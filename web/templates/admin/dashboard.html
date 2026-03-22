@@ -1,0 +1,34 @@
+{{define "content"}}
+<div class="admin-header">
+  <h1>Sites</h1>
+</div>
+
+{{if not .Sites}}
+  <p class="empty">No submissions yet.</p>
+{{else}}
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Business</th>
+      <th>Slug</th>
+      <th>Template</th>
+      <th>Status</th>
+      <th>Submitted</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{range .Sites}}
+    <tr>
+      <td><strong>{{.BusinessName}}</strong></td>
+      <td><code>/sites/{{.Slug}}</code></td>
+      <td>{{.Template}}</td>
+      <td><span class="badge badge-{{.Status}}">{{.Status}}</span></td>
+      <td>{{.CreatedAt.Format "02 Jan 2006"}}</td>
+      <td><a href="/admin/sites/{{.ID}}">View →</a></td>
+    </tr>
+    {{end}}
+  </tbody>
+</table>
+{{end}}
+{{end}}

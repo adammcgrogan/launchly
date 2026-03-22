@@ -1,0 +1,27 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMG Digital - Getting your business online</title>
+  <link rel="stylesheet" href="/static/css/public.css">
+</head>
+<body>
+  <header class="site-header">
+    <a href="/" class="logo">AMG Digital</a>
+    <nav class="site-nav">
+      <a href="/#how-it-works">How it works</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/get-started" class="btn-primary">Get Started</a>
+    </nav>
+  </header>
+  <main>
+    {{template "content" .}}
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 AMG Digital. Getting your business online.</p>
+  </footer>
+</body>
+</html>
+{{end}}

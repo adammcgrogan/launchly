@@ -1,0 +1,78 @@
+package handlers
+
+import (
+	"net/http"
+	"strings"
+
+	"github.com/adammcgrogan/locallaunch/internal/db"
+	"github.com/adammcgrogan/locallaunch/internal/email"
+)
+
+// siteTemplates lists available templates shown in the onboarding form.
+var siteTemplates = []struct {
+	ID          string
+	Name        string
+	Description string
+	ExampleSlug string
+}{
+	{"bold", "Bold", "Dark, high contrast — great for trades and gyms", "example-bold"},
+	{"fresh", "Fresh", "Light and minimal — ideal for professional services", "example-fresh"},
+	{"warm", "Warm", "Earthy tones — perfect for cafés and restaurants", "example-warm"},
+	{"glow", "Glow", "Soft pastels — suited for salons and beauty", "example-glow"},
+	{"classic", "Classic", "Neutral and timeless — works for any business", "example-classic"},
+}
+
+// buildTestimonials assembles the testimonials string from individual form fields.
+func buildTestimonials(r *http.Request) string {
+	names := r.Form["testimonial_name[]"]
+	roles := r.Form["testimonial_role[]"]
+	quotes := r.Form["testimonial_quote[]"]
+	var lines []string
+	for i, quote := range quotes {
+		quote = strings.TrimSpace(quote)
+		if quote == "" {
+			continue
+		}
+		name := ""
+		if i < len(names) {
+			name = strings.TrimSpace(names[i])
+		}
+		role := ""
+		if i < len(roles) {
+			role = strings.TrimSpace(roles[i])
+		}
+		lines = append(lines, name+"|"+role+"|"+quote)
+	}
+	return strings.Join(lines, "\n")
+}
+
+// baseURL returns the scheme+host for the current request.
+func (h *Handler) baseURL(reqHost string) string {
+	scheme := "https"
+	if strings.Contains(reqHost, ":") {
+		scheme = "http"
+	}
+	return scheme + "://" + reqHost
+}
+
+// exampleURL builds the path-based URL for an example site.
+// Path routing (/sites/slug) works everywhere; subdomain routing requires a custom domain.
+func (h *Handler) exampleURL(reqHost, slug string) string {
+	return h.baseURL(reqHost) + "/sites/" + slug
+}
+
+type Handler struct {
+	store  *db.Store
+	email  *email.Client
+	domain string // e.g. "locallaunch.co"
+	adminPass string
+}
+
+func New(store *db.Store, email *email.Client, domain, adminPass string) *Handler {
+	return &Handler{
+		store:     store,
+		email:     email,
+		domain:    domain,
+		adminPass: adminPass,
+	}
+}

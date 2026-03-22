@@ -1,0 +1,280 @@
+{{define "content"}}
+<div class="bg-gray-50 min-h-screen py-12">
+  <div class="max-w-3xl mx-auto px-6">
+
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-black tracking-tight mb-3">Get your business online</h1>
+      <p class="text-gray-500 text-lg">Fill in the form below. We'll build your site and have it live within 2 days.</p>
+    </div>
+
+    <form method="POST" action="/get-started" class="space-y-6">
+
+      <!-- Business Details -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8">
+        <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
+          <span class="w-7 h-7 bg-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-black">1</span>
+          Your Business
+        </h2>
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Business Name <span class="text-red-500">*</span></label>
+            <input type="text" name="business_name" required placeholder="e.g. Joe's Barbershop"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tagline</label>
+            <input type="text" name="tagline" placeholder="e.g. The best cuts in town"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Main Button Text <span class="font-normal text-gray-400">(optional)</span></label>
+            <input type="text" name="cta_text" placeholder="e.g. Get a Quote, Book Now, Call Us"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            <p class="text-gray-400 text-xs mt-1">The main action button shown on your site. Defaults to "Get in Touch" if left blank.</p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">About Your Business</label>
+            <textarea name="about" rows="4" placeholder="Tell visitors who you are and what makes you different..."
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Services <span class="font-normal text-gray-400">(one per line)</span></label>
+            <textarea name="services" rows="5" placeholder="Haircut - £15&#10;Beard Trim - £10&#10;Cut &amp; Beard - £22"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none font-mono"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Details -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8">
+        <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
+          <span class="w-7 h-7 bg-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-black">2</span>
+          Contact Details
+        </h2>
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number</label>
+            <input type="tel" name="phone" placeholder="+44 7700 900000"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
+            <input type="email" name="email" placeholder="joe@example.co.uk"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Address</label>
+            <input type="text" name="address" placeholder="12 High Street, Manchester, M1 1AA"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Opening Hours <span class="font-normal text-gray-400">(one per line)</span></label>
+            <textarea name="hours" rows="4" placeholder="Mon–Fri: 9am – 6pm&#10;Saturday: 9am – 4pm&#10;Sunday: Closed"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none font-mono"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Google Maps Link</label>
+            <input type="url" name="map_url" placeholder="https://maps.google.com/..."
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Facebook <span class="font-normal text-gray-400">(optional)</span></label>
+            <input type="url" name="facebook_url" placeholder="https://facebook.com/yourbusiness"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Instagram <span class="font-normal text-gray-400">(optional)</span></label>
+            <input type="url" name="instagram_url" placeholder="https://instagram.com/yourbusiness"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">WhatsApp <span class="font-normal text-gray-400">(optional)</span></label>
+            <input type="url" name="whatsapp_url" placeholder="https://wa.me/447700900000"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">X / Twitter <span class="font-normal text-gray-400">(optional)</span></label>
+            <input type="url" name="twitter_url" placeholder="https://x.com/yourbusiness"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">TikTok <span class="font-normal text-gray-400">(optional)</span></label>
+            <input type="url" name="tiktok_url" placeholder="https://tiktok.com/@yourbusiness"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">LinkedIn <span class="font-normal text-gray-400">(optional)</span></label>
+            <input type="url" name="linkedin_url" placeholder="https://linkedin.com/in/yourname"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">YouTube <span class="font-normal text-gray-400">(optional)</span></label>
+            <input type="url" name="youtube_url" placeholder="https://youtube.com/@yourbusiness"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8">
+        <h2 class="font-bold text-lg mb-2 flex items-center gap-2">
+          <span class="w-7 h-7 bg-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-black">3</span>
+          Customer Testimonials <span class="font-normal text-gray-400 text-base ml-1">(optional)</span>
+        </h2>
+        <p class="text-gray-500 text-sm mb-5 ml-9">Add up to 3 customer reviews to display on your site.</p>
+        <div id="testimonials-container" class="space-y-4"></div>
+        <button type="button" id="add-testimonial" class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-500">+ Add another testimonial</button>
+      </div>
+
+      <!-- Logo & Gallery -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8">
+        <h2 class="font-bold text-lg mb-2 flex items-center gap-2">
+          <span class="w-7 h-7 bg-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-black">4</span>
+          Logo &amp; Photos <span class="font-normal text-gray-400 text-base ml-1">(optional)</span>
+        </h2>
+        <p class="text-gray-500 text-sm mb-5 ml-9">Paste direct URLs to your images. You can link from Facebook, your existing website, or any public image host.</p>
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Logo URL</label>
+            <input type="url" name="logo_url" placeholder="https://example.com/my-logo.png"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Photo Gallery <span class="font-normal text-gray-400">(one URL per line)</span></label>
+            <textarea name="gallery" rows="4" placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg&#10;https://example.com/photo3.jpg"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none font-mono"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lead delivery -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8">
+        <h2 class="font-bold text-lg mb-2 flex items-center gap-2">
+          <span class="w-7 h-7 bg-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-black">5</span>
+          Where should we send your leads?
+        </h2>
+        <p class="text-gray-500 text-sm mb-5 ml-9">When a visitor fills in your contact form, we'll email the enquiry straight to this address.</p>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Your Email for Leads <span class="text-red-500">*</span></label>
+          <input type="email" name="lead_email" required placeholder="joe@example.co.uk"
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+        </div>
+      </div>
+
+      <!-- Template picker -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8">
+        <h2 class="font-bold text-lg mb-2 flex items-center gap-2">
+          <span class="w-7 h-7 bg-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-black">6</span>
+          Choose a Template
+        </h2>
+        <p class="text-gray-500 text-sm mb-6 ml-9">Click a template to select it. Open the preview link to see a live example.</p>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {{range .Templates}}
+          <label class="cursor-pointer group">
+            <input type="radio" name="template" value="{{.ID}}" class="sr-only peer" {{if eq .ID "bold"}}checked{{end}}>
+            <div class="rounded-xl border-2 border-gray-200 overflow-hidden peer-checked:border-indigo-600 peer-checked:ring-2 peer-checked:ring-indigo-600/20 transition">
+              {{if eq .ID "bold"}}
+              <div class="bg-zinc-950 p-4 text-center">
+                <div class="text-amber-400 font-black text-sm">McGrath Plumbing</div>
+                <div class="text-zinc-500 text-[10px] mt-0.5">Fast, reliable plumbing</div>
+                <div class="flex justify-center gap-1.5 mt-2"><span class="bg-amber-400 text-zinc-900 text-[9px] font-bold px-2 py-0.5 rounded">Call Now</span><span class="border border-zinc-600 text-zinc-400 text-[9px] px-2 py-0.5 rounded">Quote</span></div>
+              </div>
+              {{else if eq .ID "fresh"}}
+              <div class="bg-slate-50 p-4 text-center">
+                <div class="text-blue-700 font-black text-sm">Peak Accountants</div>
+                <div class="text-gray-500 text-[10px] mt-0.5">Clear, honest accounting</div>
+                <div class="flex justify-center gap-1.5 mt-2"><span class="bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded">Book a Call</span><span class="border border-blue-200 text-blue-600 text-[9px] px-2 py-0.5 rounded">Services</span></div>
+              </div>
+              {{else if eq .ID "warm"}}
+              <div class="bg-amber-50 p-4 text-center">
+                <div class="text-amber-900 font-black text-sm">The Corner Café</div>
+                <div class="text-amber-700 text-[10px] mt-0.5">Homemade food &amp; coffee</div>
+                <div class="flex justify-center gap-1.5 mt-2"><span class="bg-amber-700 text-white text-[9px] font-bold px-2 py-0.5 rounded">Find Us</span><span class="border border-amber-300 text-amber-800 text-[9px] px-2 py-0.5 rounded">Menu</span></div>
+              </div>
+              {{else if eq .ID "glow"}}
+              <div class="bg-rose-50 p-4 text-center">
+                <div class="text-rose-800 font-black text-sm">Luxe Hair Studio</div>
+                <div class="text-rose-500 text-[10px] mt-0.5">A luxury experience</div>
+                <div class="flex justify-center gap-1.5 mt-2"><span class="bg-rose-600 text-white text-[9px] font-bold px-2 py-0.5 rounded">Book Now</span><span class="border border-rose-200 text-rose-600 text-[9px] px-2 py-0.5 rounded">Services</span></div>
+              </div>
+              {{else if eq .ID "classic"}}
+              <div class="bg-gray-100 p-4 text-center">
+                <div class="text-gray-800 font-black text-sm">City Electricians</div>
+                <div class="text-gray-500 text-[10px] mt-0.5">Part P registered</div>
+                <div class="flex justify-center gap-1.5 mt-2"><span class="bg-gray-800 text-white text-[9px] font-bold px-2 py-0.5 rounded">Call Us</span><span class="border border-gray-300 text-gray-600 text-[9px] px-2 py-0.5 rounded">Quote</span></div>
+              </div>
+              {{end}}
+              <div class="px-3 py-2.5 border-t border-gray-100 flex items-center justify-between bg-white">
+                <div>
+                  <div class="text-xs font-bold">{{.Name}}</div>
+                  <div class="text-[10px] text-gray-400">{{.Description}}</div>
+                </div>
+                <a href="{{.ExampleURL}}" target="_blank" rel="noopener"
+                  class="text-[10px] text-indigo-600 font-semibold hover:underline whitespace-nowrap"
+                  onclick="event.stopPropagation()">Preview →</a>
+              </div>
+            </div>
+          </label>
+          {{end}}
+        </div>
+      </div>
+
+      <script>
+(function () {
+  var MAX = 3;
+  var container = document.getElementById('testimonials-container');
+  var addBtn = document.getElementById('add-testimonial');
+
+  function makeEntry() {
+    var div = document.createElement('div');
+    div.className = 'testimonial-entry bg-gray-50 rounded-xl border border-gray-200 p-5 space-y-3';
+    div.innerHTML =
+      '<div class="grid sm:grid-cols-2 gap-3">' +
+        '<div><label class="block text-sm font-semibold text-gray-700 mb-1.5">Customer Name</label>' +
+          '<input type="text" name="testimonial_name[]" placeholder="Jane Smith" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"></div>' +
+        '<div><label class="block text-sm font-semibold text-gray-700 mb-1.5">Role <span class="font-normal text-gray-400">(optional)</span></label>' +
+          '<input type="text" name="testimonial_role[]" placeholder="Happy Customer" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"></div>' +
+      '</div>' +
+      '<div><label class="block text-sm font-semibold text-gray-700 mb-1.5">Their Quote</label>' +
+        '<textarea name="testimonial_quote[]" rows="2" placeholder="Brilliant service, would highly recommend!" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none bg-white"></textarea></div>' +
+      '<button type="button" class="remove-testimonial text-sm text-red-500 hover:text-red-700 font-semibold">Remove</button>';
+    div.querySelector('.remove-testimonial').addEventListener('click', function () {
+      div.remove();
+      update();
+    });
+    return div;
+  }
+
+  function update() {
+    var entries = container.querySelectorAll('.testimonial-entry');
+    entries.forEach(function (e) {
+      e.querySelector('.remove-testimonial').style.display = entries.length > 1 ? '' : 'none';
+    });
+    addBtn.style.display = entries.length >= MAX ? 'none' : '';
+  }
+
+  addBtn.addEventListener('click', function () {
+    container.appendChild(makeEntry());
+    update();
+  });
+
+  container.appendChild(makeEntry());
+  update();
+})();
+      </script>
+
+      <!-- Submit -->
+      <div class="text-center pb-4">
+        <button type="submit"
+          class="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-lg px-10 py-4 rounded-xl transition shadow-lg shadow-indigo-500/25 w-full sm:w-auto">
+          Submit - Get My Site Live
+        </button>
+        <p class="text-gray-400 text-sm mt-3">We'll review your details and be in touch within 24 hours.</p>
+      </div>
+
+    </form>
+  </div>
+</div>
+{{end}}

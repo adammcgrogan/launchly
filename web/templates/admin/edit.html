@@ -1,0 +1,230 @@
+{{define "content"}}
+<div class="admin-header">
+  <h1>Edit: {{.Site.BusinessName}}</h1>
+  <a href="/admin/sites/{{.Site.ID}}" class="btn-back">← Back</a>
+</div>
+
+<form method="POST" action="/admin/sites/{{.Site.ID}}/edit" class="admin-form">
+
+  <div class="admin-card">
+    <h2>Business Details</h2>
+    <div class="form-fields">
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="business_name">Business Name</label>
+          <input type="text" id="business_name" name="business_name" value="{{.Site.BusinessName}}" required>
+        </div>
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" name="location" value="{{.Site.Location}}" placeholder="e.g. Belfast, NI">
+          <small>Shown in the hero badge on the site</small>
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="tagline">Tagline</label>
+          <input type="text" id="tagline" name="tagline" value="{{.Site.Tagline}}" placeholder="A short punchy description">
+        </div>
+        <div class="form-group">
+          <label for="cta_text">CTA Button Text</label>
+          <input type="text" id="cta_text" name="cta_text" value="{{.Site.CTAText}}" placeholder="e.g. Get a Quote, Book Now, Contact Us">
+          <small>Main action button shown across the site</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="about">About</label>
+        <textarea id="about" name="about" rows="4" placeholder="A paragraph about the business...">{{.Site.About}}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h2>Services &amp; Trust Signals</h2>
+    <div class="form-fields">
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="services">Services</label>
+          <small>One per line</small>
+          <textarea id="services" name="services" rows="8" placeholder="Boiler Repair&#10;Leak Detection&#10;Bathroom Fitting">{{.Site.Services}}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="certifications">Certifications / Trust Badges</label>
+          <small>One per line, shown as trust signals on the site</small>
+          <textarea id="certifications" name="certifications" rows="8" placeholder="Gas Safe Registered&#10;Fully Insured&#10;25+ Years Experience">{{.Site.Certifications}}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h2>Contact &amp; Location</h2>
+    <div class="form-fields">
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" value="{{.Site.Phone}}">
+        </div>
+        <div class="form-group">
+          <label for="email">Business Email</label>
+          <input type="email" id="email" name="email" value="{{.Site.Email}}">
+        </div>
+        <div class="form-group">
+          <label for="lead_email">Lead Notification Email</label>
+          <small>Where enquiries are forwarded</small>
+          <input type="email" id="lead_email" name="lead_email" value="{{.Site.LeadEmail}}" required>
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" id="address" name="address" value="{{.Site.Address}}">
+        </div>
+        <div class="form-group">
+          <label for="map_url">Google Maps URL</label>
+          <input type="url" id="map_url" name="map_url" value="{{.Site.MapURL}}" placeholder="https://maps.google.com/...">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h2>Testimonials</h2>
+    <div class="form-fields">
+      <div id="testimonials-container" class="form-fields">
+        {{if .Testimonials}}
+        {{range .Testimonials}}
+        <div class="testimonial-entry" style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:0.75rem;">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Customer Name</label>
+              <input type="text" name="testimonial_name[]" value="{{.Name}}" placeholder="Jane Smith">
+            </div>
+            <div class="form-group">
+              <label>Role <small style="font-weight:normal;">(optional)</small></label>
+              <input type="text" name="testimonial_role[]" value="{{.Role}}" placeholder="Happy Customer">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Their Quote</label>
+            <textarea name="testimonial_quote[]" rows="2" placeholder="Brilliant service, would highly recommend!">{{.Quote}}</textarea>
+          </div>
+          <button type="button" class="remove-testimonial" style="align-self:flex-start;background:none;border:none;color:#ef4444;font-size:0.8rem;font-weight:600;cursor:pointer;padding:0;">Remove</button>
+        </div>
+        {{end}}
+        {{end}}
+      </div>
+      <button type="button" id="add-testimonial" class="btn-edit" style="align-self:flex-start;">+ Add Testimonial</button>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h2>Logo &amp; Gallery</h2>
+    <div class="form-fields">
+      <div class="form-group">
+        <label for="logo_url">Logo Image URL</label>
+        <small>Paste a direct URL to your logo image (PNG or SVG works best)</small>
+        <input type="url" id="logo_url" name="logo_url" value="{{.Site.LogoURL}}" placeholder="https://example.com/logo.png">
+      </div>
+      <div class="form-group">
+        <label for="gallery">Photo Gallery URLs</label>
+        <small>One image URL per line — shown as a photo grid on your site</small>
+        <textarea id="gallery" name="gallery" rows="5" placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg">{{.Site.Gallery}}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h2>Hours &amp; Social</h2>
+    <div class="form-fields">
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="hours">Opening Hours</label>
+          <small>One per line</small>
+          <textarea id="hours" name="hours" rows="5" placeholder="Mon–Fri: 9am – 5pm&#10;Saturday: 10am – 2pm">{{.Site.Hours}}</textarea>
+        </div>
+        <div class="form-fields">
+          <div class="form-group">
+            <label for="facebook_url">Facebook URL</label>
+            <input type="url" id="facebook_url" name="facebook_url" value="{{.Site.FacebookURL}}" placeholder="https://facebook.com/...">
+          </div>
+          <div class="form-group">
+            <label for="instagram_url">Instagram URL</label>
+            <input type="url" id="instagram_url" name="instagram_url" value="{{.Site.InstagramURL}}" placeholder="https://instagram.com/...">
+          </div>
+          <div class="form-group">
+            <label for="whatsapp_url">WhatsApp</label>
+            <input type="url" id="whatsapp_url" name="whatsapp_url" value="{{.Site.WhatsAppURL}}" placeholder="https://wa.me/447700900000">
+          </div>
+          <div class="form-group">
+            <label for="twitter_url">X / Twitter URL</label>
+            <input type="url" id="twitter_url" name="twitter_url" value="{{.Site.TwitterURL}}" placeholder="https://x.com/...">
+          </div>
+          <div class="form-group">
+            <label for="tiktok_url">TikTok URL</label>
+            <input type="url" id="tiktok_url" name="tiktok_url" value="{{.Site.TikTokURL}}" placeholder="https://tiktok.com/@...">
+          </div>
+          <div class="form-group">
+            <label for="linkedin_url">LinkedIn URL</label>
+            <input type="url" id="linkedin_url" name="linkedin_url" value="{{.Site.LinkedInURL}}" placeholder="https://linkedin.com/in/...">
+          </div>
+          <div class="form-group">
+            <label for="youtube_url">YouTube URL</label>
+            <input type="url" id="youtube_url" name="youtube_url" value="{{.Site.YouTubeURL}}" placeholder="https://youtube.com/@...">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn-save">Save Changes</button>
+</form>
+
+<script>
+(function () {
+  var MAX = 3;
+  var container = document.getElementById('testimonials-container');
+  var addBtn = document.getElementById('add-testimonial');
+
+  function entryHTML(name, role, quote) {
+    return '<div class="testimonial-entry" style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:0.75rem;">' +
+      '<div class="form-grid-2">' +
+        '<div class="form-group"><label>Customer Name</label>' +
+          '<input type="text" name="testimonial_name[]" value="' + esc(name) + '" placeholder="Jane Smith"></div>' +
+        '<div class="form-group"><label>Role <small style="font-weight:normal;">(optional)</small></label>' +
+          '<input type="text" name="testimonial_role[]" value="' + esc(role) + '" placeholder="Happy Customer"></div>' +
+      '</div>' +
+      '<div class="form-group"><label>Their Quote</label>' +
+        '<textarea name="testimonial_quote[]" rows="2" placeholder="Brilliant service, would highly recommend!">' + esc(quote) + '</textarea></div>' +
+      '<button type="button" class="remove-testimonial" style="align-self:flex-start;background:none;border:none;color:#ef4444;font-size:0.8rem;font-weight:600;cursor:pointer;padding:0;">Remove</button>' +
+    '</div>';
+  }
+
+  function esc(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function update() {
+    var entries = container.querySelectorAll('.testimonial-entry');
+    entries.forEach(function (e) {
+      e.querySelector('.remove-testimonial').style.display = entries.length > 1 ? '' : 'none';
+    });
+    addBtn.style.display = entries.length >= MAX ? 'none' : '';
+  }
+
+  container.addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-testimonial')) {
+      e.target.closest('.testimonial-entry').remove();
+      update();
+    }
+  });
+
+  addBtn.addEventListener('click', function () {
+    container.insertAdjacentHTML('beforeend', entryHTML('', '', ''));
+    update();
+  });
+
+  if (container.querySelectorAll('.testimonial-entry').length === 0) {
+    container.insertAdjacentHTML('beforeend', entryHTML('', '', ''));
+  }
+  update();
+})();
+</script>
+{{end}}

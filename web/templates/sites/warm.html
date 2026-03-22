@@ -1,0 +1,147 @@
+{{define "theme"}}
+<style>body{background:#fffbf0;}</style>
+{{end}}
+
+{{define "site-content"}}
+<!-- Nav -->
+<header class="sticky top-0 z-50 bg-amber-900 text-white">
+  <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+    {{if .Site.LogoURL}}<img src="{{.Site.LogoURL}}" alt="{{.Site.BusinessName}}" class="h-8 w-auto">{{else}}<span class="font-black text-amber-200 text-lg italic">{{.Site.BusinessName}}</span>{{end}}
+    <div class="flex gap-3">
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="text-amber-200 text-sm font-semibold hidden md:block">{{.Site.Phone}}</a>{{end}}
+      <a href="#contact" class="bg-amber-400 text-amber-900 font-black text-sm px-4 py-2 rounded-lg hover:bg-amber-300 transition">{{.CTAText}}</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero — warm full bleed with big text -->
+<section class="bg-amber-900 text-white pb-16">
+  <div class="max-w-5xl mx-auto px-6 pt-16 pb-8">
+    {{if .Site.Location}}<div class="inline-block border border-amber-700 text-amber-400 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-widest">{{.Site.Location}}</div>{{end}}
+    <h1 class="text-6xl md:text-8xl font-black italic leading-none text-amber-100 mb-4">{{.Site.BusinessName}}</h1>
+    {{if .Site.Tagline}}<p class="text-amber-300 text-xl mb-8 max-w-lg">{{.Site.Tagline}}</p>{{end}}
+    <div class="flex flex-wrap gap-3">
+      <a href="#contact" class="bg-amber-400 text-amber-900 font-black text-lg px-8 py-3.5 rounded-xl hover:bg-amber-300 transition">{{.CTAText}}</a>
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="border-2 border-amber-700 text-amber-200 font-bold text-lg px-8 py-3.5 rounded-xl hover:border-amber-400 transition">{{.Site.Phone}}</a>{{end}}
+    </div>
+  </div>
+  <!-- Wavy divider -->
+  <div class="overflow-hidden mt-8">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+      <path d="M0 30 Q360 0 720 30 Q1080 60 1440 30 V60 H0Z" fill="#fffbf0"/>
+    </svg>
+  </div>
+</section>
+
+<!-- About + Hours side by side -->
+{{if or .Site.About .Hours}}
+<section class="bg-amber-50 py-16 border-b border-amber-100" id="about">
+  <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+    {{if .Site.About}}
+    <div>
+      <p class="text-amber-700 font-bold text-sm uppercase tracking-widest mb-3">Our Story</p>
+      <p class="text-stone-600 text-lg leading-relaxed">{{.Site.About}}</p>
+    </div>
+    {{end}}
+    {{if .Hours}}
+    <div>
+      <p class="text-amber-700 font-bold text-sm uppercase tracking-widest mb-3">We're Open</p>
+      <ul class="space-y-3">
+        {{range .Hours}}<li class="flex items-center gap-3 text-stone-600"><span class="w-1.5 h-1.5 bg-amber-400 rounded-full"></span>{{.}}</li>{{end}}
+      </ul>
+      {{if .Site.Address}}<p class="mt-6 text-stone-500 text-sm">📍 {{.Site.Address}}</p>{{end}}
+      {{if .Site.MapURL}}<a href="{{.Site.MapURL}}" target="_blank" class="text-amber-700 text-sm font-semibold hover:underline mt-2 inline-block">Get Directions →</a>{{end}}
+    </div>
+    {{end}}
+  </div>
+</section>
+{{end}}
+
+<!-- Services — card grid (no hardcoded emoji) -->
+{{if .Services}}
+<section class="bg-white py-16 border-b border-amber-100" id="services">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-amber-700 font-bold text-sm uppercase tracking-widest mb-2">What We Offer</p>
+    <h2 class="text-3xl font-black text-stone-900 mb-8">Our Menu</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {{range .Services}}
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+        <div class="text-stone-800 font-semibold">{{.}}</div>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Contact — full width warm -->
+<section class="bg-amber-900 text-white py-16" id="contact">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+    <p class="text-amber-400 font-bold text-sm uppercase tracking-widest mb-3">Say Hello</p>
+    <h2 class="text-4xl font-black text-amber-100 mb-8">Get in Touch</h2>
+    {{if .LeadSent}}<div class="bg-green-800/40 border border-green-400/40 text-green-300 rounded-2xl p-4 mb-6">Thanks! We'll get back to you soon.</div>{{end}}
+    <form method="POST" action="{{.FormAction}}" class="space-y-4 text-left">
+      <div class="grid sm:grid-cols-2 gap-4">
+        <input type="text" name="name" required placeholder="Your Name" class="w-full bg-amber-800/60 border border-amber-700 text-white rounded-xl px-4 py-3 text-sm placeholder-amber-400 focus:outline-none focus:border-amber-400">
+        <input type="tel" name="phone" placeholder="Your Phone" class="w-full bg-amber-800/60 border border-amber-700 text-white rounded-xl px-4 py-3 text-sm placeholder-amber-400 focus:outline-none focus:border-amber-400">
+      </div>
+      <textarea name="message" rows="3" placeholder="Your message..." class="w-full bg-amber-800/60 border border-amber-700 text-white rounded-xl px-4 py-3 text-sm placeholder-amber-400 focus:outline-none focus:border-amber-400 resize-none"></textarea>
+      <button type="submit" class="w-full bg-amber-400 text-amber-900 font-black py-4 rounded-xl hover:bg-amber-300 transition text-base">Send Message</button>
+    </form>
+    {{if .Certifications}}
+    <div class="flex flex-wrap justify-center gap-4 mt-8">
+      {{range .Certifications}}<span class="text-amber-300 text-sm">· {{.}}</span>{{end}}
+    </div>
+    {{end}}
+    {{if or .Site.FacebookURL .Site.InstagramURL .Site.WhatsAppURL .Site.TwitterURL .Site.TikTokURL .Site.LinkedInURL .Site.YouTubeURL}}
+    <div class="flex flex-wrap gap-6 justify-center mt-8">
+      {{if .Site.FacebookURL}}<a href="{{.Site.FacebookURL}}" target="_blank" class="text-amber-300 hover:underline text-sm font-bold">Facebook</a>{{end}}
+      {{if .Site.InstagramURL}}<a href="{{.Site.InstagramURL}}" target="_blank" class="text-amber-300 hover:underline text-sm font-bold">Instagram</a>{{end}}
+      {{if .Site.WhatsAppURL}}<a href="{{.Site.WhatsAppURL}}" target="_blank" class="text-amber-300 hover:underline text-sm font-bold">WhatsApp</a>{{end}}
+      {{if .Site.TwitterURL}}<a href="{{.Site.TwitterURL}}" target="_blank" class="text-amber-300 hover:underline text-sm font-bold">X / Twitter</a>{{end}}
+      {{if .Site.TikTokURL}}<a href="{{.Site.TikTokURL}}" target="_blank" class="text-amber-300 hover:underline text-sm font-bold">TikTok</a>{{end}}
+      {{if .Site.LinkedInURL}}<a href="{{.Site.LinkedInURL}}" target="_blank" class="text-amber-300 hover:underline text-sm font-bold">LinkedIn</a>{{end}}
+      {{if .Site.YouTubeURL}}<a href="{{.Site.YouTubeURL}}" target="_blank" class="text-amber-300 hover:underline text-sm font-bold">YouTube</a>{{end}}
+    </div>
+    {{end}}
+  </div>
+</section>
+
+<!-- Testimonials -->
+{{if .Testimonials}}
+<section class="bg-amber-50 py-16 border-t border-amber-100">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-amber-700 font-bold text-sm uppercase tracking-widest mb-2">Happy Customers</p>
+    <h2 class="text-3xl font-black text-stone-900 mb-8">What People Say</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{range .Testimonials}}
+      <div class="bg-white border border-amber-200 rounded-2xl p-6">
+        <p class="text-stone-600 text-sm leading-relaxed mb-5">"{{.Quote}}"</p>
+        <div>
+          <div class="text-stone-800 font-bold text-sm">{{.Name}}</div>
+          {{if .Role}}<div class="text-amber-600 text-xs mt-0.5">{{.Role}}</div>{{end}}
+        </div>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Gallery -->
+{{if .Gallery}}
+<section class="bg-white py-16 border-t border-amber-100">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-amber-700 font-bold text-sm uppercase tracking-widest mb-2">Our Space</p>
+    <h2 class="text-3xl font-black text-stone-900 mb-8">Photos</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      {{range .Gallery}}
+      <div class="aspect-square overflow-hidden rounded-2xl">
+        <img src="{{.}}" alt="Gallery photo" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+{{end}}

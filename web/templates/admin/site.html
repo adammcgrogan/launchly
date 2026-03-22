@@ -1,0 +1,110 @@
+{{define "content"}}
+<div class="admin-header">
+  <h1>{{.Site.BusinessName}}</h1>
+  <a href="/admin" class="btn-back">← Back</a>
+</div>
+
+<div class="admin-grid">
+  <div class="admin-card">
+    <h2>Details</h2>
+    <dl>
+      <dt>Status</dt>
+      <dd><span class="badge badge-{{.Site.Status}}">{{.Site.Status}}</span></dd>
+
+      <dt>URL</dt>
+      <dd>
+        {{if eq .Site.Status "live"}}
+          <a href="{{.SiteURL}}" target="_blank">{{.SiteURL}}</a>
+        {{else}}
+          <code>{{.SiteURL}}</code>
+        {{end}}
+      </dd>
+
+      <dt>Template</dt>
+      <dd>{{.Site.Template}}</dd>
+
+      <dt>Phone</dt>
+      <dd>{{or .Site.Phone "-"}}</dd>
+
+      <dt>Email</dt>
+      <dd>{{or .Site.Email "-"}}</dd>
+
+      <dt>Address</dt>
+      <dd>{{or .Site.Address "-"}}</dd>
+
+      <dt>Lead Email</dt>
+      <dd>{{.Site.LeadEmail}}</dd>
+
+      <dt>Submitted</dt>
+      <dd>{{.Site.CreatedAt.Format "02 Jan 2006 15:04"}}</dd>
+
+      {{if .Site.PublishedAt}}
+      <dt>Published</dt>
+      <dd>{{.Site.PublishedAt.Format "02 Jan 2006 15:04"}}</dd>
+      {{end}}
+    </dl>
+
+    <div class="admin-actions">
+      <a href="/admin/sites/{{.Site.ID}}/edit" class="btn-edit">Edit Content</a>
+      <a href="/admin/sites/{{.Site.ID}}/switch-template" class="btn-edit">Switch Template</a>
+      {{if eq .Site.Status "draft"}}
+        <form method="POST" action="/admin/sites/{{.Site.ID}}/publish">
+          <button type="submit" class="btn-publish">Publish Site</button>
+        </form>
+      {{else}}
+        <form method="POST" action="/admin/sites/{{.Site.ID}}/unpublish">
+          <button type="submit" class="btn-unpublish">Unpublish</button>
+        </form>
+      {{end}}
+      <form method="POST" action="/admin/sites/{{.Site.ID}}/delete" onsubmit="return confirm('Delete {{.Site.BusinessName}}? This cannot be undone.')">
+        <button type="submit" class="btn-delete">Delete Site</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h2>Content Preview</h2>
+    <dl>
+      <dt>Tagline</dt>
+      <dd>{{or .Site.Tagline "-"}}</dd>
+
+      <dt>About</dt>
+      <dd>{{or .Site.About "-"}}</dd>
+
+      <dt>Services</dt>
+      <dd><pre>{{or .Site.Services "-"}}</pre></dd>
+
+      <dt>Hours</dt>
+      <dd><pre>{{or .Site.Hours "-"}}</pre></dd>
+    </dl>
+  </div>
+</div>
+
+<div class="admin-card admin-leads">
+  <h2>Leads ({{len .Leads}})</h2>
+  {{if not .Leads}}
+    <p class="empty">No leads yet.</p>
+  {{else}}
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Message</th>
+        <th>Received</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Leads}}
+      <tr>
+        <td>{{.Name}}</td>
+        <td>{{or .Phone "-"}}</td>
+        <td>{{.Message}}</td>
+        <td>{{.CreatedAt.Format "02 Jan 2006 15:04"}}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  {{end}}
+</div>
+{{end}}

@@ -1,0 +1,91 @@
+package main
+
+import (
+	"log"
+	"net/http"
+	"os"
+	"strings"
+
+	"github.com/adammcgrogan/locallaunch/internal/db"
+	"github.com/adammcgrogan/locallaunch/internal/email"
+	"github.com/adammcgrogan/locallaunch/internal/handlers"
+	"github.com/joho/godotenv"
+)
+
+func main() {
+	_ = godotenv.Load()
+
+	dsn := mustEnv("DATABASE_URL")
+	domain := getEnv("DOMAIN", "amgdigital.co")
+	adminPass := mustEnv("ADMIN_PASSWORD")
+	resendKey := getEnv("RESEND_API_KEY", "")
+	emailFrom := getEnv("EMAIL_FROM", "noreply@amgdigital.co")
+	addr := getEnv("ADDR", ":8080")
+
+	store, err := db.New(dsn)
+	if err != nil {
+		log.Fatalf("database: %v", err)
+	}
+	if err := store.Migrate(); err != nil {
+		log.Fatalf("migrate: %v", err)
+	}
+	if err := store.SeedExamples(); err != nil {
+		log.Fatalf("seed examples: %v", err)
+	}
+
+	mailer := email.New(resendKey, emailFrom)
+	h := handlers.New(store, mailer, domain, adminPass)
+
+	mux := http.NewServeMux()
+
+	// Static files
+	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web/static"))))
+
+	// Register app routes
+	h.RegisterRoutes(mux)
+
+	// Subdomain router: anything on *.domain hits the site handler
+	// All other requests go to the main mux
+	finalHandler := subdomainRouter(domain, h, mux)
+
+	log.Printf("AMG Digital listening on %s (domain: %s)", addr, domain)
+	log.Fatal(http.ListenAndServe(addr, finalHandler))
+}
+
+// subdomainRouter routes subdomain requests to the site handler,
+// and everything else to the main mux.
+func subdomainRouter(domain string, h *handlers.Handler, fallback http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		host := strings.ToLower(strings.Split(r.Host, ":")[0])
+		if strings.HasSuffix(host, "."+domain) {
+			// Static assets must be served on subdomains too
+			if strings.HasPrefix(r.URL.Path, "/static/") {
+				fallback.ServeHTTP(w, r)
+				return
+			}
+			// Contact form on business sites
+			if r.Method == http.MethodPost && r.URL.Path == "/contact" {
+				h.SubmitLead(w, r)
+				return
+			}
+			h.ServeSite(w, r)
+			return
+		}
+		fallback.ServeHTTP(w, r)
+	})
+}
+
+func mustEnv(key string) string {
+	v := os.Getenv(key)
+	if v == "" {
+		log.Fatalf("required env var %s is not set", key)
+	}
+	return v
+}
+
+func getEnv(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return fallback
+}

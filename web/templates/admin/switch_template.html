@@ -1,0 +1,94 @@
+{{define "content"}}
+<div class="admin-header">
+  <h1>Switch Template: {{.Site.BusinessName}}</h1>
+  <a href="/admin/sites/{{.Site.ID}}" class="btn-back">← Back</a>
+</div>
+
+<div class="admin-card">
+  <h2>Choose a Template</h2>
+  <p style="color:#6b7280;font-size:0.875rem;margin-bottom:1.5rem;">Select a new template. Your content stays the same — only the design changes.</p>
+
+  <form method="POST" action="/admin/sites/{{.Site.ID}}/switch-template">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem;">
+      {{range .Templates}}
+      <label style="cursor:pointer;">
+        <input type="radio" name="template" value="{{.ID}}" {{if .Current}}checked{{end}} style="position:absolute;opacity:0;width:0;height:0;">
+        <div class="template-card {{if .Current}}template-card--active{{end}}" onclick="selectTemplate(this, '{{.ID}}')">
+          {{if eq .ID "bold"}}
+          <div style="background:#09090b;padding:1rem;text-align:center;">
+            <div style="color:#fbbf24;font-weight:900;font-size:0.8rem;">McLaughlin Plumbing</div>
+            <div style="color:#52525b;font-size:0.65rem;margin-top:2px;">Fast, reliable plumbing</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#fbbf24;color:#09090b;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Call Now</span>
+              <span style="border:1px solid #3f3f46;color:#a1a1aa;font-size:0.6rem;padding:2px 8px;border-radius:4px;">Quote</span>
+            </div>
+          </div>
+          {{else if eq .ID "fresh"}}
+          <div style="background:#f8fafc;padding:1rem;text-align:center;">
+            <div style="color:#1e3a5f;font-weight:900;font-size:0.8rem;">O'Neill Accountancy</div>
+            <div style="color:#94a3b8;font-size:0.65rem;margin-top:2px;">Clear, honest accounting</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#2563eb;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book a Call</span>
+            </div>
+          </div>
+          {{else if eq .ID "warm"}}
+          <div style="background:#78350f;padding:1rem;text-align:center;">
+            <div style="color:#fde68a;font-weight:900;font-size:0.8rem;font-style:italic;">The Wee Bakehouse</div>
+            <div style="color:#d97706;font-size:0.65rem;margin-top:2px;">Freshly baked daily</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#fbbf24;color:#78350f;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Find Us</span>
+            </div>
+          </div>
+          {{else if eq .ID "glow"}}
+          <div style="background:#fff;padding:1rem;text-align:center;">
+            <div style="color:#4c0519;font-weight:900;font-size:0.8rem;font-style:italic;">Aoife's Beauty</div>
+            <div style="color:#f43f5e;font-size:0.65rem;margin-top:2px;">Award-winning studio</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#e11d48;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:20px;">Book Now</span>
+            </div>
+          </div>
+          {{else if eq .ID "classic"}}
+          <div style="background:#111827;padding:1rem;text-align:center;">
+            <div style="color:#fff;font-weight:900;font-size:0.8rem;">Quinn Electrical</div>
+            <div style="color:#6b7280;font-size:0.65rem;margin-top:2px;">NICEIC approved</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#fff;color:#111827;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Get a Quote</span>
+            </div>
+          </div>
+          {{end}}
+          <div style="padding:0.75rem;border-top:1px solid #e5e7eb;background:#fff;">
+            <div style="font-size:0.8rem;font-weight:700;color:#111827;">{{.Name}} {{if .Current}}<span style="color:#6366f1;font-size:0.7rem;">(current)</span>{{end}}</div>
+            <div style="font-size:0.7rem;color:#9ca3af;margin-top:2px;">{{.Description}}</div>
+            <a href="{{.ExampleURL}}" target="_blank" rel="noopener" style="font-size:0.7rem;color:#6366f1;font-weight:600;text-decoration:none;margin-top:4px;display:inline-block;" onclick="event.stopPropagation()">Preview →</a>
+          </div>
+        </div>
+      </label>
+      {{end}}
+    </div>
+
+    <button type="submit" class="btn-save">Apply Template</button>
+  </form>
+</div>
+
+<style>
+.template-card {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.template-card:hover { border-color: #a5b4fc; }
+.template-card--active { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+input[type=radio]:checked + .template-card { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+</style>
+
+<script>
+function selectTemplate(el, id) {
+  document.querySelectorAll('.template-card').forEach(function(c) {
+    c.classList.remove('template-card--active');
+  });
+  el.classList.add('template-card--active');
+  document.querySelector('input[value="' + id + '"]').checked = true;
+}
+</script>
+{{end}}

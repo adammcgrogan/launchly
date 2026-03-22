@@ -1,0 +1,61 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMG Digital - Getting your business online</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-white text-gray-900 antialiased">
+
+  <!-- Nav -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="text-xl font-black tracking-tight text-gray-900">AMG Digital</a>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#how-it-works" class="text-sm text-gray-500 hover:text-gray-900 transition">How it works</a>
+        <a href="#features" class="text-sm text-gray-500 hover:text-gray-900 transition">Features</a>
+        <a href="#pricing" class="text-sm text-gray-500 hover:text-gray-900 transition">Pricing</a>
+        <a href="#about" class="text-sm text-gray-500 hover:text-gray-900 transition">About</a>
+        <a href="/get-started" class="bg-gray-900 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-gray-700 transition">Get Started</a>
+      </nav>
+      <a href="/get-started" class="md:hidden bg-gray-900 text-white text-sm font-semibold px-4 py-2 rounded-lg">Get Started</a>
+    </div>
+  </header>
+
+  <main>
+    {{template "content" .}}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-950 text-gray-400">
+    <div class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="text-white font-black text-lg">AMG Digital</span>
+        <p class="text-sm mt-1">Getting your business online.</p>
+      </div>
+      <div class="flex gap-6 text-sm">
+        <a href="/#how-it-works" class="hover:text-white transition">How it works</a>
+        <a href="/#pricing" class="hover:text-white transition">Pricing</a>
+        <a href="/#about" class="hover:text-white transition">About</a>
+        <a href="/get-started" class="hover:text-white transition">Get Started</a>
+      </div>
+      <p class="text-sm">&copy; 2026 AMG Digital</p>
+    </div>
+  </footer>
+
+</body>
+</html>
+{{end}}

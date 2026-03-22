@@ -1,0 +1,146 @@
+{{define "theme"}}
+<style>body{background:#fff;}</style>
+{{end}}
+
+{{define "site-content"}}
+<!-- Nav -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200">
+  <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+    {{if .Site.LogoURL}}<img src="{{.Site.LogoURL}}" alt="{{.Site.BusinessName}}" class="h-8 w-auto">{{else}}<span class="font-black text-gray-900 text-lg">{{.Site.BusinessName}}</span>{{end}}
+    <div class="flex items-center gap-4">
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="font-black text-gray-900 text-sm hidden md:block">{{.Site.Phone}}</a>{{end}}
+      <a href="#contact" class="bg-gray-900 text-white font-bold text-sm px-5 py-2 rounded-lg hover:bg-gray-700 transition">{{.CTAText}}</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero — dark banner -->
+<section class="bg-gray-900 py-20">
+  <div class="max-w-5xl mx-auto px-6">
+    {{if .Site.Location}}<div class="inline-block border border-gray-700 text-gray-400 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-widest">{{.Site.Location}}</div>{{end}}
+    <h1 class="text-5xl md:text-6xl font-black text-white leading-tight mb-5 max-w-2xl">{{.Site.BusinessName}}</h1>
+    {{if .Site.Tagline}}<p class="text-gray-400 text-xl mb-10 max-w-xl">{{.Site.Tagline}}</p>{{end}}
+    <div class="flex flex-wrap gap-4 items-center">
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="bg-white text-gray-900 font-black text-lg px-8 py-4 rounded-xl hover:bg-gray-100 transition">{{.Site.Phone}}</a>{{end}}
+      <a href="#contact" class="border-2 border-gray-600 text-white font-bold text-lg px-8 py-4 rounded-xl hover:border-white transition">{{.CTAText}}</a>
+    </div>
+    <!-- Trust bar from data -->
+    {{if .Certifications}}
+    <div class="flex flex-wrap gap-6 mt-12 pt-12 border-t border-gray-800">
+      {{range .Certifications}}
+      <span class="text-gray-400 text-sm flex items-center gap-2"><span class="text-green-400">✓</span> {{.}}</span>
+      {{end}}
+    </div>
+    {{end}}
+  </div>
+</section>
+
+<!-- Services + About in a sidebar layout -->
+<section class="bg-white py-20 border-b border-gray-100">
+  <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-3 gap-12">
+    {{if .Services}}
+    <div class="md:col-span-2">
+      <p class="text-gray-500 font-bold text-sm uppercase tracking-widest mb-3">What We Do</p>
+      <h2 class="text-3xl font-black text-gray-900 mb-6">Our Services</h2>
+      <ul class="divide-y divide-gray-100">
+        {{range .Services}}
+        <li class="flex items-center gap-4 py-4">
+          <span class="w-2 h-2 bg-gray-900 rounded-full flex-shrink-0"></span>
+          <span class="text-gray-700 font-medium">{{.}}</span>
+        </li>
+        {{end}}
+      </ul>
+    </div>
+    {{end}}
+    <div class="space-y-8">
+      {{if .Site.About}}
+      <div>
+        <p class="text-gray-500 font-bold text-sm uppercase tracking-widest mb-3">About</p>
+        <p class="text-gray-600 text-sm leading-relaxed">{{.Site.About}}</p>
+      </div>
+      {{end}}
+      {{if .Hours}}
+      <div>
+        <p class="text-gray-500 font-bold text-sm uppercase tracking-widest mb-3">Hours</p>
+        <ul class="space-y-2">{{range .Hours}}<li class="text-gray-600 text-sm">{{.}}</li>{{end}}</ul>
+      </div>
+      {{end}}
+      {{if .Site.Address}}
+      <div>
+        <p class="text-gray-500 font-bold text-sm uppercase tracking-widest mb-2">Address</p>
+        <p class="text-gray-600 text-sm mb-2">{{.Site.Address}}</p>
+        {{if .Site.MapURL}}<a href="{{.Site.MapURL}}" target="_blank" class="text-gray-900 text-sm font-semibold hover:underline">Map →</a>{{end}}
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+
+<!-- Contact — full-width grey section -->
+<section class="bg-gray-50 py-20" id="contact">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="max-w-xl">
+      <p class="text-gray-500 font-bold text-sm uppercase tracking-widest mb-2">Contact</p>
+      <h2 class="text-3xl font-black text-gray-900 mb-8">{{.CTAText}}</h2>
+      {{if .LeadSent}}<div class="bg-green-50 border border-green-200 text-green-700 rounded-xl p-4 mb-6">Thanks! We'll be in touch shortly.</div>{{end}}
+      <form method="POST" action="{{.FormAction}}" class="space-y-4">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <input type="text" name="name" required placeholder="Your Name" class="w-full border border-gray-200 bg-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900">
+          <input type="tel" name="phone" placeholder="Phone Number" class="w-full border border-gray-200 bg-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900">
+        </div>
+        <textarea name="message" rows="4" placeholder="Describe the work needed..." class="w-full border border-gray-200 bg-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 resize-none"></textarea>
+        <button type="submit" class="bg-gray-900 hover:bg-gray-700 text-white font-bold py-3.5 px-8 rounded-xl transition">Send Message</button>
+      </form>
+      {{if or .Site.FacebookURL .Site.InstagramURL .Site.WhatsAppURL .Site.TwitterURL .Site.TikTokURL .Site.LinkedInURL .Site.YouTubeURL}}
+      <div class="flex flex-wrap gap-4 mt-8">
+        {{if .Site.FacebookURL}}<a href="{{.Site.FacebookURL}}" target="_blank" class="text-gray-500 hover:text-gray-900 text-sm font-semibold hover:underline">Facebook</a>{{end}}
+        {{if .Site.InstagramURL}}<a href="{{.Site.InstagramURL}}" target="_blank" class="text-gray-500 hover:text-gray-900 text-sm font-semibold hover:underline">Instagram</a>{{end}}
+        {{if .Site.WhatsAppURL}}<a href="{{.Site.WhatsAppURL}}" target="_blank" class="text-gray-500 hover:text-gray-900 text-sm font-semibold hover:underline">WhatsApp</a>{{end}}
+        {{if .Site.TwitterURL}}<a href="{{.Site.TwitterURL}}" target="_blank" class="text-gray-500 hover:text-gray-900 text-sm font-semibold hover:underline">X / Twitter</a>{{end}}
+        {{if .Site.TikTokURL}}<a href="{{.Site.TikTokURL}}" target="_blank" class="text-gray-500 hover:text-gray-900 text-sm font-semibold hover:underline">TikTok</a>{{end}}
+        {{if .Site.LinkedInURL}}<a href="{{.Site.LinkedInURL}}" target="_blank" class="text-gray-500 hover:text-gray-900 text-sm font-semibold hover:underline">LinkedIn</a>{{end}}
+        {{if .Site.YouTubeURL}}<a href="{{.Site.YouTubeURL}}" target="_blank" class="text-gray-500 hover:text-gray-900 text-sm font-semibold hover:underline">YouTube</a>{{end}}
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+{{if .Testimonials}}
+<section class="bg-white py-20 border-t border-gray-100">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-gray-500 font-bold text-sm uppercase tracking-widest mb-2">Reviews</p>
+    <h2 class="text-3xl font-black text-gray-900 mb-10">What Our Customers Say</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{range .Testimonials}}
+      <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6">
+        <p class="text-gray-600 text-sm leading-relaxed mb-5">"{{.Quote}}"</p>
+        <div>
+          <div class="text-gray-900 font-bold text-sm">{{.Name}}</div>
+          {{if .Role}}<div class="text-gray-400 text-xs mt-0.5">{{.Role}}</div>{{end}}
+        </div>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Gallery -->
+{{if .Gallery}}
+<section class="bg-gray-50 py-20 border-t border-gray-100">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-gray-500 font-bold text-sm uppercase tracking-widest mb-2">Our Work</p>
+    <h2 class="text-3xl font-black text-gray-900 mb-10">Gallery</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      {{range .Gallery}}
+      <div class="aspect-square overflow-hidden rounded-2xl">
+        <img src="{{.}}" alt="Gallery photo" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+{{end}}
