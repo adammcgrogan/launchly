@@ -7,6 +7,7 @@ import (
 	"github.com/stripe/stripe-go/v81"
 	stripesession "github.com/stripe/stripe-go/v81/checkout/session"
 	"github.com/stripe/stripe-go/v81/price"
+	"github.com/stripe/stripe-go/v81/subscription"
 	"github.com/stripe/stripe-go/v81/webhook"
 )
 
@@ -83,10 +84,20 @@ func (c *Client) priceForProduct(productID string) (string, error) {
 	return "", fmt.Errorf("no active price found for product %s", productID)
 }
 
+// CancelSubscription immediately cancels a Stripe subscription.
+func (c *Client) CancelSubscription(subscriptionID string) error {
+	_, err := subscription.Cancel(subscriptionID, &stripe.SubscriptionCancelParams{})
+	if err != nil {
+		return fmt.Errorf("cancel subscription: %w", err)
+	}
+	return nil
+}
+
 // WebhookEvent is a parsed Stripe webhook event.
 type WebhookEvent struct {
-	Type      string
-	SessionID string // populated for checkout.session.completed
+	Type           string
+	SessionID      string // populated for checkout.session.completed
+	SubscriptionID string // populated for checkout.session.completed and customer.subscription.deleted
 }
 
 // ParseWebhook verifies the Stripe webhook signature and returns a parsed event.
@@ -98,12 +109,22 @@ func (c *Client) ParseWebhook(payload []byte, sigHeader string) (*WebhookEvent, 
 		return nil, fmt.Errorf("webhook signature: %w", err)
 	}
 	we := &WebhookEvent{Type: string(event.Type)}
-	if event.Type == "checkout.session.completed" {
+	switch event.Type {
+	case "checkout.session.completed":
 		var sess stripe.CheckoutSession
 		if err := json.Unmarshal(event.Data.Raw, &sess); err != nil {
 			return nil, fmt.Errorf("unmarshal session: %w", err)
 		}
 		we.SessionID = sess.ID
+		if sess.Subscription != nil {
+			we.SubscriptionID = sess.Subscription.ID
+		}
+	case "customer.subscription.deleted":
+		var sub stripe.Subscription
+		if err := json.Unmarshal(event.Data.Raw, &sub); err != nil {
+			return nil, fmt.Errorf("unmarshal subscription: %w", err)
+		}
+		we.SubscriptionID = sub.ID
 	}
 	return we, nil
 }

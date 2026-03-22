@@ -52,6 +52,9 @@
         {{else if eq .Site.PaymentStatus "pending"}}
           <span class="badge badge-draft">Awaiting payment</span>
           {{if .Site.Plan}}<span style="margin-left:0.4rem;font-size:0.85rem;color:#555;text-transform:capitalize;">{{.Site.Plan}}</span>{{end}}
+        {{else if eq .Site.PaymentStatus "cancelled"}}
+          <span class="badge badge-draft" style="background:#fee2e2;color:#991b1b;">Cancelled</span>
+          {{if .Site.Plan}}<span style="margin-left:0.4rem;font-size:0.85rem;color:#555;text-transform:capitalize;">{{.Site.Plan}}</span>{{end}}
         {{else}}
           <span style="color:#999;font-size:0.85rem;">No link sent</span>
         {{end}}
@@ -82,7 +85,11 @@
       <p style="color:#166534;background:#dcfce7;padding:0.5rem 0.75rem;border-radius:6px;font-size:0.9rem;margin-bottom:0.75rem;">Payment link sent to {{.Site.LeadEmail}}</p>
       {{end}}
       {{if eq .Site.PaymentStatus "paid"}}
-      <p style="color:#166534;font-size:0.9rem;">Payment received.</p>
+      <form method="POST" action="/admin/sites/{{.Site.ID}}/cancel-subscription" onsubmit="return confirm('Cancel the subscription for {{.Site.BusinessName}}? This will stop their billing immediately.')">
+        <button type="submit" class="btn-unpublish" style="font-size:0.9rem;padding:0.5rem 1.2rem;">Cancel Subscription</button>
+      </form>
+      {{else if eq .Site.PaymentStatus "cancelled"}}
+      <p style="color:#991b1b;font-size:0.9rem;">Subscription cancelled.</p>
       {{else}}
       <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
         <select name="plan" style="border:1px solid #ddd;border-radius:6px;padding:0.5rem 0.75rem;font-size:0.9rem;font-family:inherit;background:#fff;">

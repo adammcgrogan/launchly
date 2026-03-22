@@ -284,6 +284,32 @@ func (h *Handler) AdminSendPayment(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d?payment=sent", id), http.StatusSeeOther)
 }
 
+func (h *Handler) AdminCancelSubscription(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	site, err := h.store.GetSiteByID(id)
+	if err != nil || site == nil {
+		http.NotFound(w, r)
+		return
+	}
+	if site.StripeSubscriptionID == "" {
+		http.Error(w, "no subscription on record", http.StatusBadRequest)
+		return
+	}
+	if err := h.pay.CancelSubscription(site.StripeSubscriptionID); err != nil {
+		http.Error(w, "stripe error: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := h.store.SetSiteCancelled(site.StripeSubscriptionID); err != nil {
+		http.Error(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
+}
+
 func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(io.LimitReader(r.Body, 65536))
 	if err != nil {
@@ -296,11 +322,22 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid webhook", http.StatusBadRequest)
 		return
 	}
-	if event.Type == "checkout.session.completed" && event.SessionID != "" {
-		if err := h.store.SetSitePaid(event.SessionID); err != nil {
-			log.Printf("set site paid error: %v", err)
-		} else {
-			log.Printf("payment received for session %s", event.SessionID)
+	switch event.Type {
+	case "checkout.session.completed":
+		if event.SessionID != "" {
+			if err := h.store.SetSitePaid(event.SessionID, event.SubscriptionID); err != nil {
+				log.Printf("set site paid error: %v", err)
+			} else {
+				log.Printf("payment received for session %s", event.SessionID)
+			}
+		}
+	case "customer.subscription.deleted":
+		if event.SubscriptionID != "" {
+			if err := h.store.SetSiteCancelled(event.SubscriptionID); err != nil {
+				log.Printf("set site cancelled error: %v", err)
+			} else {
+				log.Printf("subscription cancelled: %s", event.SubscriptionID)
+			}
 		}
 	}
 	w.WriteHeader(http.StatusOK)
@@ -337,4 +374,5 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /admin/sites/{id}/switch-template", h.adminAuth(h.AdminSwitchTemplate))
 	mux.HandleFunc("POST /admin/sites/{id}/switch-template", h.adminAuth(h.AdminDoSwitchTemplate))
 	mux.HandleFunc("POST /admin/sites/{id}/send-payment", h.adminAuth(h.AdminSendPayment))
+	mux.HandleFunc("POST /admin/sites/{id}/cancel-subscription", h.adminAuth(h.AdminCancelSubscription))
 }
