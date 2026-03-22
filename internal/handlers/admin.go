@@ -79,9 +79,20 @@ func (h *Handler) AdminPublish(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+	site, err := h.store.GetSiteByID(id)
+	if err != nil || site == nil {
+		http.NotFound(w, r)
+		return
+	}
 	if err := h.store.PublishSite(id); err != nil {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
+	}
+	if site.LeadEmail != "" {
+		siteURL := h.baseURL(r.Host) + "/sites/" + site.Slug
+		if err := h.email.SendSitePublished(site.LeadEmail, site.BusinessName, siteURL); err != nil {
+			log.Printf("send site published email error: %v", err)
+		}
 	}
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
@@ -92,9 +103,19 @@ func (h *Handler) AdminUnpublish(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+	site, err := h.store.GetSiteByID(id)
+	if err != nil || site == nil {
+		http.NotFound(w, r)
+		return
+	}
 	if err := h.store.UnpublishSite(id); err != nil {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
+	}
+	if site.LeadEmail != "" {
+		if err := h.email.SendSiteUnpublished(site.LeadEmail, site.BusinessName); err != nil {
+			log.Printf("send site unpublished email error: %v", err)
+		}
 	}
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
@@ -133,14 +154,46 @@ func (h *Handler) AdminEditSite(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func siteDiff(old, updated *models.Site) []string {
+	var changes []string
+	check := func(label, a, b string) {
+		if a != b {
+			changes = append(changes, label)
+		}
+	}
+	check("Business Name", old.BusinessName, updated.BusinessName)
+	check("Tagline", old.Tagline, updated.Tagline)
+	check("About", old.About, updated.About)
+	check("Services", old.Services, updated.Services)
+	check("Certifications / Trust Badges", old.Certifications, updated.Certifications)
+	check("Location", old.Location, updated.Location)
+	check("CTA Button Text", old.CTAText, updated.CTAText)
+	check("Testimonials", old.Testimonials, updated.Testimonials)
+	check("Logo", old.LogoURL, updated.LogoURL)
+	check("Photo Gallery", old.Gallery, updated.Gallery)
+	check("Phone", old.Phone, updated.Phone)
+	check("Business Email", old.Email, updated.Email)
+	check("Address", old.Address, updated.Address)
+	check("Opening Hours", old.Hours, updated.Hours)
+	check("Google Maps URL", old.MapURL, updated.MapURL)
+	check("Facebook", old.FacebookURL, updated.FacebookURL)
+	check("Instagram", old.InstagramURL, updated.InstagramURL)
+	check("WhatsApp", old.WhatsAppURL, updated.WhatsAppURL)
+	check("Twitter / X", old.TwitterURL, updated.TwitterURL)
+	check("TikTok", old.TikTokURL, updated.TikTokURL)
+	check("LinkedIn", old.LinkedInURL, updated.LinkedInURL)
+	check("YouTube", old.YouTubeURL, updated.YouTubeURL)
+	return changes
+}
+
 func (h *Handler) AdminUpdateSite(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		http.NotFound(w, r)
 		return
 	}
-	site, err := h.store.GetSiteByID(id)
-	if err != nil || site == nil {
+	old, err := h.store.GetSiteByID(id)
+	if err != nil || old == nil {
 		http.NotFound(w, r)
 		return
 	}
@@ -148,33 +201,41 @@ func (h *Handler) AdminUpdateSite(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "bad request", http.StatusBadRequest)
 		return
 	}
-	site.BusinessName = strings.TrimSpace(r.FormValue("business_name"))
-	site.Tagline = strings.TrimSpace(r.FormValue("tagline"))
-	site.About = strings.TrimSpace(r.FormValue("about"))
-	site.Services = strings.TrimSpace(r.FormValue("services"))
-	site.Certifications = strings.TrimSpace(r.FormValue("certifications"))
-	site.Location = strings.TrimSpace(r.FormValue("location"))
-	site.CTAText = strings.TrimSpace(r.FormValue("cta_text"))
-	site.Testimonials = buildTestimonials(r)
-	site.LogoURL = strings.TrimSpace(r.FormValue("logo_url"))
-	site.Gallery = strings.TrimSpace(r.FormValue("gallery"))
-	site.Phone = strings.TrimSpace(r.FormValue("phone"))
-	site.Email = strings.TrimSpace(r.FormValue("email"))
-	site.Address = strings.TrimSpace(r.FormValue("address"))
-	site.Hours = strings.TrimSpace(r.FormValue("hours"))
-	site.MapURL = strings.TrimSpace(r.FormValue("map_url"))
-	site.FacebookURL = strings.TrimSpace(r.FormValue("facebook_url"))
-	site.InstagramURL = strings.TrimSpace(r.FormValue("instagram_url"))
-	site.WhatsAppURL = strings.TrimSpace(r.FormValue("whatsapp_url"))
-	site.TwitterURL = strings.TrimSpace(r.FormValue("twitter_url"))
-	site.TikTokURL = strings.TrimSpace(r.FormValue("tiktok_url"))
-	site.LinkedInURL = strings.TrimSpace(r.FormValue("linkedin_url"))
-	site.YouTubeURL = strings.TrimSpace(r.FormValue("youtube_url"))
-	site.UmamiWebsiteID = strings.TrimSpace(r.FormValue("umami_website_id"))
-	site.LeadEmail = strings.TrimSpace(r.FormValue("lead_email"))
-	if err := h.store.UpdateSite(site); err != nil {
+	// Copy old into updated, then apply form values
+	updated := *old
+	updated.BusinessName = strings.TrimSpace(r.FormValue("business_name"))
+	updated.Tagline = strings.TrimSpace(r.FormValue("tagline"))
+	updated.About = strings.TrimSpace(r.FormValue("about"))
+	updated.Services = strings.TrimSpace(r.FormValue("services"))
+	updated.Certifications = strings.TrimSpace(r.FormValue("certifications"))
+	updated.Location = strings.TrimSpace(r.FormValue("location"))
+	updated.CTAText = strings.TrimSpace(r.FormValue("cta_text"))
+	updated.Testimonials = buildTestimonials(r)
+	updated.LogoURL = strings.TrimSpace(r.FormValue("logo_url"))
+	updated.Gallery = strings.TrimSpace(r.FormValue("gallery"))
+	updated.Phone = strings.TrimSpace(r.FormValue("phone"))
+	updated.Email = strings.TrimSpace(r.FormValue("email"))
+	updated.Address = strings.TrimSpace(r.FormValue("address"))
+	updated.Hours = strings.TrimSpace(r.FormValue("hours"))
+	updated.MapURL = strings.TrimSpace(r.FormValue("map_url"))
+	updated.FacebookURL = strings.TrimSpace(r.FormValue("facebook_url"))
+	updated.InstagramURL = strings.TrimSpace(r.FormValue("instagram_url"))
+	updated.WhatsAppURL = strings.TrimSpace(r.FormValue("whatsapp_url"))
+	updated.TwitterURL = strings.TrimSpace(r.FormValue("twitter_url"))
+	updated.TikTokURL = strings.TrimSpace(r.FormValue("tiktok_url"))
+	updated.LinkedInURL = strings.TrimSpace(r.FormValue("linkedin_url"))
+	updated.YouTubeURL = strings.TrimSpace(r.FormValue("youtube_url"))
+	updated.UmamiWebsiteID = strings.TrimSpace(r.FormValue("umami_website_id"))
+	updated.LeadEmail = strings.TrimSpace(r.FormValue("lead_email"))
+	changes := siteDiff(old, &updated)
+	if err := h.store.UpdateSite(&updated); err != nil {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
+	}
+	if len(changes) > 0 && updated.LeadEmail != "" {
+		if err := h.email.SendSiteUpdated(updated.LeadEmail, updated.BusinessName, changes); err != nil {
+			log.Printf("send site updated email error: %v", err)
+		}
 	}
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
