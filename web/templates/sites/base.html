@@ -13,13 +13,16 @@
     }
   </script>
   {{template "theme" .}}
+  {{if and .UmamiScriptURL .Site.UmamiWebsiteID}}
+  <script defer src="{{.UmamiScriptURL}}" data-website-id="{{.Site.UmamiWebsiteID}}"></script>
+  {{end}}
 </head>
 <body class="antialiased">
   {{template "site-content" .}}
-  <footer class="py-8 text-center text-sm border-t" style="border-color:var(--border);background:var(--bg);color:var(--muted);">
-    <p class="font-medium" style="color:var(--text);">{{.Site.BusinessName}}</p>
+  <footer class="py-8 text-center text-sm border-t border-gray-200 bg-white text-gray-500">
+    <p class="font-medium text-gray-800">{{.Site.BusinessName}}</p>
     {{if .Site.Address}}<p class="mt-1">{{.Site.Address}}</p>{{end}}
-    <p class="mt-3 text-xs" style="color:var(--muted);">Powered by <a href="https://amgdigital.co" style="color:var(--accent);">AMG Digital</a></p>
+    <p class="mt-3 text-xs text-gray-400">Powered by <a href="https://amgdigital.co" class="text-gray-500 hover:text-gray-700 underline">AMG Digital</a></p>
   </footer>
 </body>
 </html>

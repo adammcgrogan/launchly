@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"regexp"
@@ -55,14 +56,26 @@ func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	slug := toSlug(businessName)
+	base := slug
+	for i := 2; ; i++ {
+		existing, _ := h.store.GetSiteBySlug(slug)
+		if existing == nil {
+			break
+		}
+		slug = fmt.Sprintf("%s-%d", base, i)
+	}
+
 	site := &models.Site{
-		Slug:         toSlug(businessName),
+		Slug:         slug,
 		BusinessName: businessName,
 		Template:     r.FormValue("template"),
 		Tagline:      r.FormValue("tagline"),
 		About:        r.FormValue("about"),
-		Services:     r.FormValue("services"),
-		CTAText:      strings.TrimSpace(r.FormValue("cta_text")),
+		Services:       r.FormValue("services"),
+		Location:       strings.TrimSpace(r.FormValue("location")),
+		Certifications: strings.TrimSpace(r.FormValue("certifications")),
+		CTAText:        strings.TrimSpace(r.FormValue("cta_text")),
 		Testimonials: buildTestimonials(r),
 		LogoURL:      r.FormValue("logo_url"),
 		Gallery:      r.FormValue("gallery"),

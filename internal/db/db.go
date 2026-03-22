@@ -52,6 +52,7 @@ func (s *Store) Migrate() error {
 			tiktok_url       TEXT NOT NULL DEFAULT '',
 			linkedin_url     TEXT NOT NULL DEFAULT '',
 			youtube_url      TEXT NOT NULL DEFAULT '',
+			umami_website_id TEXT NOT NULL DEFAULT '',
 			lead_email       TEXT NOT NULL,
 			status           TEXT NOT NULL DEFAULT 'draft',
 			created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -62,6 +63,7 @@ func (s *Store) Migrate() error {
 			id         SERIAL PRIMARY KEY,
 			site_id    INT NOT NULL REFERENCES sites(id) ON DELETE CASCADE,
 			name       TEXT NOT NULL,
+			email      TEXT NOT NULL DEFAULT '',
 			phone      TEXT NOT NULL DEFAULT '',
 			message    TEXT NOT NULL DEFAULT '',
 			created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -82,6 +84,8 @@ func (s *Store) Migrate() error {
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS tiktok_url TEXT NOT NULL DEFAULT ''`)
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS linkedin_url TEXT NOT NULL DEFAULT ''`)
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS youtube_url TEXT NOT NULL DEFAULT ''`)
+	s.db.Exec(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS email TEXT NOT NULL DEFAULT ''`)
+	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS umami_website_id TEXT NOT NULL DEFAULT ''`)
 	return nil
 }
 
@@ -208,15 +212,17 @@ func (s *Store) CreateSite(site *models.Site) error {
 		                   certifications, location, cta_text, testimonials, logo_url, gallery,
 		                   phone, email, address, hours,
 		                   map_url, facebook_url, instagram_url, whatsapp_url,
-		                   twitter_url, tiktok_url, linkedin_url, youtube_url, lead_email)
-		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25)
+		                   twitter_url, tiktok_url, linkedin_url, youtube_url,
+		                   umami_website_id, lead_email)
+		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26)
 		RETURNING id, created_at`,
 		site.Slug, site.BusinessName, site.Template, site.Tagline, site.About,
 		site.Services, site.Certifications, site.Location, site.CTAText,
 		site.Testimonials, site.LogoURL, site.Gallery,
 		site.Phone, site.Email, site.Address, site.Hours,
 		site.MapURL, site.FacebookURL, site.InstagramURL, site.WhatsAppURL,
-		site.TwitterURL, site.TikTokURL, site.LinkedInURL, site.YouTubeURL, site.LeadEmail,
+		site.TwitterURL, site.TikTokURL, site.LinkedInURL, site.YouTubeURL,
+		site.UmamiWebsiteID, site.LeadEmail,
 	).Scan(&site.ID, &site.CreatedAt)
 }
 
@@ -226,14 +232,15 @@ func (s *Store) UpdateSite(site *models.Site) error {
 		certifications=$5, location=$6, cta_text=$7, testimonials=$8, logo_url=$9, gallery=$10,
 		phone=$11, email=$12, address=$13, hours=$14,
 		map_url=$15, facebook_url=$16, instagram_url=$17, whatsapp_url=$18,
-		twitter_url=$19, tiktok_url=$20, linkedin_url=$21, youtube_url=$22, lead_email=$23
-		WHERE id=$24`,
+		twitter_url=$19, tiktok_url=$20, linkedin_url=$21, youtube_url=$22,
+		umami_website_id=$23, lead_email=$24
+		WHERE id=$25`,
 		site.BusinessName, site.Tagline, site.About, site.Services,
 		site.Certifications, site.Location, site.CTAText, site.Testimonials, site.LogoURL, site.Gallery,
 		site.Phone, site.Email, site.Address, site.Hours,
 		site.MapURL, site.FacebookURL, site.InstagramURL, site.WhatsAppURL,
 		site.TwitterURL, site.TikTokURL, site.LinkedInURL, site.YouTubeURL,
-		site.LeadEmail, site.ID,
+		site.UmamiWebsiteID, site.LeadEmail, site.ID,
 	)
 	return err
 }
@@ -245,7 +252,7 @@ func (s *Store) GetSiteBySlug(slug string) (*models.Site, error) {
 		       certifications, location, cta_text, testimonials, logo_url, gallery,
 		       phone, email, address, hours, map_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
-		       lead_email, status, created_at, published_at
+		       umami_website_id, lead_email, status, created_at, published_at
 		FROM sites WHERE slug = $1`, slug).
 		Scan(&site.ID, &site.Slug, &site.BusinessName, &site.Template,
 			&site.Tagline, &site.About, &site.Services,
@@ -254,7 +261,7 @@ func (s *Store) GetSiteBySlug(slug string) (*models.Site, error) {
 			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL,
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
-			&site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt)
+			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
@@ -268,7 +275,7 @@ func (s *Store) GetSiteByID(id int) (*models.Site, error) {
 		       certifications, location, cta_text, testimonials, logo_url, gallery,
 		       phone, email, address, hours, map_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
-		       lead_email, status, created_at, published_at
+		       umami_website_id, lead_email, status, created_at, published_at
 		FROM sites WHERE id = $1`, id).
 		Scan(&site.ID, &site.Slug, &site.BusinessName, &site.Template,
 			&site.Tagline, &site.About, &site.Services,
@@ -277,7 +284,7 @@ func (s *Store) GetSiteByID(id int) (*models.Site, error) {
 			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL,
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
-			&site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt)
+			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
@@ -290,7 +297,7 @@ func (s *Store) ListSites() ([]*models.Site, error) {
 		       certifications, location, cta_text, testimonials, logo_url, gallery,
 		       phone, email, address, hours, map_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
-		       lead_email, status, created_at, published_at
+		       umami_website_id, lead_email, status, created_at, published_at
 		FROM sites ORDER BY created_at DESC`)
 	if err != nil {
 		return nil, err
@@ -307,7 +314,7 @@ func (s *Store) ListSites() ([]*models.Site, error) {
 			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL,
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
-			&site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt); err != nil {
+			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt); err != nil {
 			return nil, err
 		}
 		sites = append(sites, site)
@@ -335,16 +342,16 @@ func (s *Store) DeleteSite(id int) error {
 
 func (s *Store) CreateLead(lead *models.Lead) error {
 	return s.db.QueryRow(`
-		INSERT INTO leads (site_id, name, phone, message)
-		VALUES ($1, $2, $3, $4)
+		INSERT INTO leads (site_id, name, email, phone, message)
+		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id, created_at`,
-		lead.SiteID, lead.Name, lead.Phone, lead.Message,
+		lead.SiteID, lead.Name, lead.Email, lead.Phone, lead.Message,
 	).Scan(&lead.ID, &lead.CreatedAt)
 }
 
 func (s *Store) ListLeadsBySite(siteID int) ([]*models.Lead, error) {
 	rows, err := s.db.Query(`
-		SELECT id, site_id, name, phone, message, created_at
+		SELECT id, site_id, name, email, phone, message, created_at
 		FROM leads WHERE site_id = $1 ORDER BY created_at DESC`, siteID)
 	if err != nil {
 		return nil, err
@@ -354,7 +361,7 @@ func (s *Store) ListLeadsBySite(siteID int) ([]*models.Lead, error) {
 	var leads []*models.Lead
 	for rows.Next() {
 		l := &models.Lead{}
-		if err := rows.Scan(&l.ID, &l.SiteID, &l.Name, &l.Phone, &l.Message, &l.CreatedAt); err != nil {
+		if err := rows.Scan(&l.ID, &l.SiteID, &l.Name, &l.Email, &l.Phone, &l.Message, &l.CreatedAt); err != nil {
 			return nil, err
 		}
 		leads = append(leads, l)
@@ -364,7 +371,7 @@ func (s *Store) ListLeadsBySite(siteID int) ([]*models.Lead, error) {
 
 func (s *Store) ListAllLeads() ([]*models.Lead, error) {
 	rows, err := s.db.Query(`
-		SELECT id, site_id, name, phone, message, created_at
+		SELECT id, site_id, name, email, phone, message, created_at
 		FROM leads ORDER BY created_at DESC`)
 	if err != nil {
 		return nil, err
@@ -374,7 +381,7 @@ func (s *Store) ListAllLeads() ([]*models.Lead, error) {
 	var leads []*models.Lead
 	for rows.Next() {
 		l := &models.Lead{}
-		if err := rows.Scan(&l.ID, &l.SiteID, &l.Name, &l.Phone, &l.Message, &l.CreatedAt); err != nil {
+		if err := rows.Scan(&l.ID, &l.SiteID, &l.Name, &l.Email, &l.Phone, &l.Message, &l.CreatedAt); err != nil {
 			return nil, err
 		}
 		leads = append(leads, l)

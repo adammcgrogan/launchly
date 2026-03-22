@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/adammcgrogan/locallaunch/internal/db"
 	"github.com/adammcgrogan/locallaunch/internal/email"
@@ -20,6 +21,7 @@ func main() {
 	adminPass := mustEnv("ADMIN_PASSWORD")
 	resendKey := getEnv("RESEND_API_KEY", "")
 	emailFrom := getEnv("EMAIL_FROM", "noreply@amgdigital.co")
+	umamiScriptURL := getEnv("UMAMI_SCRIPT_URL", "")
 	addr := getEnv("ADDR", ":8080")
 
 	store, err := db.New(dsn)
@@ -34,7 +36,7 @@ func main() {
 	}
 
 	mailer := email.New(resendKey, emailFrom)
-	h := handlers.New(store, mailer, domain, adminPass)
+	h := handlers.New(store, mailer, domain, adminPass, umamiScriptURL)
 
 	mux := http.NewServeMux()
 
@@ -46,10 +48,31 @@ func main() {
 
 	// Subdomain router: anything on *.domain hits the site handler
 	// All other requests go to the main mux
-	finalHandler := subdomainRouter(domain, h, mux)
+	finalHandler := loggingMiddleware(subdomainRouter(domain, h, mux))
 
 	log.Printf("AMG Digital listening on %s (domain: %s)", addr, domain)
 	log.Fatal(http.ListenAndServe(addr, finalHandler))
+}
+
+// loggingMiddleware logs each request with method, path, status code, and duration.
+func loggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		rec := &statusRecorder{ResponseWriter: w, status: http.StatusOK}
+		next.ServeHTTP(rec, r)
+		log.Printf("%s %s %d %s", r.Method, r.URL.Path, rec.status, time.Since(start).Round(time.Millisecond))
+	})
+}
+
+// statusRecorder wraps ResponseWriter to capture the status code.
+type statusRecorder struct {
+	http.ResponseWriter
+	status int
+}
+
+func (r *statusRecorder) WriteHeader(code int) {
+	r.status = code
+	r.ResponseWriter.WriteHeader(code)
 }
 
 // subdomainRouter routes subdomain requests to the site handler,

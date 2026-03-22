@@ -36,6 +36,7 @@ type Site struct {
 	TikTokURL        string     `db:"tiktok_url"`
 	LinkedInURL      string     `db:"linkedin_url"`
 	YouTubeURL       string     `db:"youtube_url"`
+	UmamiWebsiteID   string     `db:"umami_website_id"` // Umami analytics website ID
 	LeadEmail        string     `db:"lead_email"`       // where leads are forwarded
 	Status           SiteStatus `db:"status"`
 	CreatedAt        time.Time  `db:"created_at"`
@@ -47,6 +48,7 @@ type Lead struct {
 	ID        int       `db:"id"`
 	SiteID    int       `db:"site_id"`
 	Name      string    `db:"name"`
+	Email     string    `db:"email"`
 	Phone     string    `db:"phone"`
 	Message   string    `db:"message"`
 	CreatedAt time.Time `db:"created_at"`

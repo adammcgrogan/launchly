@@ -165,6 +165,7 @@ func (h *Handler) AdminUpdateSite(w http.ResponseWriter, r *http.Request) {
 	site.TikTokURL = strings.TrimSpace(r.FormValue("tiktok_url"))
 	site.LinkedInURL = strings.TrimSpace(r.FormValue("linkedin_url"))
 	site.YouTubeURL = strings.TrimSpace(r.FormValue("youtube_url"))
+	site.UmamiWebsiteID = strings.TrimSpace(r.FormValue("umami_website_id"))
 	site.LeadEmail = strings.TrimSpace(r.FormValue("lead_email"))
 	if err := h.store.UpdateSite(site); err != nil {
 		http.Error(w, "database error", http.StatusInternalServerError)

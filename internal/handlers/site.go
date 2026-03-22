@@ -45,7 +45,7 @@ func (h *Handler) renderSite(w http.ResponseWriter, r *http.Request, slug, formA
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	data := siteData(site, r.URL.Query().Get("lead") == "1", formAction)
+	data := h.siteData(site, r.URL.Query().Get("lead") == "1", formAction)
 	if err := tmpl.ExecuteTemplate(w, "base", data); err != nil {
 		log.Printf("template render error for site %s: %v", slug, err)
 	}
@@ -79,6 +79,7 @@ func (h *Handler) saveLead(w http.ResponseWriter, r *http.Request, slug, redirec
 	lead := &models.Lead{
 		SiteID:  site.ID,
 		Name:    strings.TrimSpace(r.FormValue("name")),
+		Email:   strings.TrimSpace(r.FormValue("email")),
 		Phone:   strings.TrimSpace(r.FormValue("phone")),
 		Message: strings.TrimSpace(r.FormValue("message")),
 	}
@@ -94,14 +95,14 @@ func (h *Handler) saveLead(w http.ResponseWriter, r *http.Request, slug, redirec
 	}
 
 	if site.LeadEmail != "" {
-		h.email.SendLeadNotification(site.LeadEmail, site.BusinessName, lead.Name, lead.Phone, lead.Message)
+		h.email.SendLeadNotification(site.LeadEmail, site.BusinessName, lead.Name, lead.Email, lead.Phone, lead.Message)
 	}
 
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
 
 // extractSlug pulls the subdomain from the host header.
-// e.g. "joes-barbers.locallaunch.co" → "joes-barbers"
+// e.g. "adam-barbers.locallaunch.co" → "adam-barbers"
 func extractSlug(host, domain string) string {
 	host = strings.ToLower(strings.Split(host, ":")[0]) // strip port
 	suffix := "." + domain
@@ -127,9 +128,10 @@ type templateData struct {
 	CTAText        string
 	LeadSent       bool
 	FormAction     string
+	UmamiScriptURL string
 }
 
-func siteData(site *models.Site, leadSent bool, formAction string) templateData {
+func (h *Handler) siteData(site *models.Site, leadSent bool, formAction string) templateData {
 	ctaText := site.CTAText
 	if ctaText == "" {
 		ctaText = "Get in Touch"
@@ -144,6 +146,7 @@ func siteData(site *models.Site, leadSent bool, formAction string) templateData 
 		CTAText:        ctaText,
 		LeadSent:       leadSent,
 		FormAction:     formAction,
+		UmamiScriptURL: h.umamiScriptURL,
 	}
 }
 

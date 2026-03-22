@@ -53,15 +53,16 @@ func (c *Client) Send(to, subject, html string) error {
 	return nil
 }
 
-func (c *Client) SendLeadNotification(to, businessName, visitorName, phone, message string) error {
+func (c *Client) SendLeadNotification(to, businessName, visitorName, visitorEmail, phone, message string) error {
 	html := fmt.Sprintf(`
 		<h2>New lead for %s</h2>
 		<p><strong>Name:</strong> %s</p>
+		<p><strong>Email:</strong> %s</p>
 		<p><strong>Phone:</strong> %s</p>
 		<p><strong>Message:</strong> %s</p>
 		<hr>
-		<p style="color:#999;font-size:12px;">Sent by LocalLaunch</p>
-	`, businessName, visitorName, phone, message)
+		<p style="color:#999;font-size:12px;">Sent by AMG Digital</p>
+	`, businessName, visitorName, visitorEmail, phone, message)
 
 	return c.Send(to, fmt.Sprintf("New lead from your website — %s", businessName), html)
 }

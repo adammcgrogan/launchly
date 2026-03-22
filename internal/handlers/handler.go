@@ -62,17 +62,19 @@ func (h *Handler) exampleURL(reqHost, slug string) string {
 }
 
 type Handler struct {
-	store  *db.Store
-	email  *email.Client
-	domain string // e.g. "locallaunch.co"
-	adminPass string
+	store          *db.Store
+	email          *email.Client
+	domain         string
+	adminPass      string
+	umamiScriptURL string
 }
 
-func New(store *db.Store, email *email.Client, domain, adminPass string) *Handler {
+func New(store *db.Store, email *email.Client, domain, adminPass, umamiScriptURL string) *Handler {
 	return &Handler{
-		store:     store,
-		email:     email,
-		domain:    domain,
-		adminPass: adminPass,
+		store:          store,
+		email:          email,
+		domain:         domain,
+		adminPass:      adminPass,
+		umamiScriptURL: umamiScriptURL,
 	}
 }
