@@ -44,6 +44,7 @@ type Site struct {
 	Plan             string     `db:"plan"`               // starter, pro
 	PaymentStatus    string     `db:"payment_status"`     // unpaid, pending, paid
 	StripeSessionID  string     `db:"stripe_session_id"`
+	PaidAt           *time.Time `db:"paid_at"`
 }
 
 // Lead represents a contact form submission from a site visitor.

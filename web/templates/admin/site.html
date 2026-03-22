@@ -47,10 +47,11 @@
       <dd>
         {{if eq .Site.PaymentStatus "paid"}}
           <span class="badge badge-live">Paid</span>
-          {{if .Site.Plan}}<span style="margin-left:0.4rem;font-size:0.85rem;color:#555;">{{.Site.Plan}}</span>{{end}}
+          {{if .Site.Plan}}<span style="margin-left:0.4rem;font-size:0.85rem;color:#555;text-transform:capitalize;">{{.Site.Plan}}</span>{{end}}
+          {{if .Site.PaidAt}}<span style="display:block;font-size:0.82rem;color:#888;margin-top:0.2rem;">{{.Site.PaidAt.Format "02 Jan 2006 15:04"}}</span>{{end}}
         {{else if eq .Site.PaymentStatus "pending"}}
           <span class="badge badge-draft">Awaiting payment</span>
-          {{if .Site.Plan}}<span style="margin-left:0.4rem;font-size:0.85rem;color:#555;">{{.Site.Plan}}</span>{{end}}
+          {{if .Site.Plan}}<span style="margin-left:0.4rem;font-size:0.85rem;color:#555;text-transform:capitalize;">{{.Site.Plan}}</span>{{end}}
         {{else}}
           <span style="color:#999;font-size:0.85rem;">No link sent</span>
         {{end}}

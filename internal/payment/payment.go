@@ -91,7 +91,9 @@ type WebhookEvent struct {
 
 // ParseWebhook verifies the Stripe webhook signature and returns a parsed event.
 func (c *Client) ParseWebhook(payload []byte, sigHeader string) (*WebhookEvent, error) {
-	event, err := webhook.ConstructEvent(payload, sigHeader, c.webhookSecret)
+	event, err := webhook.ConstructEventWithOptions(payload, sigHeader, c.webhookSecret, webhook.ConstructEventOptions{
+		IgnoreAPIVersionMismatch: true,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("webhook signature: %w", err)
 	}
