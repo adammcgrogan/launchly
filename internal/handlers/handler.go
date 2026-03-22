@@ -6,6 +6,7 @@ import (
 
 	"github.com/adammcgrogan/locallaunch/internal/db"
 	"github.com/adammcgrogan/locallaunch/internal/email"
+	"github.com/adammcgrogan/locallaunch/internal/payment"
 )
 
 // siteTemplates lists available templates shown in the onboarding form.
@@ -64,15 +65,17 @@ func (h *Handler) exampleURL(reqHost, slug string) string {
 type Handler struct {
 	store          *db.Store
 	email          *email.Client
+	pay            *payment.Client
 	domain         string
 	adminPass      string
 	umamiScriptURL string
 }
 
-func New(store *db.Store, email *email.Client, domain, adminPass, umamiScriptURL string) *Handler {
+func New(store *db.Store, email *email.Client, pay *payment.Client, domain, adminPass, umamiScriptURL string) *Handler {
 	return &Handler{
 		store:          store,
 		email:          email,
+		pay:            pay,
 		domain:         domain,
 		adminPass:      adminPass,
 		umamiScriptURL: umamiScriptURL,

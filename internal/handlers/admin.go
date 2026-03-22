@@ -3,9 +3,13 @@ package handlers
 import (
 	"fmt"
 	"html/template"
+	"io"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/adammcgrogan/locallaunch/internal/models"
 )
 
 func (h *Handler) adminAuth(next http.HandlerFunc) http.HandlerFunc {
@@ -61,10 +65,11 @@ func (h *Handler) AdminSite(w http.ResponseWriter, r *http.Request) {
 		"web/templates/admin/site.html",
 	))
 	tmpl.ExecuteTemplate(w, "base", map[string]any{
-		"Site":    site,
-		"Leads":   leads,
-		"Domain":  h.domain,
-		"SiteURL": h.baseURL(r.Host) + "/sites/" + site.Slug,
+		"Site":        site,
+		"Leads":       leads,
+		"Domain":      h.domain,
+		"SiteURL":     h.baseURL(r.Host) + "/sites/" + site.Slug,
+		"PaymentSent": r.URL.Query().Get("payment") == "sent",
 	})
 }
 
@@ -241,11 +246,81 @@ func (h *Handler) AdminDoSwitchTemplate(w http.ResponseWriter, r *http.Request) 
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
 
+func (h *Handler) AdminSendPayment(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	site, err := h.store.GetSiteByID(id)
+	if err != nil || site == nil || site.Status != models.StatusLive {
+		http.NotFound(w, r)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+	plan := r.FormValue("plan")
+	if plan != "starter" && plan != "pro" {
+		http.Error(w, "invalid plan", http.StatusBadRequest)
+		return
+	}
+	successURL := h.baseURL(r.Host) + "/payment/success"
+	cancelURL := h.baseURL(r.Host) + "/sites/" + site.Slug
+
+	sessionID, checkoutURL, err := h.pay.CreateCheckoutSession(plan, site.LeadEmail, successURL, cancelURL)
+	if err != nil {
+		http.Error(w, "payment error: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := h.store.SetSitePending(id, plan, sessionID); err != nil {
+		http.Error(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	if err := h.email.SendPaymentLink(site.LeadEmail, site.BusinessName, checkoutURL); err != nil {
+		log.Printf("send payment link email error: %v", err)
+	}
+	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d?payment=sent", id), http.StatusSeeOther)
+}
+
+func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
+	body, err := io.ReadAll(io.LimitReader(r.Body, 65536))
+	if err != nil {
+		http.Error(w, "read error", http.StatusBadRequest)
+		return
+	}
+	event, err := h.pay.ParseWebhook(body, r.Header.Get("Stripe-Signature"))
+	if err != nil {
+		log.Printf("stripe webhook error: %v", err)
+		http.Error(w, "invalid webhook", http.StatusBadRequest)
+		return
+	}
+	if event.Type == "checkout.session.completed" && event.SessionID != "" {
+		if err := h.store.SetSitePaid(event.SessionID); err != nil {
+			log.Printf("set site paid error: %v", err)
+		} else {
+			log.Printf("payment received for session %s", event.SessionID)
+		}
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (h *Handler) PaymentSuccess(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles(
+		"web/templates/public/home_base.html",
+		"web/templates/public/payment_success.html",
+	))
+	tmpl.ExecuteTemplate(w, "base", nil)
+}
+
 func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	// Public
 	mux.HandleFunc("GET /", h.Home)
 	mux.HandleFunc("GET /get-started", h.OnboardingForm)
 	mux.HandleFunc("POST /get-started", h.OnboardingSubmit)
+	mux.HandleFunc("GET /payment/success", h.PaymentSuccess)
+	mux.HandleFunc("POST /webhooks/stripe", h.StripeWebhook)
 
 	// Path-based site routing (works without wildcard subdomain)
 	mux.HandleFunc("GET /sites/{slug}", h.ServeSitePath)
@@ -261,4 +336,5 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /admin/sites/{id}/delete", h.adminAuth(h.AdminDeleteSite))
 	mux.HandleFunc("GET /admin/sites/{id}/switch-template", h.adminAuth(h.AdminSwitchTemplate))
 	mux.HandleFunc("POST /admin/sites/{id}/switch-template", h.adminAuth(h.AdminDoSwitchTemplate))
+	mux.HandleFunc("POST /admin/sites/{id}/send-payment", h.adminAuth(h.AdminSendPayment))
 }

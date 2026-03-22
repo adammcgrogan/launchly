@@ -36,11 +36,14 @@ type Site struct {
 	TikTokURL        string     `db:"tiktok_url"`
 	LinkedInURL      string     `db:"linkedin_url"`
 	YouTubeURL       string     `db:"youtube_url"`
-	UmamiWebsiteID   string     `db:"umami_website_id"` // Umami analytics website ID
-	LeadEmail        string     `db:"lead_email"`       // where leads are forwarded
+	UmamiWebsiteID   string     `db:"umami_website_id"`   // Umami analytics website ID
+	LeadEmail        string     `db:"lead_email"`         // where leads are forwarded
 	Status           SiteStatus `db:"status"`
 	CreatedAt        time.Time  `db:"created_at"`
 	PublishedAt      *time.Time `db:"published_at"`
+	Plan             string     `db:"plan"`               // starter, pro
+	PaymentStatus    string     `db:"payment_status"`     // unpaid, pending, paid
+	StripeSessionID  string     `db:"stripe_session_id"`
 }
 
 // Lead represents a contact form submission from a site visitor.

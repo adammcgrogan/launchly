@@ -10,6 +10,7 @@ import (
 	"github.com/adammcgrogan/locallaunch/internal/db"
 	"github.com/adammcgrogan/locallaunch/internal/email"
 	"github.com/adammcgrogan/locallaunch/internal/handlers"
+	"github.com/adammcgrogan/locallaunch/internal/payment"
 	"github.com/joho/godotenv"
 )
 
@@ -22,6 +23,10 @@ func main() {
 	resendKey := getEnv("RESEND_API_KEY", "")
 	emailFrom := getEnv("EMAIL_FROM", "noreply@amgdigital.co")
 	umamiScriptURL := getEnv("UMAMI_SCRIPT_URL", "")
+	stripeSecretKey := getEnv("STRIPE_SECRET_KEY", "")
+	stripeWebhookSecret := getEnv("STRIPE_WEBHOOK_SECRET", "")
+	stripeStarterProduct := getEnv("STRIPE_STARTER_PRODUCT", "")
+	stripeProProduct := getEnv("STRIPE_PRO_PRODUCT", "")
 	addr := getEnv("ADDR", ":8080")
 
 	store, err := db.New(dsn)
@@ -36,7 +41,8 @@ func main() {
 	}
 
 	mailer := email.New(resendKey, emailFrom)
-	h := handlers.New(store, mailer, domain, adminPass, umamiScriptURL)
+	pay := payment.New(stripeSecretKey, stripeWebhookSecret, stripeStarterProduct, stripeProProduct)
+	h := handlers.New(store, mailer, pay, domain, adminPass, umamiScriptURL)
 
 	mux := http.NewServeMux()
 

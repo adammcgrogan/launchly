@@ -6,6 +6,10 @@
     <div class="text-center mb-10">
       <h1 class="text-4xl font-black tracking-tight mb-3">Get your business online</h1>
       <p class="text-gray-500 text-lg">Fill in the form below. We'll build your site and have it live within 2 days.</p>
+      <p class="mt-3 inline-flex items-center gap-2 bg-green-50 text-green-800 text-sm font-medium px-4 py-2 rounded-full border border-green-200">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        No payment is requested until your site has been created and approved by you.
+      </p>
     </div>
 
     <form method="POST" action="/get-started" class="space-y-6">
@@ -277,6 +281,31 @@
   update();
 })();
       </script>
+
+      <!-- Plan -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8">
+        <h2 class="font-bold text-lg mb-2 flex items-center gap-2">
+          <span class="w-7 h-7 bg-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-black">7</span>
+          Choose a Plan
+        </h2>
+        <p class="text-gray-500 text-sm mb-6 ml-9">No payment is requested until your site has been created and approved by you.</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <label class="cursor-pointer group">
+            <input type="radio" name="plan" value="starter" class="sr-only peer" checked>
+            <div class="rounded-xl border-2 border-gray-200 p-5 peer-checked:border-indigo-600 peer-checked:ring-2 peer-checked:ring-indigo-600/20 transition h-full">
+              <div class="font-black text-lg mb-1">Starter</div>
+              <p class="text-gray-500 text-sm">Everything you need to get online and start capturing leads.</p>
+            </div>
+          </label>
+          <label class="cursor-pointer group">
+            <input type="radio" name="plan" value="pro" class="sr-only peer">
+            <div class="rounded-xl border-2 border-gray-200 p-5 peer-checked:border-indigo-600 peer-checked:ring-2 peer-checked:ring-indigo-600/20 transition h-full">
+              <div class="font-black text-lg mb-1">Pro</div>
+              <p class="text-gray-500 text-sm">More features and priority support for growing businesses.</p>
+            </div>
+          </label>
+        </div>
+      </div>
 
       <!-- Submit -->
       <div class="text-center pb-4">

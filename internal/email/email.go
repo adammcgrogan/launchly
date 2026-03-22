@@ -53,6 +53,21 @@ func (c *Client) Send(to, subject, html string) error {
 	return nil
 }
 
+func (c *Client) SendPaymentLink(to, businessName, checkoutURL string) error {
+	html := fmt.Sprintf(`
+		<h2>Your website is ready — %s</h2>
+		<p>Great news! We've built your site and it's looking great.</p>
+		<p>To complete your order, please click the button below to pay securely via Stripe. You only pay once you're happy with your site.</p>
+		<p style="margin:1.5rem 0;">
+			<a href="%s" style="display:inline-block;background:#4f46e5;color:white;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:16px;">Complete Payment</a>
+		</p>
+		<p style="color:#666;font-size:13px;">If the button doesn't work, copy and paste this link into your browser:<br>%s</p>
+		<hr>
+		<p style="color:#999;font-size:12px;">Sent by AMG Digital</p>
+	`, businessName, checkoutURL, checkoutURL)
+	return c.Send(to, fmt.Sprintf("Complete payment for your %s website", businessName), html)
+}
+
 func (c *Client) SendLeadNotification(to, businessName, visitorName, visitorEmail, phone, message string) error {
 	html := fmt.Sprintf(`
 		<h2>New lead for %s</h2>

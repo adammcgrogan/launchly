@@ -92,6 +92,7 @@ func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
 		LinkedInURL:  r.FormValue("linkedin_url"),
 		YouTubeURL:   r.FormValue("youtube_url"),
 		LeadEmail:    r.FormValue("lead_email"),
+		Plan:         r.FormValue("plan"),
 		Status:       models.StatusDraft,
 	}
 
