@@ -314,7 +314,7 @@ func (h *Handler) AdminSendPayment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	site, err := h.store.GetSiteByID(id)
-	if err != nil || site == nil || site.Status != models.StatusLive {
+	if err != nil || site == nil {
 		http.NotFound(w, r)
 		return
 	}

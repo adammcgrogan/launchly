@@ -78,7 +78,6 @@
       </form>
     </div>
 
-    {{if eq .Site.Status "live"}}
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid #eee;">
       <p style="font-size:0.85rem;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem;">Send Payment Link</p>
       {{if .PaymentSent}}
@@ -102,7 +101,6 @@
       </form>
       {{end}}
     </div>
-    {{end}}
   </div>
 
   <div class="admin-card">
