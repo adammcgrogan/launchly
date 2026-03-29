@@ -4,7 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AMG Digital - Getting your business online</title>
+  <title>AMG Digital — Professional Websites for Local Businesses</title>
+  <meta name="description" content="AMG Digital builds professional landing pages for local businesses across Northern Ireland. Fill in one form, we handle everything. Live within 24 hours from £19/mo.">
+  <meta property="og:title" content="AMG Digital — Your business online today">
+  <meta property="og:description" content="Professional websites for local businesses. No tech skills needed. Live within 24 hours from £19/mo.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://amgdigital.co">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AMG Digital — Your business online today">
+  <meta name="twitter:description" content="Professional websites for local businesses. Live within 24 hours from £19/mo.">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -24,6 +32,8 @@
   <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
       <a href="/" class="text-xl font-black tracking-tight text-gray-900">AMG Digital</a>
+
+      <!-- Desktop nav -->
       <nav class="hidden md:flex items-center gap-8">
         <a href="#how-it-works" class="text-sm text-gray-500 hover:text-gray-900 transition">How it works</a>
         <a href="#features" class="text-sm text-gray-500 hover:text-gray-900 transition">Features</a>
@@ -31,9 +41,49 @@
         <a href="#about" class="text-sm text-gray-500 hover:text-gray-900 transition">About</a>
         <a href="/get-started" class="bg-gray-900 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-gray-700 transition">Get Started</a>
       </nav>
-      <a href="/get-started" class="md:hidden bg-gray-900 text-white text-sm font-semibold px-4 py-2 rounded-lg">Get Started</a>
+
+      <!-- Mobile: hamburger + CTA -->
+      <div class="md:hidden flex items-center gap-3">
+        <a href="/get-started" class="bg-gray-900 text-white text-sm font-semibold px-4 py-2 rounded-lg">Get Started</a>
+        <button id="nav-toggle" aria-label="Open menu" class="text-gray-600 hover:text-gray-900 p-1">
+          <svg id="nav-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="nav-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile dropdown -->
+    <div id="nav-mobile" class="hidden md:hidden bg-white border-t border-gray-100 px-6 py-4 space-y-3">
+      <a href="#how-it-works" class="block text-sm text-gray-600 hover:text-gray-900 py-1" onclick="closeNav()">How it works</a>
+      <a href="#features" class="block text-sm text-gray-600 hover:text-gray-900 py-1" onclick="closeNav()">Features</a>
+      <a href="#pricing" class="block text-sm text-gray-600 hover:text-gray-900 py-1" onclick="closeNav()">Pricing</a>
+      <a href="#about" class="block text-sm text-gray-600 hover:text-gray-900 py-1" onclick="closeNav()">About</a>
     </div>
   </header>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('nav-toggle');
+      var menu = document.getElementById('nav-mobile');
+      var iconOpen = document.getElementById('nav-icon-open');
+      var iconClose = document.getElementById('nav-icon-close');
+      function closeNav() {
+        menu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      }
+      window.closeNav = closeNav;
+      toggle.addEventListener('click', function () {
+        var isHidden = menu.classList.toggle('hidden');
+        iconOpen.classList.toggle('hidden', !isHidden);
+        iconClose.classList.toggle('hidden', isHidden);
+      });
+    })();
+  </script>
 
   <main>
     {{template "content" .}}
@@ -41,18 +91,40 @@
 
   <!-- Footer -->
   <footer class="bg-gray-950 text-gray-400">
-    <div class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div>
-        <span class="text-white font-black text-lg">AMG Digital</span>
-        <p class="text-sm mt-1">Getting your business online.</p>
+    <div class="max-w-7xl mx-auto px-6 py-12">
+      <div class="flex flex-col md:flex-row items-start justify-between gap-8">
+        <div>
+          <span class="text-white font-black text-lg">AMG Digital</span>
+          <p class="text-sm mt-1 max-w-xs">Getting local businesses online — fast, simple, and affordable.</p>
+          <p class="text-sm mt-3">
+            Questions? Email us at
+            <a href="mailto:hello@amgdigital.co" class="text-indigo-400 hover:text-indigo-300 transition">hello@amgdigital.co</a>
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-8 text-sm">
+          <div class="space-y-2">
+            <p class="text-white font-semibold text-xs uppercase tracking-wider mb-3">Product</p>
+            <a href="/#how-it-works" class="block hover:text-white transition">How it works</a>
+            <a href="/#features" class="block hover:text-white transition">Features</a>
+            <a href="/#pricing" class="block hover:text-white transition">Pricing</a>
+            <a href="/#templates" class="block hover:text-white transition">Templates</a>
+          </div>
+          <div class="space-y-2">
+            <p class="text-white font-semibold text-xs uppercase tracking-wider mb-3">Company</p>
+            <a href="/#about" class="block hover:text-white transition">About</a>
+            <a href="/get-started" class="block hover:text-white transition">Get Started</a>
+            <a href="mailto:hello@amgdigital.co" class="block hover:text-white transition">Contact</a>
+          </div>
+          <div class="space-y-2">
+            <p class="text-white font-semibold text-xs uppercase tracking-wider mb-3">Legal</p>
+            <a href="/privacy" class="block hover:text-white transition">Privacy Policy</a>
+            <a href="/terms" class="block hover:text-white transition">Terms of Service</a>
+          </div>
+        </div>
       </div>
-      <div class="flex gap-6 text-sm">
-        <a href="/#how-it-works" class="hover:text-white transition">How it works</a>
-        <a href="/#pricing" class="hover:text-white transition">Pricing</a>
-        <a href="/#about" class="hover:text-white transition">About</a>
-        <a href="/get-started" class="hover:text-white transition">Get Started</a>
+      <div class="border-t border-white/10 mt-10 pt-6 text-sm text-gray-600">
+        &copy; 2026 AMG Digital. All rights reserved.
       </div>
-      <p class="text-sm">&copy; 2026 AMG Digital</p>
     </div>
   </footer>
 

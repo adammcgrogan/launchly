@@ -22,42 +22,42 @@
         </h2>
         <div class="space-y-5">
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Business Name <span class="text-red-500">*</span></label>
-            <input type="text" name="business_name" required placeholder="e.g. Adam's Barbershop"
+            <label for="ob_business_name" class="block text-sm font-semibold text-gray-700 mb-1.5">Business Name <span class="text-red-500">*</span></label>
+            <input id="ob_business_name" type="text" name="business_name" required placeholder="e.g. Adam's Barbershop"
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tagline</label>
-            <input type="text" name="tagline" placeholder="e.g. The best cuts in town"
+            <label for="ob_tagline" class="block text-sm font-semibold text-gray-700 mb-1.5">Tagline</label>
+            <input id="ob_tagline" type="text" name="tagline" placeholder="e.g. The best cuts in town"
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Main Button Text <span class="font-normal text-gray-400">(optional)</span></label>
-            <input type="text" name="cta_text" placeholder="e.g. Get a Quote, Book Now, Call Us"
+            <label for="ob_cta_text" class="block text-sm font-semibold text-gray-700 mb-1.5">Main Button Text <span class="font-normal text-gray-400">(optional)</span></label>
+            <input id="ob_cta_text" type="text" name="cta_text" placeholder="e.g. Get a Quote, Book Now, Call Us"
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
             <p class="text-gray-400 text-xs mt-1">The main action button shown on your site. Defaults to "Get in Touch" if left blank.</p>
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">About Your Business</label>
-            <textarea name="about" rows="4" placeholder="Tell visitors who you are and what makes you different..."
+            <label for="ob_about" class="block text-sm font-semibold text-gray-700 mb-1.5">About Your Business</label>
+            <textarea id="ob_about" name="about" rows="4" placeholder="Tell visitors who you are and what makes you different..."
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
           </div>
           <div class="grid sm:grid-cols-2 gap-5">
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Location <span class="font-normal text-gray-400">(optional)</span></label>
-              <input type="text" name="location" placeholder="e.g. Belfast, NI"
+              <label for="ob_location" class="block text-sm font-semibold text-gray-700 mb-1.5">Location <span class="font-normal text-gray-400">(optional)</span></label>
+              <input id="ob_location" type="text" name="location" placeholder="e.g. Belfast, NI"
                 class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
               <p class="text-gray-400 text-xs mt-1">Shown as a badge on your site's hero section.</p>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Certifications / Trust Signals <span class="font-normal text-gray-400">(one per line)</span></label>
-              <textarea name="certifications" rows="3" placeholder="Gas Safe Registered&#10;Fully Insured&#10;10+ Years Experience"
+              <label for="ob_certifications" class="block text-sm font-semibold text-gray-700 mb-1.5">Certifications / Trust Signals <span class="font-normal text-gray-400">(one per line)</span></label>
+              <textarea id="ob_certifications" name="certifications" rows="3" placeholder="Gas Safe Registered&#10;Fully Insured&#10;10+ Years Experience"
                 class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none font-mono"></textarea>
             </div>
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Services <span class="font-normal text-gray-400">(one per line)</span></label>
-            <textarea name="services" rows="5" placeholder="Haircut - £15&#10;Beard Trim - £10&#10;Cut &amp; Beard - £22"
+            <label for="ob_services" class="block text-sm font-semibold text-gray-700 mb-1.5">Services <span class="font-normal text-gray-400">(one per line)</span></label>
+            <textarea id="ob_services" name="services" rows="5" placeholder="Haircut - £15&#10;Beard Trim - £10&#10;Cut &amp; Beard - £22"
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none font-mono"></textarea>
           </div>
         </div>
@@ -71,66 +71,77 @@
         </h2>
         <div class="grid sm:grid-cols-2 gap-5">
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number</label>
-            <input type="tel" name="phone" placeholder="+44 7700 900000"
+            <label for="ob_phone" class="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number</label>
+            <input id="ob_phone" type="tel" name="phone" placeholder="+44 7700 900000"
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
-            <input type="email" name="email" placeholder="adam@example.co.uk"
+            <label for="ob_email" class="block text-sm font-semibold text-gray-700 mb-1.5">Business Email</label>
+            <input id="ob_email" type="email" name="email" placeholder="adam@example.co.uk"
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
           </div>
           <div class="sm:col-span-2">
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Address</label>
-            <input type="text" name="address" placeholder="12 High Street, Lisburn, BT27 8TS"
+            <label for="ob_address" class="block text-sm font-semibold text-gray-700 mb-1.5">Address</label>
+            <input id="ob_address" type="text" name="address" placeholder="12 High Street, Lisburn, BT27 8TS"
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
           </div>
           <div class="sm:col-span-2">
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Opening Hours <span class="font-normal text-gray-400">(one per line)</span></label>
-            <textarea name="hours" rows="4" placeholder="Mon–Fri: 9am – 6pm&#10;Saturday: 9am – 4pm&#10;Sunday: Closed"
+            <label for="ob_hours" class="block text-sm font-semibold text-gray-700 mb-1.5">Opening Hours <span class="font-normal text-gray-400">(one per line)</span></label>
+            <textarea id="ob_hours" name="hours" rows="4" placeholder="Mon–Fri: 9am – 6pm&#10;Saturday: 9am – 4pm&#10;Sunday: Closed"
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none font-mono"></textarea>
           </div>
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Google Maps Link</label>
-            <input type="url" name="map_url" placeholder="https://maps.google.com/..."
+          <div class="sm:col-span-2">
+            <label for="ob_map_url" class="block text-sm font-semibold text-gray-700 mb-1.5">Google Maps Link <span class="font-normal text-gray-400">(optional)</span></label>
+            <input id="ob_map_url" type="url" name="map_url" placeholder="https://maps.google.com/..."
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Facebook <span class="font-normal text-gray-400">(optional)</span></label>
-            <input type="url" name="facebook_url" placeholder="https://facebook.com/yourbusiness"
-              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Instagram <span class="font-normal text-gray-400">(optional)</span></label>
-            <input type="url" name="instagram_url" placeholder="https://instagram.com/yourbusiness"
-              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">WhatsApp <span class="font-normal text-gray-400">(optional)</span></label>
-            <input type="url" name="whatsapp_url" placeholder="https://wa.me/447700900000"
-              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">X / Twitter <span class="font-normal text-gray-400">(optional)</span></label>
-            <input type="url" name="twitter_url" placeholder="https://x.com/yourbusiness"
-              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">TikTok <span class="font-normal text-gray-400">(optional)</span></label>
-            <input type="url" name="tiktok_url" placeholder="https://tiktok.com/@yourbusiness"
-              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">LinkedIn <span class="font-normal text-gray-400">(optional)</span></label>
-            <input type="url" name="linkedin_url" placeholder="https://linkedin.com/in/yourname"
-              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">YouTube <span class="font-normal text-gray-400">(optional)</span></label>
-            <input type="url" name="youtube_url" placeholder="https://youtube.com/@yourbusiness"
-              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            <p class="text-gray-400 text-xs mt-1">Paste any Google Maps link — from your browser or the Google Maps app.</p>
           </div>
         </div>
+
+        <!-- Social links collapsible -->
+        <details class="mt-2">
+          <summary class="cursor-pointer text-sm font-semibold text-indigo-600 hover:text-indigo-500 select-none list-none flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Add social media links (optional)
+          </summary>
+          <div class="mt-4 grid sm:grid-cols-2 gap-5">
+            <div>
+              <label for="ob_facebook_url" class="block text-sm font-semibold text-gray-700 mb-1.5">Facebook</label>
+              <input id="ob_facebook_url" type="url" name="facebook_url" placeholder="https://facebook.com/yourbusiness"
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+            <div>
+              <label for="ob_instagram_url" class="block text-sm font-semibold text-gray-700 mb-1.5">Instagram</label>
+              <input id="ob_instagram_url" type="url" name="instagram_url" placeholder="https://instagram.com/yourbusiness"
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+            <div>
+              <label for="ob_whatsapp_url" class="block text-sm font-semibold text-gray-700 mb-1.5">WhatsApp</label>
+              <input id="ob_whatsapp_url" type="url" name="whatsapp_url" placeholder="https://wa.me/447700900000"
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+            <div>
+              <label for="ob_twitter_url" class="block text-sm font-semibold text-gray-700 mb-1.5">X / Twitter</label>
+              <input id="ob_twitter_url" type="url" name="twitter_url" placeholder="https://x.com/yourbusiness"
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+            <div>
+              <label for="ob_tiktok_url" class="block text-sm font-semibold text-gray-700 mb-1.5">TikTok</label>
+              <input id="ob_tiktok_url" type="url" name="tiktok_url" placeholder="https://tiktok.com/@yourbusiness"
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+            <div>
+              <label for="ob_linkedin_url" class="block text-sm font-semibold text-gray-700 mb-1.5">LinkedIn</label>
+              <input id="ob_linkedin_url" type="url" name="linkedin_url" placeholder="https://linkedin.com/in/yourname"
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+            <div>
+              <label for="ob_youtube_url" class="block text-sm font-semibold text-gray-700 mb-1.5">YouTube</label>
+              <input id="ob_youtube_url" type="url" name="youtube_url" placeholder="https://youtube.com/@yourbusiness"
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+          </div>
+        </details>
       </div>
 
       <!-- Testimonials -->
@@ -173,8 +184,8 @@
         </h2>
         <p class="text-gray-500 text-sm mb-5 ml-9">When a visitor fills in your contact form, we'll email the enquiry straight to this address.</p>
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Your Email for Leads <span class="text-red-500">*</span></label>
-          <input type="email" name="lead_email" required placeholder="adam@example.co.uk"
+          <label for="ob_lead_email" class="block text-sm font-semibold text-gray-700 mb-1.5">Your Email for Leads <span class="text-red-500">*</span></label>
+          <input id="ob_lead_email" type="email" name="lead_email" required placeholder="adam@example.co.uk"
             class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
         </div>
       </div>
@@ -293,15 +304,21 @@
           <label class="cursor-pointer group">
             <input type="radio" name="plan" value="starter" class="sr-only peer" checked>
             <div class="rounded-xl border-2 border-gray-200 p-5 peer-checked:border-indigo-600 peer-checked:ring-2 peer-checked:ring-indigo-600/20 transition h-full">
-              <div class="font-black text-lg mb-1">Starter</div>
-              <p class="text-gray-500 text-sm">Everything you need to get online and start capturing leads.</p>
+              <div class="flex items-baseline gap-2 mb-1">
+                <div class="font-black text-lg">Starter</div>
+                <div class="text-2xl font-black text-gray-900">£19<span class="text-sm font-medium text-gray-400">/mo</span></div>
+              </div>
+              <p class="text-gray-500 text-sm">Professional landing page, subdomain, instant lead alerts, SSL &amp; hosting.</p>
             </div>
           </label>
           <label class="cursor-pointer group">
             <input type="radio" name="plan" value="pro" class="sr-only peer">
             <div class="rounded-xl border-2 border-gray-200 p-5 peer-checked:border-indigo-600 peer-checked:ring-2 peer-checked:ring-indigo-600/20 transition h-full">
-              <div class="font-black text-lg mb-1">Pro</div>
-              <p class="text-gray-500 text-sm">More features and priority support for growing businesses.</p>
+              <div class="flex items-baseline gap-2 mb-1">
+                <div class="font-black text-lg">Pro</div>
+                <div class="text-2xl font-black text-gray-900">£39<span class="text-sm font-medium text-gray-400">/mo</span></div>
+              </div>
+              <p class="text-gray-500 text-sm">Everything in Starter plus custom domain, monthly content updates, and priority support.</p>
             </div>
           </label>
         </div>
@@ -319,4 +336,22 @@
     </form>
   </div>
 </div>
+
+<script>
+(function () {
+  var form = document.querySelector('form');
+  var submitted = false;
+  var dirty = false;
+
+  form.addEventListener('input', function () { dirty = true; }, { once: true });
+  form.addEventListener('submit', function () { submitted = true; });
+
+  window.addEventListener('beforeunload', function (e) {
+    if (dirty && !submitted) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+})();
+</script>
 {{end}}

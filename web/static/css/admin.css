@@ -198,3 +198,27 @@ dd pre {
 
 .empty { color: #999; font-size: 0.9rem; }
 code { font-size: 0.85rem; background: #f3f4f6; padding: 0.15rem 0.4rem; border-radius: 4px; }
+
+/* Badge variants */
+.badge-cancelled { background: #fee2e2; color: #991b1b; display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.badge-plan-label { margin-left: 0.4rem; font-size: 0.85rem; color: #555; text-transform: capitalize; }
+.badge-date { display: block; font-size: 0.82rem; color: #888; margin-top: 0.2rem; }
+.text-muted { color: #999; font-size: 0.85rem; }
+
+/* Payment section */
+.payment-section { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #eee; }
+.payment-section-label { font-size: 0.85rem; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+.payment-sent-notice { color: #166534; background: #dcfce7; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.9rem; margin-bottom: 0.75rem; }
+.payment-cancelled-notice { color: #991b1b; font-size: 0.9rem; }
+.payment-form { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.plan-select { border: 1px solid #ddd; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.9rem; font-family: inherit; background: #fff; }
+.plan-select:focus { outline: none; border-color: #2563eb; }
+
+/* Small button variant */
+.btn-sm { font-size: 0.9rem !important; padding: 0.5rem 1.2rem !important; }
+
+/* Linked URL in details */
+.admin-card dl a { color: #2563eb; text-decoration: none; }
+.admin-card dl a:hover { text-decoration: underline; }
+.admin-card dl a.text-gray-500 { color: #6b7280; }
+.admin-card dl a.text-gray-500:hover { color: #111; }

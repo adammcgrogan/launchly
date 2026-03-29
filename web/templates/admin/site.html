@@ -16,7 +16,7 @@
         {{if eq .Site.Status "live"}}
           <a href="{{.SiteURL}}" target="_blank">{{.SiteURL}}</a>
         {{else}}
-          <code>{{.SiteURL}}</code>
+          <a href="{{.SiteURL}}" target="_blank" class="text-gray-500">{{.SiteURL}} ↗</a>
         {{end}}
       </dd>
 
@@ -47,16 +47,16 @@
       <dd>
         {{if eq .Site.PaymentStatus "paid"}}
           <span class="badge badge-live">Paid</span>
-          {{if .Site.Plan}}<span style="margin-left:0.4rem;font-size:0.85rem;color:#555;text-transform:capitalize;">{{.Site.Plan}}</span>{{end}}
-          {{if .Site.PaidAt}}<span style="display:block;font-size:0.82rem;color:#888;margin-top:0.2rem;">{{.Site.PaidAt.Format "02 Jan 2006 15:04"}}</span>{{end}}
+          {{if .Site.Plan}}<span class="badge-plan-label">{{.Site.Plan}}</span>{{end}}
+          {{if .Site.PaidAt}}<span class="badge-date">{{.Site.PaidAt.Format "02 Jan 2006 15:04"}}</span>{{end}}
         {{else if eq .Site.PaymentStatus "pending"}}
           <span class="badge badge-draft">Awaiting payment</span>
-          {{if .Site.Plan}}<span style="margin-left:0.4rem;font-size:0.85rem;color:#555;text-transform:capitalize;">{{.Site.Plan}}</span>{{end}}
+          {{if .Site.Plan}}<span class="badge-plan-label">{{.Site.Plan}}</span>{{end}}
         {{else if eq .Site.PaymentStatus "cancelled"}}
-          <span class="badge badge-draft" style="background:#fee2e2;color:#991b1b;">Cancelled</span>
-          {{if .Site.Plan}}<span style="margin-left:0.4rem;font-size:0.85rem;color:#555;text-transform:capitalize;">{{.Site.Plan}}</span>{{end}}
+          <span class="badge badge-cancelled">Cancelled</span>
+          {{if .Site.Plan}}<span class="badge-plan-label">{{.Site.Plan}}</span>{{end}}
         {{else}}
-          <span style="color:#999;font-size:0.85rem;">No link sent</span>
+          <span class="text-muted">No link sent</span>
         {{end}}
       </dd>
     </dl>
@@ -66,7 +66,7 @@
       <a href="/admin/sites/{{.Site.ID}}/switch-template" class="btn-edit">Switch Template</a>
       {{if eq .Site.Status "draft"}}
         <form method="POST" action="/admin/sites/{{.Site.ID}}/publish">
-          <button type="submit" class="btn-publish">Publish Site</button>
+          <button type="submit" class="btn-publish" onclick="return confirm('Publish {{.Site.BusinessName}}? The site will go live and the customer will be notified.')">Publish Site</button>
         </form>
       {{else}}
         <form method="POST" action="/admin/sites/{{.Site.ID}}/unpublish">
@@ -78,24 +78,24 @@
       </form>
     </div>
 
-    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid #eee;">
-      <p style="font-size:0.85rem;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem;">Send Payment Link</p>
+    <div class="payment-section">
+      <p class="payment-section-label">Send Payment Link</p>
       {{if .PaymentSent}}
-      <p style="color:#166534;background:#dcfce7;padding:0.5rem 0.75rem;border-radius:6px;font-size:0.9rem;margin-bottom:0.75rem;">Payment link sent to {{.Site.LeadEmail}}</p>
+      <p class="payment-sent-notice">Payment link sent to {{.Site.LeadEmail}}</p>
       {{end}}
       {{if eq .Site.PaymentStatus "paid"}}
       <form method="POST" action="/admin/sites/{{.Site.ID}}/cancel-subscription" onsubmit="return confirm('Cancel the subscription for {{.Site.BusinessName}}? This will stop their billing immediately.')">
-        <button type="submit" class="btn-unpublish" style="font-size:0.9rem;padding:0.5rem 1.2rem;">Cancel Subscription</button>
+        <button type="submit" class="btn-unpublish btn-sm">Cancel Subscription</button>
       </form>
       {{else if eq .Site.PaymentStatus "cancelled"}}
-      <p style="color:#991b1b;font-size:0.9rem;">Subscription cancelled.</p>
+      <p class="payment-cancelled-notice">Subscription cancelled.</p>
       {{else}}
-      <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
-        <select name="plan" style="border:1px solid #ddd;border-radius:6px;padding:0.5rem 0.75rem;font-size:0.9rem;font-family:inherit;background:#fff;">
-          <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter</option>
-          <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro</option>
+      <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" class="payment-form">
+        <select name="plan" class="plan-select">
+          <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter — £19/mo</option>
+          <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro — £39/mo</option>
         </select>
-        <button type="submit" class="btn-publish" style="font-size:0.9rem;padding:0.5rem 1.2rem;">
+        <button type="submit" class="btn-publish btn-sm">
           {{if eq .Site.PaymentStatus "pending"}}Resend Payment Link{{else}}Send Payment Link{{end}}
         </button>
       </form>
