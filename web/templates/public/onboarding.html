@@ -233,6 +233,36 @@
                 <div class="text-gray-500 text-[10px] mt-0.5">Part P registered</div>
                 <div class="flex justify-center gap-1.5 mt-2"><span class="bg-gray-800 text-white text-[9px] font-bold px-2 py-0.5 rounded">Call Us</span><span class="border border-gray-300 text-gray-600 text-[9px] px-2 py-0.5 rounded">Quote</span></div>
               </div>
+              {{else if eq .ID "pulse"}}
+              <div class="bg-[#0a0a0a] p-4 text-center">
+                <div class="text-white font-black text-sm uppercase tracking-tight">Titan Fitness</div>
+                <div class="text-[#888] text-[10px] mt-0.5">No excuses gym</div>
+                <div class="flex justify-center gap-1.5 mt-2"><span class="bg-[#c8ff00] text-black text-[9px] font-black px-2 py-0.5 rounded">Join Now</span><span class="border border-[#333] text-[#ccc] text-[9px] px-2 py-0.5 rounded">Classes</span></div>
+              </div>
+              {{else if eq .ID "grove"}}
+              <div class="bg-[#1a3a28] p-4 text-center">
+                <div class="text-[#f5f0e8] font-black text-sm">O'Hara Landscaping</div>
+                <div class="text-[#a8c4b0] text-[10px] mt-0.5">Gardens transformed</div>
+                <div class="flex justify-center gap-1.5 mt-2"><span class="bg-[#c8b89a] text-[#1a3a28] text-[9px] font-black px-2 py-0.5 rounded">Free Quote</span><span class="border border-[#c8b89a]/30 text-[#c8b89a] text-[9px] px-2 py-0.5 rounded">Services</span></div>
+              </div>
+              {{else if eq .ID "fleet"}}
+              <div class="bg-[#111] p-4 text-center">
+                <div class="text-white font-black text-sm">Brady's Auto Centre</div>
+                <div class="text-[#888] text-[10px] mt-0.5">MOT &amp; servicing</div>
+                <div class="flex justify-center gap-1.5 mt-2"><span class="bg-orange-500 text-white text-[9px] font-bold px-2 py-0.5 rounded">Book In</span><span class="border border-[#2a2a2a] text-[#ccc] text-[9px] px-2 py-0.5 rounded">Services</span></div>
+              </div>
+              {{else if eq .ID "haven"}}
+              <div class="bg-[#faf8f5] p-4 text-center">
+                <div class="text-[#2c2c2c] font-black text-sm">The Harbour House</div>
+                <div class="text-[#888] text-[10px] mt-0.5 italic">Waterfront B&amp;B</div>
+                <div class="flex justify-center mt-2"><span class="bg-[#2d7a6a] text-white text-[9px] font-bold px-2 py-0.5 rounded">Check Availability</span></div>
+              </div>
+              {{else if eq .ID "arch"}}
+              <div class="bg-white p-4 text-center">
+                <div class="text-[#0a0a0a] font-black text-sm tracking-tight">Laura Vance Interiors</div>
+                <div class="text-[#888] text-[10px] mt-0.5 italic">Interior design studio</div>
+                <div class="flex justify-center mt-2"><span class="bg-[#0a0a0a] text-white text-[9px] font-bold px-2 py-0.5 rounded">Start a Project</span></div>
+              </div>
               {{end}}
               <div class="px-3 py-2.5 border-t border-gray-100 flex items-center justify-between bg-white">
                 <div>

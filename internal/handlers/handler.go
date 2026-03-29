@@ -21,6 +21,11 @@ var siteTemplates = []struct {
 	{"warm", "Warm", "Earthy tones — perfect for cafés and restaurants", "example-warm"},
 	{"glow", "Glow", "Soft pastels — suited for salons and beauty", "example-glow"},
 	{"classic", "Classic", "Neutral and timeless — works for any business", "example-classic"},
+	{"pulse", "Pulse", "Dark and energetic — built for gyms and fitness", "example-pulse"},
+	{"grove", "Grove", "Forest green and organic — ideal for landscaping and garden", "example-grove"},
+	{"fleet", "Fleet", "Industrial and direct — perfect for garages and auto services", "example-fleet"},
+	{"haven", "Haven", "Warm and welcoming — great for B&Bs and holiday lets", "example-haven"},
+	{"arch", "Arch", "Ultra-minimal and editorial — suited for design and creative services", "example-arch"},
 }
 
 // buildTestimonials assembles the testimonials string from individual form fields.
