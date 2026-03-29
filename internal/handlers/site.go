@@ -11,7 +11,7 @@ import (
 
 // ServeSite handles subdomain requests (slug.domain) — works with a custom domain.
 func (h *Handler) ServeSite(w http.ResponseWriter, r *http.Request) {
-	slug := extractSlug(r.Host, h.domain)
+	slug := extractSlug(r, h.domain)
 	if slug == "" {
 		http.NotFound(w, r)
 		return
@@ -53,7 +53,7 @@ func (h *Handler) renderSite(w http.ResponseWriter, r *http.Request, slug, formA
 
 // SubmitLead handles the contact form POST on subdomain-routed sites.
 func (h *Handler) SubmitLead(w http.ResponseWriter, r *http.Request) {
-	slug := extractSlug(r.Host, h.domain)
+	slug := extractSlug(r, h.domain)
 	h.saveLead(w, r, slug, "/?lead=1")
 }
 
@@ -101,10 +101,16 @@ func (h *Handler) saveLead(w http.ResponseWriter, r *http.Request, slug, redirec
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
 
-// extractSlug pulls the subdomain from the host header.
-// e.g. "adam-barbers.locallaunch.co" → "adam-barbers"
-func extractSlug(host, domain string) string {
-	host = strings.ToLower(strings.Split(host, ":")[0]) // strip port
+// extractSlug pulls the subdomain from the request host.
+// Checks X-Forwarded-Host first (set by Cloudflare Worker when proxying wildcard
+// subdomains) and falls back to the raw Host header.
+// e.g. "adam-barbers.launchly.ltd" → "adam-barbers"
+func extractSlug(r *http.Request, domain string) string {
+	host := r.Header.Get("X-Forwarded-Host")
+	if host == "" {
+		host = r.Host
+	}
+	host = strings.ToLower(strings.Split(host, ":")[0])
 	suffix := "." + domain
 	if strings.HasSuffix(host, suffix) {
 		return strings.TrimSuffix(host, suffix)

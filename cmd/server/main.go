@@ -81,11 +81,20 @@ func (r *statusRecorder) WriteHeader(code int) {
 	r.ResponseWriter.WriteHeader(code)
 }
 
+// effectiveHost returns X-Forwarded-Host if set (e.g. from a Cloudflare Worker
+// proxying wildcard subdomains), falling back to the raw Host header.
+func effectiveHost(r *http.Request) string {
+	if fh := r.Header.Get("X-Forwarded-Host"); fh != "" {
+		return fh
+	}
+	return r.Host
+}
+
 // subdomainRouter routes subdomain requests to the site handler,
 // and everything else to the main mux.
 func subdomainRouter(domain string, h *handlers.Handler, fallback http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		host := strings.ToLower(strings.Split(r.Host, ":")[0])
+		host := strings.ToLower(strings.Split(effectiveHost(r), ":")[0])
 		if strings.HasSuffix(host, "."+domain) {
 			// Static assets must be served on subdomains too
 			if strings.HasPrefix(r.URL.Path, "/static/") {
