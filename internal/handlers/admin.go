@@ -415,6 +415,8 @@ func (h *Handler) PaymentSuccess(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	// Public
 	mux.HandleFunc("GET /", h.Home)
+	mux.HandleFunc("GET /robots.txt", h.RobotsTxt)
+	mux.HandleFunc("GET /sitemap.xml", h.Sitemap)
 	mux.HandleFunc("GET /get-started", h.OnboardingForm)
 	mux.HandleFunc("POST /get-started", h.OnboardingSubmit)
 	mux.HandleFunc("GET /payment/success", h.PaymentSuccess)
