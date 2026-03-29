@@ -84,7 +84,7 @@ func (r *statusRecorder) WriteHeader(code int) {
 // effectiveHost returns X-Forwarded-Host if set (e.g. from a Cloudflare Worker
 // proxying wildcard subdomains), falling back to the raw Host header.
 func effectiveHost(r *http.Request) string {
-	if fh := r.Header.Get("X-Forwarded-Host"); fh != "" {
+	if fh := r.Header.Get("X-Real-Host"); fh != "" {
 		return fh
 	}
 	return r.Host

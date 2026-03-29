@@ -106,7 +106,7 @@ func (h *Handler) saveLead(w http.ResponseWriter, r *http.Request, slug, redirec
 // subdomains) and falls back to the raw Host header.
 // e.g. "adam-barbers.launchly.ltd" → "adam-barbers"
 func extractSlug(r *http.Request, domain string) string {
-	host := r.Header.Get("X-Forwarded-Host")
+	host := r.Header.Get("X-Real-Host")
 	if host == "" {
 		host = r.Host
 	}
