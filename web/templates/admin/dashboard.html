@@ -22,7 +22,7 @@
     {{range .Sites}}
     <tr>
       <td><strong>{{.BusinessName}}</strong></td>
-      <td><code>/sites/{{.Slug}}</code></td>
+      <td><a href="https://{{.Slug}}.{{$.Domain}}" target="_blank" class="text-xs text-gray-500 hover:underline">{{.Slug}}.{{$.Domain}}</a></td>
       <td>{{.Template}}</td>
       <td><span class="badge badge-{{.Status}}">{{.Status}}</span></td>
       <td>

@@ -61,10 +61,14 @@ func (h *Handler) baseURL(reqHost string) string {
 	return scheme + "://" + reqHost
 }
 
-// exampleURL builds the path-based URL for an example site.
-// Path routing (/sites/slug) works everywhere; subdomain routing requires a custom domain.
-func (h *Handler) exampleURL(reqHost, slug string) string {
-	return h.baseURL(reqHost) + "/sites/" + slug
+// exampleURL builds the subdomain URL for an example site.
+func (h *Handler) exampleURL(slug string) string {
+	return "https://" + slug + "." + h.domain
+}
+
+// siteURL builds the public subdomain URL for a site.
+func (h *Handler) siteURL(slug string) string {
+	return "https://" + slug + "." + h.domain
 }
 
 type Handler struct {

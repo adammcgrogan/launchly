@@ -68,7 +68,7 @@ func (h *Handler) AdminSite(w http.ResponseWriter, r *http.Request) {
 		"Site":        site,
 		"Leads":       leads,
 		"Domain":      h.domain,
-		"SiteURL":     h.baseURL(r.Host) + "/sites/" + site.Slug,
+		"SiteURL":     h.siteURL(site.Slug),
 		"PaymentSent": r.URL.Query().Get("payment") == "sent",
 	})
 }
@@ -89,7 +89,7 @@ func (h *Handler) AdminPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if site.LeadEmail != "" {
-		siteURL := h.baseURL(r.Host) + "/sites/" + site.Slug
+		siteURL := h.siteURL(site.Slug)
 		if err := h.email.SendSitePublished(site.LeadEmail, site.BusinessName, siteURL); err != nil {
 			log.Printf("send site published email error: %v", err)
 		}
@@ -264,7 +264,7 @@ func (h *Handler) AdminSwitchTemplate(w http.ResponseWriter, r *http.Request) {
 			ID:          t.ID,
 			Name:        t.Name,
 			Description: t.Description,
-			ExampleURL:  h.exampleURL(r.Host, t.ExampleSlug),
+			ExampleURL:  h.exampleURL(t.ExampleSlug),
 			Current:     t.ID == site.Template,
 		}
 	}
@@ -328,7 +328,7 @@ func (h *Handler) AdminSendPayment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	successURL := h.baseURL(r.Host) + "/payment/success"
-	cancelURL := h.baseURL(r.Host) + "/sites/" + site.Slug
+	cancelURL := h.siteURL(site.Slug)
 
 	sessionID, checkoutURL, err := h.pay.CreateCheckoutSession(plan, site.LeadEmail, successURL, cancelURL)
 	if err != nil {

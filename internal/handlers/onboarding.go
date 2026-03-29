@@ -31,7 +31,7 @@ func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
 			ID:          t.ID,
 			Name:        t.Name,
 			Description: t.Description,
-			ExampleURL:  h.exampleURL(r.Host, t.ExampleSlug),
+			ExampleURL:  h.exampleURL(t.ExampleSlug),
 		}
 	}
 

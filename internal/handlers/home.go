@@ -26,7 +26,7 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 			Name:        t.Name,
 			Description: t.Description,
 			ExampleSlug: t.ExampleSlug,
-			ExampleURL:  h.exampleURL(r.Host, t.ExampleSlug),
+			ExampleURL:  h.exampleURL(t.ExampleSlug),
 		}
 	}
 
