@@ -18,10 +18,10 @@ func main() {
 	_ = godotenv.Load()
 
 	dsn := mustEnv("DATABASE_URL")
-	domain := getEnv("DOMAIN", "amgdigital.co")
+	domain := getEnv("DOMAIN", "launchly.ltd")
 	adminPass := mustEnv("ADMIN_PASSWORD")
 	resendKey := getEnv("RESEND_API_KEY", "")
-	emailFrom := getEnv("EMAIL_FROM", "noreply@amgdigital.co")
+	emailFrom := getEnv("EMAIL_FROM", "noreply@launchly.ltd")
 	umamiScriptURL := getEnv("UMAMI_SCRIPT_URL", "")
 	stripeSecretKey := getEnv("STRIPE_SECRET_KEY", "")
 	stripeWebhookSecret := getEnv("STRIPE_WEBHOOK_SECRET", "")
@@ -56,7 +56,7 @@ func main() {
 	// All other requests go to the main mux
 	finalHandler := loggingMiddleware(subdomainRouter(domain, h, mux))
 
-	log.Printf("AMG Digital listening on %s (domain: %s)", addr, domain)
+	log.Printf("Launchly listening on %s (domain: %s)", addr, domain)
 	log.Fatal(http.ListenAndServe(addr, finalHandler))
 }
 

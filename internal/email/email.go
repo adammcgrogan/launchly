@@ -62,7 +62,7 @@ func (c *Client) SendSitePublished(to, businessName, siteURL string) error {
 		</p>
 		<p style="color:#666;font-size:13px;">Or copy this link: %s</p>
 		<hr>
-		<p style="color:#999;font-size:12px;">Sent by AMG Digital</p>
+		<p style="color:#999;font-size:12px;">Sent by Launchly</p>
 	`, businessName, siteURL, siteURL)
 	return c.Send(to, fmt.Sprintf("Your %s website is now live!", businessName), html)
 }
@@ -73,7 +73,7 @@ func (c *Client) SendSiteUnpublished(to, businessName string) error {
 		<p>Your website has been temporarily unpublished. It is no longer visible to the public.</p>
 		<p>If you have any questions or this was unexpected, please get in touch with us.</p>
 		<hr>
-		<p style="color:#999;font-size:12px;">Sent by AMG Digital</p>
+		<p style="color:#999;font-size:12px;">Sent by Launchly</p>
 	`, businessName)
 	return c.Send(to, fmt.Sprintf("Your %s website has been unpublished", businessName), html)
 }
@@ -89,7 +89,7 @@ func (c *Client) SendSiteUpdated(to, businessName string, changes []string) erro
 		<ul style="margin:1rem 0;padding-left:1.5rem;line-height:2;">%s</ul>
 		<p>If you have any questions about the changes, please get in touch.</p>
 		<hr>
-		<p style="color:#999;font-size:12px;">Sent by AMG Digital</p>
+		<p style="color:#999;font-size:12px;">Sent by Launchly</p>
 	`, businessName, list)
 	return c.Send(to, fmt.Sprintf("Your %s website has been updated", businessName), html)
 }
@@ -104,7 +104,7 @@ func (c *Client) SendPaymentLink(to, businessName, checkoutURL string) error {
 		</p>
 		<p style="color:#666;font-size:13px;">If the button doesn't work, copy and paste this link into your browser:<br>%s</p>
 		<hr>
-		<p style="color:#999;font-size:12px;">Sent by AMG Digital</p>
+		<p style="color:#999;font-size:12px;">Sent by Launchly</p>
 	`, businessName, checkoutURL, checkoutURL)
 	return c.Send(to, fmt.Sprintf("Complete payment for your %s website", businessName), html)
 }
@@ -117,7 +117,7 @@ func (c *Client) SendLeadNotification(to, businessName, visitorName, visitorEmai
 		<p><strong>Phone:</strong> %s</p>
 		<p><strong>Message:</strong> %s</p>
 		<hr>
-		<p style="color:#999;font-size:12px;">Sent by AMG Digital</p>
+		<p style="color:#999;font-size:12px;">Sent by Launchly</p>
 	`, businessName, visitorName, visitorEmail, phone, message)
 
 	return c.Send(to, fmt.Sprintf("New lead from your website — %s", businessName), html)
