@@ -4,15 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{.Site.BusinessName}}{{if .Site.Location}} — {{.Site.Location}}{{end}}{{if .Site.Tagline}} | {{.Site.Tagline}}{{end}}</title>
+  <title>{{.Site.BusinessName}}{{if .Site.Location}} -{{.Site.Location}}{{end}}{{if .Site.Tagline}} | {{.Site.Tagline}}{{end}}</title>
   <meta name="description" content="{{if .Site.About}}{{.Site.About}}{{else if .Site.Tagline}}{{.Site.Tagline}}{{else}}{{.Site.BusinessName}}{{if .Site.Location}} based in {{.Site.Location}}{{end}}. Contact us today.{{end}}">
-  <meta property="og:title" content="{{.Site.BusinessName}}{{if .Site.Location}} — {{.Site.Location}}{{end}}">
-  <meta property="og:description" content="{{if .Site.Tagline}}{{.Site.Tagline}}{{else}}{{.Site.BusinessName}} — contact us today.{{end}}">
+  <meta property="og:title" content="{{.Site.BusinessName}}{{if .Site.Location}} -{{.Site.Location}}{{end}}">
+  <meta property="og:description" content="{{if .Site.Tagline}}{{.Site.Tagline}}{{else}}{{.Site.BusinessName}} -contact us today.{{end}}">
   <meta property="og:type" content="website">
   {{if .Site.LogoURL}}<meta property="og:image" content="{{.Site.LogoURL}}">{{end}}
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="{{.Site.BusinessName}}">
-  <meta name="twitter:description" content="{{if .Site.Tagline}}{{.Site.Tagline}}{{else}}{{.Site.BusinessName}} — contact us today.{{end}}">
+  <meta name="twitter:description" content="{{if .Site.Tagline}}{{.Site.Tagline}}{{else}}{{.Site.BusinessName}} -contact us today.{{end}}">
   <link rel="canonical" href="https://{{.Site.Slug}}.launchly.ltd">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
