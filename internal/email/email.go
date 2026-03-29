@@ -22,15 +22,24 @@ type sendRequest struct {
 	To      []string `json:"to"`
 	Subject string   `json:"subject"`
 	HTML    string   `json:"html"`
+	ReplyTo []string `json:"reply_to,omitempty"`
 }
 
 func (c *Client) Send(to, subject, html string) error {
-	body, err := json.Marshal(sendRequest{
+	return c.sendWithReplyTo(to, subject, html, "")
+}
+
+func (c *Client) sendWithReplyTo(to, subject, html, replyTo string) error {
+	payload := sendRequest{
 		From:    c.from,
 		To:      []string{to},
 		Subject: subject,
 		HTML:    html,
-	})
+	}
+	if replyTo != "" {
+		payload.ReplyTo = []string{replyTo}
+	}
+	body, err := json.Marshal(payload)
 	if err != nil {
 		return err
 	}
@@ -206,5 +215,5 @@ func (c *Client) SendLeadNotification(to, businessName, visitorName, visitorEmai
 		divider() +
 		p(`<span style="color:#6b7280;font-size:13px;">This lead was submitted through your Launchly website contact form.</span>`)
 
-	return c.Send(to, fmt.Sprintf("New enquiry from your website - %s", businessName), wrap(content))
+	return c.sendWithReplyTo(to, fmt.Sprintf("New enquiry from your website - %s", businessName), wrap(content), visitorEmail)
 }
