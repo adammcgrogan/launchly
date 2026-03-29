@@ -8,34 +8,34 @@
   <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
   <div class="relative max-w-7xl mx-auto px-6 py-28 md:py-36 text-center">
-    <div class="inline-flex items-center gap-2 bg-white/10 border border-white/10 rounded-full px-4 py-1.5 text-sm text-gray-300 mb-8">
+    <div class="hero-fade hero-fade-1 inline-flex items-center gap-2 bg-white/10 border border-white/10 rounded-full px-4 py-1.5 text-sm text-gray-300 mb-8">
       <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
       Live within 24 hours, guaranteed
     </div>
 
-    <h1 class="text-5xl md:text-7xl font-black tracking-tight leading-[1.08] mb-6">
+    <h1 class="hero-fade hero-fade-2 text-5xl md:text-7xl font-black tracking-tight leading-[1.08] mb-6">
       Your business,<br>
       <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">online today.</span>
     </h1>
 
-    <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+    <p class="hero-fade hero-fade-3 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
       We build professional websites for local businesses. You fill in one form, we handle everything else. No tech skills needed.
     </p>
 
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-      <a href="/get-started" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg px-8 py-4 rounded-xl transition shadow-lg shadow-indigo-500/25">
+    <div class="hero-fade hero-fade-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="/get-started" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg px-8 py-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5">
         Get your site from £19/mo
       </a>
-      <a href="#how-it-works" class="w-full sm:w-auto text-gray-400 hover:text-white font-medium text-base px-6 py-4 rounded-xl border border-white/10 hover:border-white/20 transition">
+      <a href="#how-it-works" class="w-full sm:w-auto text-gray-400 hover:text-white font-medium text-base px-6 py-4 rounded-xl border border-white/10 hover:border-white/30 transition-all duration-200">
         See how it works →
       </a>
     </div>
 
-    <div class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-5 py-2 mt-5">
+    <div class="hero-fade hero-fade-5 inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-5 py-2 mt-5">
       <svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
       <span class="text-sm text-green-300 font-semibold">2-week free trial, no credit card required</span>
     </div>
-    <p class="text-sm text-gray-500 mt-3">No contracts &nbsp;·&nbsp; No setup fees &nbsp;·&nbsp; Cancel anytime</p>
+    <p class="hero-fade hero-fade-5 text-sm text-gray-500 mt-3">No contracts &nbsp;·&nbsp; No setup fees &nbsp;·&nbsp; Cancel anytime</p>
   </div>
 
   <!-- Browser mockup preview -->
@@ -74,18 +74,18 @@
       <h2 class="text-4xl md:text-5xl font-black tracking-tight">Online in three steps.</h2>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="relative bg-gray-50 rounded-2xl p-8 border border-gray-100">
+    <div class="grid md:grid-cols-3 gap-8 scroll-stagger">
+      <div class="relative bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:-translate-y-1 transition-transform duration-200">
         <div class="w-10 h-10 bg-gray-900 text-white rounded-xl flex items-center justify-center font-black text-lg mb-6">1</div>
         <h3 class="text-xl font-bold mb-3">Fill in a short form</h3>
         <p class="text-gray-500 leading-relaxed">Tell us your business name, services, contact details, and pick a template. Takes about 5 minutes.</p>
       </div>
-      <div class="relative bg-gray-50 rounded-2xl p-8 border border-gray-100">
+      <div class="relative bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:-translate-y-1 transition-transform duration-200">
         <div class="w-10 h-10 bg-gray-900 text-white rounded-xl flex items-center justify-center font-black text-lg mb-6">2</div>
         <h3 class="text-xl font-bold mb-3">We build your site</h3>
         <p class="text-gray-500 leading-relaxed">Our team reviews your details, polishes everything up, and publishes your site. You don't touch a thing.</p>
       </div>
-      <div class="relative bg-indigo-600 rounded-2xl p-8 text-white">
+      <div class="relative bg-indigo-600 rounded-2xl p-8 text-white hover:-translate-y-1 transition-transform duration-200">
         <div class="w-10 h-10 bg-white/20 text-white rounded-xl flex items-center justify-center font-black text-lg mb-6">3</div>
         <h3 class="text-xl font-bold mb-3">Leads come to you</h3>
         <p class="text-indigo-200 leading-relaxed">When someone fills in your contact form, you get an email instantly. Your site works for you around the clock.</p>
@@ -151,34 +151,46 @@
       <h2 class="text-4xl md:text-5xl font-black tracking-tight">Everything included.<br>Nothing to manage.</h2>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/30 transition">
-        <div class="text-3xl mb-4">⚡</div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 scroll-stagger">
+      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/40 hover:-translate-y-1 transition-all duration-200">
+        <div class="w-10 h-10 bg-indigo-500/15 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
         <h3 class="text-lg font-bold mb-2">Live in 24 hours</h3>
         <p class="text-gray-400 text-sm leading-relaxed">Submit your form today, have a live website tomorrow.</p>
       </div>
-      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/30 transition">
-        <div class="text-3xl mb-4">📱</div>
+      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/40 hover:-translate-y-1 transition-all duration-200">
+        <div class="w-10 h-10 bg-indigo-500/15 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        </div>
         <h3 class="text-lg font-bold mb-2">Mobile-first design</h3>
         <p class="text-gray-400 text-sm leading-relaxed">Your site looks great on every phone, tablet, and desktop.</p>
       </div>
-      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/30 transition">
-        <div class="text-3xl mb-4">📬</div>
+      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/40 hover:-translate-y-1 transition-all duration-200">
+        <div class="w-10 h-10 bg-indigo-500/15 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </div>
         <h3 class="text-lg font-bold mb-2">Always in the loop</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">You get an email the moment an enquiry comes in, and whenever your site goes live, is edited, or taken offline. You're never left wondering.</p>
+        <p class="text-gray-400 text-sm leading-relaxed">Instant email the moment an enquiry comes in, and whenever your site goes live, is edited, or taken offline.</p>
       </div>
-      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/30 transition">
-        <div class="text-3xl mb-4">🔒</div>
+      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/40 hover:-translate-y-1 transition-all duration-200">
+        <div class="w-10 h-10 bg-indigo-500/15 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
         <h3 class="text-lg font-bold mb-2">Secure &amp; hosted</h3>
         <p class="text-gray-400 text-sm leading-relaxed">HTTPS, fast hosting, and zero maintenance on your part.</p>
       </div>
-      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/30 transition">
-        <div class="text-3xl mb-4">🌐</div>
+      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/40 hover:-translate-y-1 transition-all duration-200">
+        <div class="w-10 h-10 bg-indigo-500/15 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+        </div>
         <h3 class="text-lg font-bold mb-2">Your own web address</h3>
         <p class="text-gray-400 text-sm leading-relaxed">Get a free subdomain or bring your own custom domain.</p>
       </div>
-      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/30 transition">
-        <div class="text-3xl mb-4">🛠</div>
+      <div class="bg-gray-900 border border-white/5 rounded-2xl p-7 hover:border-indigo-500/40 hover:-translate-y-1 transition-all duration-200">
+        <div class="w-10 h-10 bg-indigo-500/15 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
         <h3 class="text-lg font-bold mb-2">We handle updates</h3>
         <p class="text-gray-400 text-sm leading-relaxed">Changed your hours or added a service? Just drop us a message.</p>
       </div>
@@ -195,7 +207,7 @@
       <p class="text-gray-500 mt-4 text-lg">Every template is designed to turn visitors into enquiries.</p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 scroll-stagger">
 
       {{range .Templates}}
       <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-lg transition group">
@@ -430,7 +442,7 @@
       </div>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto scroll-stagger">
 
       <!-- Starter -->
       <div class="bg-white rounded-3xl border-2 border-gray-200 p-8 relative">
@@ -481,7 +493,7 @@
 <!-- About Me -->
 <section id="about" class="py-24 bg-white border-t border-gray-100">
   <div class="max-w-5xl mx-auto px-6">
-    <div class="grid md:grid-cols-2 gap-16 items-center">
+    <div class="grid md:grid-cols-2 gap-16 items-center scroll-stagger">
       <!-- Text -->
       <div>
         <p class="text-indigo-600 font-semibold text-sm uppercase tracking-widest mb-4">Who's behind this?</p>
@@ -528,7 +540,7 @@
       <h2 class="text-4xl md:text-5xl font-black tracking-tight text-gray-900">Common questions</h2>
     </div>
 
-    <div class="space-y-3">
+    <div class="space-y-3 scroll-stagger">
 
       <details class="bg-white border border-gray-200 rounded-2xl overflow-hidden group">
         <summary class="flex items-center justify-between px-6 py-5 cursor-pointer font-bold text-gray-900 text-base list-none select-none">
@@ -606,14 +618,78 @@
 
 <!-- Final CTA -->
 <section class="py-28 bg-indigo-600 text-white text-center">
-  <div class="max-w-3xl mx-auto px-6">
+  <div class="max-w-3xl mx-auto px-6 scroll-fade">
     <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-5">Ready to get your<br>business online?</h2>
     <p class="text-indigo-200 text-lg mb-10">Fill in a short form and we'll take care of everything.</p>
-    <a href="/get-started" class="inline-block bg-white text-indigo-600 font-black text-lg px-10 py-4 rounded-xl hover:bg-indigo-50 transition shadow-xl">
+    <a href="/get-started" class="inline-block bg-white text-indigo-600 font-black text-lg px-10 py-4 rounded-xl hover:bg-indigo-50 hover:-translate-y-0.5 transition-all duration-200 shadow-xl hover:shadow-2xl">
       Get Started Today
     </a>
     <p class="text-indigo-300 text-sm mt-5">From £19/mo &nbsp;·&nbsp; No contracts &nbsp;·&nbsp; Cancel anytime</p>
   </div>
 </section>
+
+<style>
+/* Hero entrance */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-fade {
+  opacity: 0;
+  animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-fade-1 { animation-delay: 0.05s; }
+.hero-fade-2 { animation-delay: 0.15s; }
+.hero-fade-3 { animation-delay: 0.28s; }
+.hero-fade-4 { animation-delay: 0.4s; }
+.hero-fade-5 { animation-delay: 0.52s; }
+
+/* Scroll fade — single element */
+.scroll-fade {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.scroll-fade.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scroll stagger — animates direct children */
+.scroll-stagger > * {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.scroll-stagger.in-view > *:nth-child(1)  { opacity:1; transform:none; transition-delay: 0ms; }
+.scroll-stagger.in-view > *:nth-child(2)  { opacity:1; transform:none; transition-delay: 80ms; }
+.scroll-stagger.in-view > *:nth-child(3)  { opacity:1; transform:none; transition-delay: 160ms; }
+.scroll-stagger.in-view > *:nth-child(4)  { opacity:1; transform:none; transition-delay: 240ms; }
+.scroll-stagger.in-view > *:nth-child(5)  { opacity:1; transform:none; transition-delay: 320ms; }
+.scroll-stagger.in-view > *:nth-child(6)  { opacity:1; transform:none; transition-delay: 400ms; }
+.scroll-stagger.in-view > *:nth-child(7)  { opacity:1; transform:none; transition-delay: 460ms; }
+.scroll-stagger.in-view > *:nth-child(n+8){ opacity:1; transform:none; transition-delay: 520ms; }
+
+/* FAQ chevron */
+details[open] summary svg { transform: rotate(180deg); }
+details summary svg { transition: transform 0.2s ease; }
+</style>
+
+<script>
+(function () {
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.scroll-fade, .scroll-stagger').forEach(function (el) {
+    io.observe(el);
+  });
+})();
+</script>
 
 {{end}}
