@@ -85,9 +85,13 @@ func (c *Client) priceForProduct(productID string) (string, error) {
 }
 
 // CancelSubscription immediately cancels a Stripe subscription.
+// If the subscription no longer exists in Stripe, it is treated as already cancelled.
 func (c *Client) CancelSubscription(subscriptionID string) error {
 	_, err := subscription.Cancel(subscriptionID, &stripe.SubscriptionCancelParams{})
 	if err != nil {
+		if stripeErr, ok := err.(*stripe.Error); ok && stripeErr.Code == stripe.ErrorCodeResourceMissing {
+			return nil
+		}
 		return fmt.Errorf("cancel subscription: %w", err)
 	}
 	return nil
