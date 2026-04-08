@@ -1,18 +1,20 @@
-# LocalLaunch — Product Document
+# Launchly — Product Document
 
-> **Tagline:** Getting your business online.
+> **Tagline:** Done-for-you websites for local businesses.
 
 ---
 
 ## Overview
 
-LocalLaunch is a done-for-you web presence service for local businesses. The business owner does nothing technical — they fill in a short onboarding form, pick a template, and get a professional landing page live within 24 hours. Leads (form submissions, calls) are forwarded directly to them. They pay a flat monthly fee and never have to touch anything.
+Launchly is a done-for-you web presence service for local businesses. The business owner does nothing technical — they fill in a short onboarding form, pick a template, and get a professional landing page live within 24 hours. Leads from the contact form are forwarded directly to them by email. They pay a flat monthly subscription and never have to touch anything.
+
+Operated by Adam McGrogan — [launchly.ltd](https://launchly.ltd)
 
 ---
 
 ## Problem
 
-Most small local businesses have no website, or one that is outdated and ineffective. Existing solutions (Squarespace, Wix, WordPress) require time, skill, and ongoing maintenance that small business owners don't have. Agencies are expensive and slow.
+Most small local businesses have no website, or one that is outdated and ineffective. Existing solutions (Squarespace, Wix, WordPress) require time, skill, and ongoing maintenance. Agencies are expensive and slow.
 
 ---
 
@@ -28,161 +30,157 @@ Small local businesses across any niche, including:
 
 - Trades (plumbers, electricians, builders, cleaners)
 - Health & beauty (salons, barbers, spas, nail studios)
-- Food & drink (cafés, restaurants, takeaways)
+- Food & drink (cafés, restaurants, takeaways, bakeries)
 - Fitness (gyms, personal trainers, yoga studios)
 - Professional services (accountants, solicitors, consultants)
 - Retail & shops
-- Events & entertainment
+- Hospitality (B&Bs, guesthouses)
 
 ---
 
-## Business Model
+## Pricing
 
-- **Monthly subscription** — flat fee per site (e.g. £49–£99/month)
-- **Setup fee** (optional one-off charge to cover initial build)
-- **Custom domain add-on** — business uses their own domain instead of a subdomain
-- Low churn expected — once live, businesses rarely cancel
+| Plan | Price | Build time |
+|------|-------|------------|
+| Starter | £19/mo | Within 24 hours |
+| Pro | £39/mo | Within 12 hours |
+
+- 14-day free trial, no card required upfront
+- No contracts, cancel anytime
+- Custom domain included on Pro (set up manually via Cloudflare)
 
 ---
 
 ## How It Works (Customer Journey)
 
-1. Business owner visits LocalLaunch and clicks **Get Started**
-2. They fill in an onboarding form:
-   - Business name, type, tagline
-   - Services offered
-   - Contact details (phone, email, address)
-   - Opening hours
-   - Logo and photos (optional)
-   - Social media links (optional)
-   - Google Maps link (optional)
-3. They pick a template from 5–10 options
-4. They submit — LocalLaunch receives the request
-5. The site is reviewed, any final adjustments made, and published
-6. The business goes live on a subdomain: `businessname.locallaunch.co`
-7. Custom domain available as an add-on
-8. When a visitor submits the contact form, the lead is emailed/texted directly to the business owner
+1. Business owner visits Launchly and clicks **Get Started**
+2. They fill in a 4-step onboarding form:
+   - Business name, tagline, about, services, trust badges
+   - Contact details (phone, email, address, hours, social links)
+   - Logo and gallery photos (URL paste; file upload planned)
+   - Template choice and plan selection
+3. They submit — a welcome email confirms receipt
+4. Adam reviews the submission, makes any adjustments, and publishes
+5. The business goes live at `slug.launchly.ltd`
+6. Adam sends a Stripe payment link to the business
+7. Customer pays — subscription begins, payment confirmation email sent
+8. When a visitor submits the contact form, the lead is emailed to the business instantly
 
 ---
 
 ## Templates
 
-Each template shares the same page structure but has a distinct visual style suited to different business types. All are mobile-first and fast-loading.
+10 templates available, each mobile-first with a distinct visual style:
 
-| # | Name | Style | Best for |
-|---|------|-------|----------|
-| 1 | **Bold** | Dark, high contrast, strong typography | Trades, gyms |
-| 2 | **Fresh** | Light, clean, minimal | Professional services, consultants |
-| 3 | **Warm** | Earthy tones, inviting | Cafés, restaurants, food |
-| 4 | **Glow** | Soft pastels, elegant | Salons, spas, beauty |
-| 5 | **Energy** | Vibrant, dynamic | Fitness, personal trainers |
-| 6 | **Classic** | Neutral, professional, timeless | Retail, general use |
-| 7 | **Local** | Friendly, community feel | Any neighbourhood business |
-
-More templates added over time based on demand.
+| Name | Style | Best for |
+|------|-------|----------|
+| Bold | Dark, high contrast, strong typography | Trades, gyms |
+| Fresh | Light, clean, minimal | Professional services |
+| Warm | Earthy tones, inviting | Cafés, bakeries, food |
+| Glow | Soft pastels, elegant | Salons, beauty, spas |
+| Classic | Neutral, professional, timeless | General use |
+| Pulse | High energy, neon accents | Fitness, gyms |
+| Grove | Natural greens, earthy | Landscaping, outdoors |
+| Fleet | Dark industrial, orange accents | Auto, mechanics, trades |
+| Haven | Warm neutral, calm | B&Bs, hospitality |
+| Arch | Editorial, minimal serif | Interiors, design, studios |
 
 ---
 
-## Landing Page Structure (All Templates)
+## Landing Page Structure
 
 Every page follows the same section order:
 
-1. **Hero** — Business name, tagline, primary CTA (call or contact)
-2. **About** — Short intro, who they are, what makes them different
-3. **Services** — List of services offered (with optional prices)
-4. **Gallery** — Photos (optional)
-5. **Opening Hours** — Days and times
-6. **Contact / Lead Form** — Name, phone, message — submits to business owner
-7. **Location** — Address + Google Maps embed
-8. **Footer** — Links, copyright, "Powered by LocalLaunch"
+1. **Hero** — Business name, tagline, location badge, primary CTA
+2. **Services** — Grid of services offered
+3. **About** — Short intro paragraph
+4. **Contact form** — Name, phone, email, message → lead forwarded by email
+5. **Opening hours + address** — With optional Google Maps embed
+6. **Social links**
+7. **Testimonials** — Up to 3 customer quotes (optional)
+8. **Gallery** — Photo grid (optional)
+9. **Footer** — Address, "Powered by Launchly"
+
+Mobile sticky bar: click-to-call and WhatsApp buttons fixed at the bottom on mobile if phone/WhatsApp is set.
 
 ---
 
 ## Lead Capture
 
 When a visitor submits the contact form:
-- The lead is emailed to the business owner instantly
-- Optional SMS notification
-- Lead is also logged in the LocalLaunch admin dashboard
-- Future: weekly lead summary email to business owner
+
+- Lead is saved to the database
+- Email notification sent to the business owner instantly (with reply-to set to the visitor's email)
+- All leads visible in the admin panel with CSV export
+- Weekly lead summary email (planned)
 
 ---
 
-## Hosting & Domains
+## SEO
 
-- Every site gets a free subdomain: `businessname.locallaunch.co`
-- Custom domain support as a paid add-on
-- All sites served from a single Go server using subdomain routing
-- SSL via Let's Encrypt (automatic)
+Each site includes:
+
+- Full meta tags (title, description, Open Graph, Twitter card)
+- Canonical URL
+- JSON-LD `LocalBusiness` structured data (name, phone, email, address, logo, URL)
 
 ---
 
-## Admin Dashboard (Internal — for LocalLaunch operator)
+## Hosting & Infrastructure
 
-The admin panel is used by the LocalLaunch operator (you) to manage clients. It is not accessible to business owners.
+- All sites hosted on Railway
+- Subdomain routing via Cloudflare Worker — `slug.launchly.ltd`
+- SSL via Cloudflare (automatic)
+- Single Go binary serves all sites
 
-Features:
-- View all client onboarding submissions
-- Publish / unpublish a site
+---
+
+## Admin Dashboard
+
+Internal panel for the Launchly operator. Not accessible to business owners.
+
+- View all onboarding submissions
 - Edit site content
-- View leads per site
-- Manage billing status
-- Add/remove custom domains
+- Switch template
+- Publish / unpublish
+- View and export leads per site
+- Send Stripe payment link
+- Cancel subscription
 
 ---
 
 ## Tech Stack
 
-| Layer | Choice | Reason |
-|-------|--------|--------|
-| Backend | Go | Fast, single binary, easy to deploy, great for serving many sites |
-| Templating | Go `html/template` | Built-in, safe, sufficient for static-ish pages |
-| Database | PostgreSQL | Reliable, simple schema |
-| Email | SMTP / Resend API | Lead forwarding and notifications |
-| SMS | Twilio | Optional lead SMS alerts |
-| Payments | Stripe | Subscriptions and billing |
-| Hosting | Single VPS (e.g. Hetzner) | Low cost, full control |
-| SSL | Let's Encrypt (certmagic) | Automatic HTTPS per domain |
-| File storage | S3-compatible (e.g. Backblaze B2) | Logo and photo uploads |
+| Layer | Choice |
+|-------|--------|
+| Backend | Go 1.22 |
+| Templating | `html/template` + Tailwind CSS (CDN) |
+| Database | PostgreSQL via `lib/pq` |
+| Email | Resend API |
+| Payments | Stripe (subscriptions) |
+| Hosting | Railway |
+| DNS / Proxy | Cloudflare |
+| Analytics | Umami (optional per site) |
 
 ---
 
-## MVP Scope
+## Out of Scope (Current)
 
-The first version ships with:
-
-- [ ] Onboarding form (public-facing)
-- [ ] Template picker (5 templates minimum)
-- [ ] Site generation and subdomain routing
-- [ ] Contact / lead capture form with email forwarding
-- [ ] Admin dashboard (view submissions, publish sites, view leads)
-- [ ] Stripe subscription billing
-- [ ] SSL for all subdomains
-
-**Out of scope for MVP:**
-- Custom domain support
+- Business owner login or self-editing
 - SMS notifications
-- Business owner login / self-editing
-- Analytics / visitor stats
-- Multi-language support
+- Image file uploads (URL paste only — R2 upload planned)
+- Custom domain automation (manual via Cloudflare for now)
+- Multi-page sites
+- Appointment booking
 
 ---
 
-## Future Ideas
+## Planned / Future
 
-- Business owner portal (view their own leads, update opening hours)
-- SEO enhancements (meta tags, schema markup, Google Business integration)
-- Review widget (pull in Google reviews)
-- WhatsApp contact button
-- Appointment booking add-on
-- Analytics dashboard (visits, leads, conversion rate)
-- White-label option (agencies resell LocalLaunch)
-
----
-
-## Open Questions
-
-- What is the pricing (setup fee + monthly)?
-- What markets to target first (UK, US, other)?
-- What is the custom domain add-on price?
-- Will there be a free trial or money-back guarantee?
+- Image upload via Cloudflare R2 (replaces URL pasting)
+- First-party analytics — page views stored in PostgreSQL, visible in admin
+- Weekly lead summary email to business owners
+- Contact form enquiry type field (pre-qualifies leads)
+- Business owner portal (read-only: view leads, site status)
+- Google Reviews widget
+- White-label option
