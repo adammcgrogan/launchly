@@ -176,6 +176,7 @@ func siteDiff(old, updated *models.Site) []string {
 	check("Address", old.Address, updated.Address)
 	check("Opening Hours", old.Hours, updated.Hours)
 	check("Google Maps URL", old.MapURL, updated.MapURL)
+	check("Google Maps Embed", old.MapEmbedURL, updated.MapEmbedURL)
 	check("Facebook", old.FacebookURL, updated.FacebookURL)
 	check("Instagram", old.InstagramURL, updated.InstagramURL)
 	check("WhatsApp", old.WhatsAppURL, updated.WhatsAppURL)
@@ -218,6 +219,7 @@ func (h *Handler) AdminUpdateSite(w http.ResponseWriter, r *http.Request) {
 	updated.Address = strings.TrimSpace(r.FormValue("address"))
 	updated.Hours = strings.TrimSpace(r.FormValue("hours"))
 	updated.MapURL = strings.TrimSpace(r.FormValue("map_url"))
+	updated.MapEmbedURL = strings.TrimSpace(r.FormValue("map_embed_url"))
 	updated.FacebookURL = strings.TrimSpace(r.FormValue("facebook_url"))
 	updated.InstagramURL = strings.TrimSpace(r.FormValue("instagram_url"))
 	updated.WhatsAppURL = strings.TrimSpace(r.FormValue("whatsapp_url"))
@@ -390,14 +392,25 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 				log.Printf("set site paid error: %v", err)
 			} else {
 				log.Printf("payment received for session %s", event.SessionID)
+				if site, err := h.store.GetSiteByStripeSessionID(event.SessionID); err == nil && site != nil && site.LeadEmail != "" {
+					if err := h.email.SendPaymentConfirmation(site.LeadEmail, site.BusinessName, site.Plan); err != nil {
+						log.Printf("send payment confirmation email error: %v", err)
+					}
+				}
 			}
 		}
 	case "customer.subscription.deleted":
 		if event.SubscriptionID != "" {
+			site, _ := h.store.GetSiteByStripeSubscriptionID(event.SubscriptionID)
 			if err := h.store.SetSiteCancelled(event.SubscriptionID); err != nil {
 				log.Printf("set site cancelled error: %v", err)
 			} else {
 				log.Printf("subscription cancelled: %s", event.SubscriptionID)
+				if site != nil && site.LeadEmail != "" {
+					if err := h.email.SendCancellationConfirmation(site.LeadEmail, site.BusinessName); err != nil {
+						log.Printf("send cancellation confirmation email error: %v", err)
+					}
+				}
 			}
 		}
 	}

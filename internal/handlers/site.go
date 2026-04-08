@@ -70,6 +70,12 @@ func (h *Handler) saveLead(w http.ResponseWriter, r *http.Request, slug, redirec
 		return
 	}
 
+	// Honeypot: silently succeed so bots don't know they were rejected
+	if r.FormValue("website") != "" {
+		http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+		return
+	}
+
 	site, err := h.store.GetSiteBySlug(slug)
 	if err != nil || site == nil || site.Status != models.StatusLive {
 		http.NotFound(w, r)

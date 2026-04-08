@@ -179,6 +179,43 @@ func (c *Client) SendPaymentLink(to, businessName, checkoutURL string) error {
 	return c.Send(to, fmt.Sprintf("Complete payment for your %s website", businessName), wrap(content))
 }
 
+func (c *Client) SendWelcomeEmail(to, businessName string) error {
+	content := h1("We've received your details!") +
+		p(fmt.Sprintf("Thanks for submitting your information for <strong>%s</strong>. We're on it!", businessName)) +
+		p("Here's what happens next:") +
+		`<ol style="margin:0 0 16px;padding-left:20px;color:#374151;font-size:15px;line-height:1.8;">
+  <li>We review your details and build your site</li>
+  <li>You'll receive an email with your site link within 24 hours</li>
+  <li>Once you're happy, your site goes live and starts attracting customers</li>
+</ol>` +
+		p("If you have any questions in the meantime, just reply to this email.") +
+		divider() +
+		p(`<span style="color:#6b7280;font-size:13px;">Questions? Contact us at <a href="mailto:hello@launchly.ltd" style="color:#4f46e5;">hello@launchly.ltd</a></span>`)
+	return c.Send(to, fmt.Sprintf("We've received your details — %s", businessName), wrap(content))
+}
+
+func (c *Client) SendPaymentConfirmation(to, businessName, plan string) error {
+	planLabel := "Starter"
+	if plan == "pro" {
+		planLabel = "Pro"
+	}
+	content := h1("Payment confirmed — you're all set!") +
+		p(fmt.Sprintf("Thanks for subscribing to the <strong>%s plan</strong> for <strong>%s</strong>.", planLabel, businessName)) +
+		p("Your site is now live and active. Enquiries from your site will be forwarded straight to your inbox.") +
+		divider() +
+		p(`<span style="color:#6b7280;font-size:13px;">Need to make changes? Just reply to this email and we'll take care of it.</span>`)
+	return c.Send(to, fmt.Sprintf("Payment confirmed for %s", businessName), wrap(content))
+}
+
+func (c *Client) SendCancellationConfirmation(to, businessName string) error {
+	content := h1("Your subscription has been cancelled") +
+		p(fmt.Sprintf("We've cancelled the subscription for <strong>%s</strong>. Your site will be taken offline shortly.", businessName)) +
+		p("If this was a mistake or you'd like to reactivate your site in future, just get in touch.") +
+		divider() +
+		p(`<span style="color:#6b7280;font-size:13px;">We're sorry to see you go. Contact us at <a href="mailto:hello@launchly.ltd" style="color:#4f46e5;">hello@launchly.ltd</a></span>`)
+	return c.Send(to, fmt.Sprintf("Subscription cancelled — %s", businessName), wrap(content))
+}
+
 func (c *Client) SendLeadNotification(to, businessName, visitorName, visitorEmail, phone, message string) error {
 	rows := ""
 	fields := [][2]string{

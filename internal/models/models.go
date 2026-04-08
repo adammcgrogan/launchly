@@ -29,6 +29,7 @@ type Site struct {
 	Address          string     `db:"address"`
 	Hours            string     `db:"hours"`            // newline-separated e.g. "Mon-Fri: 9am-5pm"
 	MapURL           string     `db:"map_url"`
+	MapEmbedURL      string     `db:"map_embed_url"`
 	FacebookURL      string     `db:"facebook_url"`
 	InstagramURL     string     `db:"instagram_url"`
 	WhatsAppURL      string     `db:"whatsapp_url"`

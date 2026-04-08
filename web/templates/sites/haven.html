@@ -122,6 +122,7 @@
           <input type="email" name="email" placeholder="Email Address" class="w-full rounded-xl px-4 py-3 text-sm sm:col-span-2">
         </div>
         <textarea name="message" rows="4" placeholder="Tell us your dates and how many guests..." class="w-full rounded-xl px-4 py-3 text-sm resize-none"></textarea>
+        <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
         <button type="submit" class="w-full bg-[#2d7a6a] hover:bg-[#236659] text-white font-bold py-3.5 rounded-xl transition">Send Enquiry</button>
       </form>
     </div>
@@ -137,6 +138,7 @@
         <p class="text-[#2d7a6a] font-bold text-xs uppercase tracking-widest mb-2">Address</p>
         <p class="text-[#666] text-sm mb-3">{{.Site.Address}}</p>
         {{if .Site.MapURL}}<a href="{{.Site.MapURL}}" target="_blank" class="text-[#2d7a6a] text-sm font-bold hover:underline">Get Directions →</a>{{end}}
+        {{if .Site.MapEmbedURL}}<div class="mt-3 rounded-xl overflow-hidden"><iframe src="{{.Site.MapEmbedURL}}" width="100%" height="180" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>{{end}}
       </div>
       {{end}}
       {{if .Site.Phone}}

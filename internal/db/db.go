@@ -45,6 +45,7 @@ func (s *Store) Migrate() error {
 			address          TEXT NOT NULL DEFAULT '',
 			hours            TEXT NOT NULL DEFAULT '',
 			map_url          TEXT NOT NULL DEFAULT '',
+			map_embed_url    TEXT NOT NULL DEFAULT '',
 			facebook_url     TEXT NOT NULL DEFAULT '',
 			instagram_url    TEXT NOT NULL DEFAULT '',
 			whatsapp_url     TEXT NOT NULL DEFAULT '',
@@ -96,6 +97,7 @@ func (s *Store) Migrate() error {
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS stripe_session_id TEXT NOT NULL DEFAULT ''`)
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS stripe_subscription_id TEXT NOT NULL DEFAULT ''`)
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ`)
+	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS map_embed_url TEXT NOT NULL DEFAULT ''`)
 	return nil
 }
 
@@ -291,16 +293,16 @@ func (s *Store) CreateSite(site *models.Site) error {
 		INSERT INTO sites (slug, business_name, template, tagline, about, services,
 		                   certifications, location, cta_text, testimonials, logo_url, gallery,
 		                   phone, email, address, hours,
-		                   map_url, facebook_url, instagram_url, whatsapp_url,
+		                   map_url, map_embed_url, facebook_url, instagram_url, whatsapp_url,
 		                   twitter_url, tiktok_url, linkedin_url, youtube_url,
 		                   umami_website_id, lead_email, plan)
-		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27)
+		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28)
 		RETURNING id, created_at`,
 		site.Slug, site.BusinessName, site.Template, site.Tagline, site.About,
 		site.Services, site.Certifications, site.Location, site.CTAText,
 		site.Testimonials, site.LogoURL, site.Gallery,
 		site.Phone, site.Email, site.Address, site.Hours,
-		site.MapURL, site.FacebookURL, site.InstagramURL, site.WhatsAppURL,
+		site.MapURL, site.MapEmbedURL, site.FacebookURL, site.InstagramURL, site.WhatsAppURL,
 		site.TwitterURL, site.TikTokURL, site.LinkedInURL, site.YouTubeURL,
 		site.UmamiWebsiteID, site.LeadEmail, site.Plan,
 	).Scan(&site.ID, &site.CreatedAt)
@@ -311,14 +313,14 @@ func (s *Store) UpdateSite(site *models.Site) error {
 		UPDATE sites SET business_name=$1, tagline=$2, about=$3, services=$4,
 		certifications=$5, location=$6, cta_text=$7, testimonials=$8, logo_url=$9, gallery=$10,
 		phone=$11, email=$12, address=$13, hours=$14,
-		map_url=$15, facebook_url=$16, instagram_url=$17, whatsapp_url=$18,
-		twitter_url=$19, tiktok_url=$20, linkedin_url=$21, youtube_url=$22,
-		umami_website_id=$23, lead_email=$24
-		WHERE id=$25`,
+		map_url=$15, map_embed_url=$16, facebook_url=$17, instagram_url=$18, whatsapp_url=$19,
+		twitter_url=$20, tiktok_url=$21, linkedin_url=$22, youtube_url=$23,
+		umami_website_id=$24, lead_email=$25
+		WHERE id=$26`,
 		site.BusinessName, site.Tagline, site.About, site.Services,
 		site.Certifications, site.Location, site.CTAText, site.Testimonials, site.LogoURL, site.Gallery,
 		site.Phone, site.Email, site.Address, site.Hours,
-		site.MapURL, site.FacebookURL, site.InstagramURL, site.WhatsAppURL,
+		site.MapURL, site.MapEmbedURL, site.FacebookURL, site.InstagramURL, site.WhatsAppURL,
 		site.TwitterURL, site.TikTokURL, site.LinkedInURL, site.YouTubeURL,
 		site.UmamiWebsiteID, site.LeadEmail, site.ID,
 	)
@@ -330,7 +332,7 @@ func (s *Store) GetSiteBySlug(slug string) (*models.Site, error) {
 	err := s.db.QueryRow(`
 		SELECT id, slug, business_name, template, tagline, about, services,
 		       certifications, location, cta_text, testimonials, logo_url, gallery,
-		       phone, email, address, hours, map_url,
+		       phone, email, address, hours, map_url, map_embed_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
 		       umami_website_id, lead_email, status, created_at, published_at,
 		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at
@@ -339,7 +341,7 @@ func (s *Store) GetSiteBySlug(slug string) (*models.Site, error) {
 			&site.Tagline, &site.About, &site.Services,
 			&site.Certifications, &site.Location, &site.CTAText,
 			&site.Testimonials, &site.LogoURL, &site.Gallery,
-			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL,
+			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL, &site.MapEmbedURL,
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
 			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
@@ -355,7 +357,7 @@ func (s *Store) GetSiteByID(id int) (*models.Site, error) {
 	err := s.db.QueryRow(`
 		SELECT id, slug, business_name, template, tagline, about, services,
 		       certifications, location, cta_text, testimonials, logo_url, gallery,
-		       phone, email, address, hours, map_url,
+		       phone, email, address, hours, map_url, map_embed_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
 		       umami_website_id, lead_email, status, created_at, published_at,
 		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at
@@ -364,7 +366,7 @@ func (s *Store) GetSiteByID(id int) (*models.Site, error) {
 			&site.Tagline, &site.About, &site.Services,
 			&site.Certifications, &site.Location, &site.CTAText,
 			&site.Testimonials, &site.LogoURL, &site.Gallery,
-			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL,
+			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL, &site.MapEmbedURL,
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
 			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
@@ -379,7 +381,7 @@ func (s *Store) ListSites() ([]*models.Site, error) {
 	rows, err := s.db.Query(`
 		SELECT id, slug, business_name, template, tagline, about, services,
 		       certifications, location, cta_text, testimonials, logo_url, gallery,
-		       phone, email, address, hours, map_url,
+		       phone, email, address, hours, map_url, map_embed_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
 		       umami_website_id, lead_email, status, created_at, published_at,
 		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at
@@ -396,7 +398,7 @@ func (s *Store) ListSites() ([]*models.Site, error) {
 			&site.Tagline, &site.About, &site.Services,
 			&site.Certifications, &site.Location, &site.CTAText,
 			&site.Testimonials, &site.LogoURL, &site.Gallery,
-			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL,
+			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL, &site.MapEmbedURL,
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
 			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
@@ -453,6 +455,56 @@ func (s *Store) ListLeadsBySite(siteID int) ([]*models.Lead, error) {
 		leads = append(leads, l)
 	}
 	return leads, rows.Err()
+}
+
+func (s *Store) GetSiteByStripeSessionID(sessionID string) (*models.Site, error) {
+	site := &models.Site{}
+	err := s.db.QueryRow(`
+		SELECT id, slug, business_name, template, tagline, about, services,
+		       certifications, location, cta_text, testimonials, logo_url, gallery,
+		       phone, email, address, hours, map_url, map_embed_url,
+		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
+		       umami_website_id, lead_email, status, created_at, published_at,
+		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at
+		FROM sites WHERE stripe_session_id = $1`, sessionID).
+		Scan(&site.ID, &site.Slug, &site.BusinessName, &site.Template,
+			&site.Tagline, &site.About, &site.Services,
+			&site.Certifications, &site.Location, &site.CTAText,
+			&site.Testimonials, &site.LogoURL, &site.Gallery,
+			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL, &site.MapEmbedURL,
+			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
+			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
+			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
+			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	return site, err
+}
+
+func (s *Store) GetSiteByStripeSubscriptionID(subID string) (*models.Site, error) {
+	site := &models.Site{}
+	err := s.db.QueryRow(`
+		SELECT id, slug, business_name, template, tagline, about, services,
+		       certifications, location, cta_text, testimonials, logo_url, gallery,
+		       phone, email, address, hours, map_url, map_embed_url,
+		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
+		       umami_website_id, lead_email, status, created_at, published_at,
+		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at
+		FROM sites WHERE stripe_subscription_id = $1`, subID).
+		Scan(&site.ID, &site.Slug, &site.BusinessName, &site.Template,
+			&site.Tagline, &site.About, &site.Services,
+			&site.Certifications, &site.Location, &site.CTAText,
+			&site.Testimonials, &site.LogoURL, &site.Gallery,
+			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL, &site.MapEmbedURL,
+			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
+			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
+			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
+			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	return site, err
 }
 
 func (s *Store) SetSitePending(id int, plan, sessionID string) error {

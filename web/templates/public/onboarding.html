@@ -130,6 +130,13 @@
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
             <p class="text-gray-400 text-xs mt-1">Paste any Google Maps link from your browser or the Maps app.</p>
           </div>
+          <div>
+            <label for="ob_map_embed_url" class="block text-sm font-semibold text-gray-700 mb-1.5">Google Maps Embed URL <span class="font-normal text-gray-400">(optional)</span></label>
+            <input id="ob_map_embed_url" type="url" name="map_embed_url"
+              placeholder="https://www.google.com/maps/embed?pb=..."
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            <p class="text-gray-400 text-xs mt-1">From Google Maps: Share → Embed a map → copy the src URL from the iframe code.</p>
+          </div>
 
           <!-- Social links collapsible -->
           <details class="mt-1">
@@ -349,6 +356,9 @@
             </label>
           </div>
         </div>
+
+        <!-- Honeypot -->
+        <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
 
         <!-- Submit -->
         <div class="text-center pb-4">

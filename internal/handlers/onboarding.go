@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -50,6 +51,12 @@ func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Honeypot: bots fill hidden fields, humans don't
+	if r.FormValue("website") != "" {
+		http.Redirect(w, r, "/get-started?thanks=1", http.StatusSeeOther)
+		return
+	}
+
 	businessName := strings.TrimSpace(r.FormValue("business_name"))
 	if businessName == "" {
 		http.Error(w, "business name is required", http.StatusBadRequest)
@@ -84,6 +91,7 @@ func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
 		Address:      r.FormValue("address"),
 		Hours:        r.FormValue("hours"),
 		MapURL:       r.FormValue("map_url"),
+		MapEmbedURL:  r.FormValue("map_embed_url"),
 		FacebookURL:  r.FormValue("facebook_url"),
 		InstagramURL: r.FormValue("instagram_url"),
 		WhatsAppURL:  r.FormValue("whatsapp_url"),
@@ -103,6 +111,12 @@ func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
 	if err := h.store.CreateSite(site); err != nil {
 		http.Error(w, "could not save your submission", http.StatusInternalServerError)
 		return
+	}
+
+	if site.LeadEmail != "" {
+		if err := h.email.SendWelcomeEmail(site.LeadEmail, site.BusinessName); err != nil {
+			log.Printf("send welcome email error: %v", err)
+		}
 	}
 
 	tmpl := template.Must(template.ParseFiles(
