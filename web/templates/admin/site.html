@@ -129,7 +129,10 @@
 </div>
 
 <div class="admin-card admin-leads">
-  <h2>Leads ({{len .Leads}})</h2>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+    <h2 style="margin:0;">Leads ({{len .Leads}})</h2>
+    {{if .Leads}}<a href="/admin/sites/{{.Site.ID}}/leads.csv" class="btn-secondary" style="font-size:0.8rem;padding:0.4rem 0.9rem;">Export CSV</a>{{end}}
+  </div>
   {{if not .Leads}}
     <p class="empty">No leads yet.</p>
   {{else}}

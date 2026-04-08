@@ -14,6 +14,19 @@
   <meta name="twitter:title" content="{{.Site.BusinessName}}">
   <meta name="twitter:description" content="{{if .Site.Tagline}}{{.Site.Tagline}}{{else}}{{.Site.BusinessName}} -contact us today.{{end}}">
   <link rel="canonical" href="https://{{.Site.Slug}}.launchly.ltd">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "{{.Site.BusinessName}}"
+    {{if .Site.Tagline}},"description": "{{.Site.Tagline}}"{{end}}
+    {{if .Site.Phone}},"telephone": "{{.Site.Phone}}"{{end}}
+    {{if .Site.Email}},"email": "{{.Site.Email}}"{{end}}
+    {{if .Site.Address}},"address": {"@type": "PostalAddress", "streetAddress": "{{.Site.Address}}"}{{end}}
+    {{if .Site.LogoURL}},"image": "{{.Site.LogoURL}}"{{end}}
+    ,"url": "https://{{.Site.Slug}}.launchly.ltd"
+  }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {

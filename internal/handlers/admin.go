@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/csv"
 	"fmt"
 	"html/template"
 	"io"
@@ -373,6 +374,32 @@ func (h *Handler) AdminCancelSubscription(w http.ResponseWriter, r *http.Request
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
 
+func (h *Handler) AdminExportLeads(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	site, err := h.store.GetSiteByID(id)
+	if err != nil || site == nil {
+		http.NotFound(w, r)
+		return
+	}
+	leads, err := h.store.ListLeadsBySite(id)
+	if err != nil {
+		http.Error(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/csv")
+	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s-leads.csv"`, site.Slug))
+	cw := csv.NewWriter(w)
+	cw.Write([]string{"Name", "Email", "Phone", "Message", "Date"})
+	for _, l := range leads {
+		cw.Write([]string{l.Name, l.Email, l.Phone, l.Message, l.CreatedAt.Format("2006-01-02 15:04")})
+	}
+	cw.Flush()
+}
+
 func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(io.LimitReader(r.Body, 65536))
 	if err != nil {
@@ -390,6 +417,8 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 		if event.SessionID != "" {
 			if err := h.store.SetSitePaid(event.SessionID, event.SubscriptionID); err != nil {
 				log.Printf("set site paid error: %v", err)
+				http.Error(w, "database error", http.StatusInternalServerError)
+				return
 			} else {
 				log.Printf("payment received for session %s", event.SessionID)
 				if site, err := h.store.GetSiteByStripeSessionID(event.SessionID); err == nil && site != nil && site.LeadEmail != "" {
@@ -404,6 +433,8 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 			site, _ := h.store.GetSiteByStripeSubscriptionID(event.SubscriptionID)
 			if err := h.store.SetSiteCancelled(event.SubscriptionID); err != nil {
 				log.Printf("set site cancelled error: %v", err)
+				http.Error(w, "database error", http.StatusInternalServerError)
+				return
 			} else {
 				log.Printf("subscription cancelled: %s", event.SubscriptionID)
 				if site != nil && site.LeadEmail != "" {
@@ -453,4 +484,5 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /admin/sites/{id}/switch-template", h.adminAuth(h.AdminDoSwitchTemplate))
 	mux.HandleFunc("POST /admin/sites/{id}/send-payment", h.adminAuth(h.AdminSendPayment))
 	mux.HandleFunc("POST /admin/sites/{id}/cancel-subscription", h.adminAuth(h.AdminCancelSubscription))
+	mux.HandleFunc("GET /admin/sites/{id}/leads.csv", h.adminAuth(h.AdminExportLeads))
 }
