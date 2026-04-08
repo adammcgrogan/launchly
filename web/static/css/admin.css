@@ -217,6 +217,26 @@ code { font-size: 0.85rem; background: #f3f4f6; padding: 0.15rem 0.4rem; border-
 /* Small button variant */
 .btn-sm { font-size: 0.9rem !important; padding: 0.5rem 1.2rem !important; }
 
+/* Detail items (site detail page) */
+.detail-item { padding: 0.65rem 0; border-bottom: 1px solid #f3f3f3; }
+.detail-item:last-child { border-bottom: none; }
+.detail-label { font-size: 0.75rem; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem; }
+.detail-value { font-size: 0.95rem; color: #111; }
+
+/* Secondary button */
+.btn-secondary {
+  display: inline-block;
+  background: #f3f4f6;
+  color: #374151;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  border: 1px solid #e5e7eb;
+}
+.btn-secondary:hover { background: #e5e7eb; }
+
 /* Linked URL in details */
 .admin-card dl a { color: #2563eb; text-decoration: none; }
 .admin-card dl a:hover { text-decoration: underline; }

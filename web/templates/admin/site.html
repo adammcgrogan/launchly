@@ -1,69 +1,71 @@
 {{define "content"}}
 <div class="admin-header">
-  <h1>{{.Site.BusinessName}}</h1>
-  <a href="/admin" class="btn-back">← Back</a>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <a href="/admin" class="btn-back">← Sites</a>
+    <h1 style="font-size:1.4rem;font-weight:800;">{{.Site.BusinessName}}</h1>
+    <span class="badge badge-{{.Site.Status}}">{{.Site.Status}}</span>
+    {{if eq .Site.PaymentStatus "paid"}}<span class="badge badge-live" style="background:#dbeafe;color:#1e40af;">{{.Site.Plan}}</span>{{end}}
+  </div>
+  <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+    <a href="{{.SiteURL}}" target="_blank" class="btn-edit">View Site ↗</a>
+    <a href="/admin/sites/{{.Site.ID}}/edit" class="btn-edit">Edit Content</a>
+    <a href="/admin/sites/{{.Site.ID}}/switch-template" class="btn-edit">Switch Template</a>
+  </div>
 </div>
 
-<div class="admin-grid">
-  <div class="admin-card">
-    <h2>Details</h2>
-    <dl>
-      <dt>Status</dt>
-      <dd><span class="badge badge-{{.Site.Status}}">{{.Site.Status}}</span></dd>
+<!-- Info + Actions row -->
+<div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;margin-bottom:1.5rem;">
 
-      <dt>URL</dt>
-      <dd>
-        {{if eq .Site.Status "live"}}
-          <a href="{{.SiteURL}}" target="_blank">{{.SiteURL}}</a>
-        {{else}}
-          <a href="{{.SiteURL}}" target="_blank" class="text-gray-500">{{.SiteURL}} ↗</a>
-        {{end}}
-      </dd>
+  <!-- Info card -->
+  <div class="admin-card" style="margin-bottom:0;">
+    <h2>Site Details</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.1rem 2rem;">
 
-      <dt>Template</dt>
-      <dd>{{.Site.Template}}</dd>
+      <div class="detail-item">
+        <div class="detail-label">Template</div>
+        <div class="detail-value" style="text-transform:capitalize;">{{.Site.Template}}</div>
+      </div>
 
-      <dt>Phone</dt>
-      <dd>{{or .Site.Phone "-"}}</dd>
+      <div class="detail-item">
+        <div class="detail-label">URL</div>
+        <div class="detail-value"><a href="{{.SiteURL}}" target="_blank">{{.SiteURL}}</a></div>
+      </div>
 
-      <dt>Email</dt>
-      <dd>{{or .Site.Email "-"}}</dd>
+      <div class="detail-item">
+        <div class="detail-label">Phone</div>
+        <div class="detail-value">{{or .Site.Phone "—"}}</div>
+      </div>
 
-      <dt>Address</dt>
-      <dd>{{or .Site.Address "-"}}</dd>
+      <div class="detail-item">
+        <div class="detail-label">Business Email</div>
+        <div class="detail-value">{{or .Site.Email "—"}}</div>
+      </div>
 
-      <dt>Lead Email</dt>
-      <dd>{{.Site.LeadEmail}}</dd>
+      <div class="detail-item">
+        <div class="detail-label">Lead Email</div>
+        <div class="detail-value">{{.Site.LeadEmail}}</div>
+      </div>
 
-      <dt>Submitted</dt>
-      <dd>{{.Site.CreatedAt.Format "02 Jan 2006 15:04"}}</dd>
+      <div class="detail-item">
+        <div class="detail-label">Address</div>
+        <div class="detail-value">{{or .Site.Address "—"}}</div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-label">Submitted</div>
+        <div class="detail-value">{{.Site.CreatedAt.Format "02 Jan 2006, 15:04"}}</div>
+      </div>
 
       {{if .Site.PublishedAt}}
-      <dt>Published</dt>
-      <dd>{{.Site.PublishedAt.Format "02 Jan 2006 15:04"}}</dd>
+      <div class="detail-item">
+        <div class="detail-label">Published</div>
+        <div class="detail-value">{{.Site.PublishedAt.Format "02 Jan 2006, 15:04"}}</div>
+      </div>
       {{end}}
 
-      <dt>Payment</dt>
-      <dd>
-        {{if eq .Site.PaymentStatus "paid"}}
-          <span class="badge badge-live">Paid</span>
-          {{if .Site.Plan}}<span class="badge-plan-label">{{.Site.Plan}}</span>{{end}}
-          {{if .Site.PaidAt}}<span class="badge-date">{{.Site.PaidAt.Format "02 Jan 2006 15:04"}}</span>{{end}}
-        {{else if eq .Site.PaymentStatus "pending"}}
-          <span class="badge badge-draft">Awaiting payment</span>
-          {{if .Site.Plan}}<span class="badge-plan-label">{{.Site.Plan}}</span>{{end}}
-        {{else if eq .Site.PaymentStatus "cancelled"}}
-          <span class="badge badge-cancelled">Cancelled</span>
-          {{if .Site.Plan}}<span class="badge-plan-label">{{.Site.Plan}}</span>{{end}}
-        {{else}}
-          <span class="text-muted">No link sent</span>
-        {{end}}
-      </dd>
-    </dl>
+    </div>
 
-    <div class="admin-actions">
-      <a href="/admin/sites/{{.Site.ID}}/edit" class="btn-edit">Edit Content</a>
-      <a href="/admin/sites/{{.Site.ID}}/switch-template" class="btn-edit">Switch Template</a>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid #eee;display:flex;gap:0.6rem;flex-wrap:wrap;">
       {{if eq .Site.Status "draft"}}
         <form method="POST" action="/admin/sites/{{.Site.ID}}/publish">
           <button type="submit" class="btn-publish" onclick="return confirm('Publish {{.Site.BusinessName}}? The site will go live and the customer will be notified.')">Publish Site</button>
@@ -73,65 +75,64 @@
           <button type="submit" class="btn-unpublish">Unpublish</button>
         </form>
       {{end}}
-      <form method="POST" action="/admin/sites/{{.Site.ID}}/delete" onsubmit="return confirm('Delete {{.Site.BusinessName}}? This cannot be undone.')">
-        <button type="submit" class="btn-delete">Delete Site</button>
+      <form method="POST" action="/admin/sites/{{.Site.ID}}/delete" onsubmit="return confirm('Delete {{.Site.BusinessName}}? This cannot be undone.')" style="margin-left:auto;">
+        <button type="submit" class="btn-delete">Delete</button>
       </form>
     </div>
+  </div>
 
-    <div class="payment-section">
-      <p class="payment-section-label">Send Payment Link</p>
-      {{if .PaymentSent}}
-      <p class="payment-sent-notice">Payment link sent to {{.Site.LeadEmail}}</p>
-      {{end}}
+  <!-- Payment card -->
+  <div class="admin-card" style="margin-bottom:0;">
+    <h2>Payment</h2>
+
+    <div style="margin-bottom:1.25rem;">
       {{if eq .Site.PaymentStatus "paid"}}
-      <form method="POST" action="/admin/sites/{{.Site.ID}}/cancel-subscription" onsubmit="return confirm('Cancel the subscription for {{.Site.BusinessName}}? This will stop their billing immediately.')">
-        <button type="submit" class="btn-unpublish btn-sm">Cancel Subscription</button>
-      </form>
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;">
+          <span class="badge badge-live">Paid</span>
+          <span style="font-size:0.9rem;color:#555;text-transform:capitalize;">{{.Site.Plan}}</span>
+        </div>
+        {{if .Site.PaidAt}}<div style="font-size:0.82rem;color:#888;">Since {{.Site.PaidAt.Format "02 Jan 2006"}}</div>{{end}}
+      {{else if eq .Site.PaymentStatus "pending"}}
+        <span class="badge badge-draft">Awaiting payment</span>
+        {{if .Site.Plan}}<span style="font-size:0.85rem;color:#555;margin-left:0.4rem;text-transform:capitalize;">{{.Site.Plan}}</span>{{end}}
       {{else if eq .Site.PaymentStatus "cancelled"}}
-      <p class="payment-cancelled-notice">Subscription cancelled.</p>
-      <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" class="payment-form">
-        <select name="plan" class="plan-select">
-          <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter - £19/mo</option>
-          <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro - £39/mo</option>
-        </select>
-        <button type="submit" class="btn-publish btn-sm">Send Payment Link</button>
-      </form>
+        <span class="badge badge-cancelled">Cancelled</span>
       {{else}}
-      <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" class="payment-form">
-        <select name="plan" class="plan-select">
-          <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter - £19/mo</option>
-          <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro - £39/mo</option>
+        <span style="color:#999;font-size:0.9rem;">No link sent yet</span>
+      {{end}}
+    </div>
+
+    {{if .PaymentSent}}
+    <div class="payment-sent-notice" style="margin-bottom:1rem;">✓ Payment link sent to {{.Site.LeadEmail}}</div>
+    {{end}}
+
+    {{if eq .Site.PaymentStatus "paid"}}
+      <form method="POST" action="/admin/sites/{{.Site.ID}}/cancel-subscription" onsubmit="return confirm('Cancel the subscription for {{.Site.BusinessName}}?')">
+        <button type="submit" class="btn-unpublish" style="width:100%;font-size:0.875rem;padding:0.5rem 1rem;">Cancel Subscription</button>
+      </form>
+    {{else}}
+      <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" style="display:flex;flex-direction:column;gap:0.6rem;">
+        <select name="plan" class="plan-select" style="width:100%;">
+          <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter — £19/mo</option>
+          <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro — £39/mo</option>
         </select>
-        <button type="submit" class="btn-publish btn-sm">
+        <button type="submit" class="btn-publish" style="width:100%;font-size:0.875rem;padding:0.55rem 1rem;">
           {{if eq .Site.PaymentStatus "pending"}}Resend Payment Link{{else}}Send Payment Link{{end}}
         </button>
       </form>
+      {{if eq .Site.PaymentStatus "cancelled"}}
+      <p style="font-size:0.8rem;color:#888;margin-top:0.6rem;">Subscription was previously cancelled.</p>
       {{end}}
-    </div>
+    {{end}}
   </div>
 
-  <div class="admin-card">
-    <h2>Content Preview</h2>
-    <dl>
-      <dt>Tagline</dt>
-      <dd>{{or .Site.Tagline "-"}}</dd>
-
-      <dt>About</dt>
-      <dd>{{or .Site.About "-"}}</dd>
-
-      <dt>Services</dt>
-      <dd><pre>{{or .Site.Services "-"}}</pre></dd>
-
-      <dt>Hours</dt>
-      <dd><pre>{{or .Site.Hours "-"}}</pre></dd>
-    </dl>
-  </div>
 </div>
 
-<div class="admin-card admin-leads">
+<!-- Leads -->
+<div class="admin-card">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-    <h2 style="margin:0;">Leads ({{len .Leads}})</h2>
-    {{if .Leads}}<a href="/admin/sites/{{.Site.ID}}/leads.csv" class="btn-secondary" style="font-size:0.8rem;padding:0.4rem 0.9rem;">Export CSV</a>{{end}}
+    <h2 style="margin:0;">Leads <span style="font-weight:400;color:#999;">({{len .Leads}})</span></h2>
+    {{if .Leads}}<a href="/admin/sites/{{.Site.ID}}/leads.csv" class="btn-secondary">Export CSV</a>{{end}}
   </div>
   {{if not .Leads}}
     <p class="empty">No leads yet.</p>
@@ -149,11 +150,11 @@
     <tbody>
       {{range .Leads}}
       <tr>
-        <td>{{.Name}}</td>
-        <td>{{or .Email "-"}}</td>
-        <td>{{or .Phone "-"}}</td>
-        <td>{{.Message}}</td>
-        <td>{{.CreatedAt.Format "02 Jan 2006 15:04"}}</td>
+        <td style="font-weight:600;">{{.Name}}</td>
+        <td>{{or .Email "—"}}</td>
+        <td>{{or .Phone "—"}}</td>
+        <td style="color:#555;">{{.Message}}</td>
+        <td style="white-space:nowrap;color:#888;font-size:0.85rem;">{{.CreatedAt.Format "02 Jan 2006 15:04"}}</td>
       </tr>
       {{end}}
     </tbody>
