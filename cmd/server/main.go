@@ -36,8 +36,10 @@ func main() {
 	if err := store.Migrate(); err != nil {
 		log.Fatalf("migrate: %v", err)
 	}
-	if err := store.SeedExamples(); err != nil {
-		log.Fatalf("seed examples: %v", err)
+	if getEnv("SEED_EXAMPLES", "") == "true" {
+		if err := store.SeedExamples(); err != nil {
+			log.Fatalf("seed examples: %v", err)
+		}
 	}
 
 	mailer := email.New(resendKey, emailFrom)
