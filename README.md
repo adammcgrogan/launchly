@@ -1,8 +1,8 @@
 # Launchly
 
-A done-for-you website service for local businesses. Customers fill in a form, the site gets built and reviewed, then published on a subdomain. Enquiries from the site are forwarded to the business owner by email.
+Check it out at [launchly.ltd](https://launchly.ltd).
 
-Built and operated by Adam McGrogan — [launchly.ltd](https://launchly.ltd)
+A done-for-you website service for local businesses. Customers fill in a form, the site gets built and reviewed, then published on a subdomain. Enquiries from the site are forwarded to the business owner by email.
 
 ## Stack
 
@@ -21,45 +21,6 @@ Built and operated by Adam McGrogan — [launchly.ltd](https://launchly.ltd)
 3. Admin publishes the site — it goes live at `slug.launchly.ltd`
 4. Admin sends a Stripe payment link
 5. Visitor submits the contact form — lead is saved and emailed to the business
-
-## Running locally
-
-Copy the example env file and fill in your values:
-
-```
-cp .env.example .env
-```
-
-Run the server:
-
-```
-go run ./cmd/server/main.go
-```
-
-Build check:
-
-```
-go build ./...
-```
-
-There is no test suite currently.
-
-## Environment variables
-
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `DOMAIN` | `launchly.ltd` in production |
-| `ADMIN_PASSWORD` | Protects `/admin` via HTTP basic auth |
-| `RESEND_API_KEY` | Resend API key |
-| `EMAIL_FROM` | From address for outbound email |
-| `STRIPE_SECRET_KEY` | Stripe secret key |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
-| `STRIPE_STARTER_PRODUCT` | Stripe product ID for Starter plan |
-| `STRIPE_PRO_PRODUCT` | Stripe product ID for Pro plan |
-| `UMAMI_SCRIPT_URL` | Optional — Umami analytics script URL |
-| `SEED_EXAMPLES` | Set to `true` to seed example sites on startup |
-| `ADDR` | Server address, defaults to `:8080` |
 
 ## Site templates
 
