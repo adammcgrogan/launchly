@@ -70,7 +70,7 @@ Small local businesses across any niche, including:
 
 ## Templates
 
-10 templates available, each mobile-first with a distinct visual style:
+13 templates available, each mobile-first with a distinct visual style:
 
 | Name | Style | Best for |
 |------|-------|----------|
@@ -84,6 +84,9 @@ Small local businesses across any niche, including:
 | Fleet | Dark industrial, orange accents | Auto, mechanics, trades |
 | Haven | Warm neutral, calm | B&Bs, hospitality |
 | Arch | Editorial, minimal serif | Interiors, design, studios |
+| Dine | Dark, moody, menu-style layout | Restaurants, pubs, takeaways |
+| Heal | Clean, clinical, trust-focused | Dentists, physios, clinics |
+| Craft | Earthy, artisan, gallery-first | Makers, bakers, studios |
 
 ---
 

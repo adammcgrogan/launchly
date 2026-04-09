@@ -295,6 +295,24 @@
                   <div class="text-[#888] text-[10px] mt-0.5 italic">Interior design studio</div>
                   <div class="flex justify-center mt-2"><span class="bg-[#0a0a0a] text-white text-[9px] font-bold px-2 py-0.5 rounded">Start a Project</span></div>
                 </div>
+                {{else if eq .ID "dine"}}
+                <div class="bg-[#1a1110] p-4 text-center">
+                  <div class="text-[#f5efe6] font-black text-sm">The Ember Room</div>
+                  <div class="text-[#a89080] text-[10px] mt-0.5 italic">Wood-fired kitchen</div>
+                  <div class="flex justify-center gap-1.5 mt-2"><span class="bg-[#d4a574] text-[#1a1110] text-[9px] font-bold px-2 py-0.5 rounded">Book a Table</span><span class="border border-[#3a3230] text-[#d4a574] text-[9px] px-2 py-0.5 rounded">Menu</span></div>
+                </div>
+                {{else if eq .ID "heal"}}
+                <div class="bg-gradient-to-b from-[#e8f4f4] to-[#f8fafb] p-4 text-center">
+                  <div class="text-gray-900 font-black text-sm">Greenfield Dental</div>
+                  <div class="text-gray-400 text-[10px] mt-0.5 italic">Family dentistry</div>
+                  <div class="flex justify-center mt-2"><span class="bg-[#0d6e6e] text-white text-[9px] font-bold px-2 py-0.5 rounded">Book Appointment</span></div>
+                </div>
+                {{else if eq .ID "craft"}}
+                <div class="bg-[#4a3728] p-4 text-center">
+                  <div class="text-[#faf6f1] font-black text-sm">Willow & Thread</div>
+                  <div class="text-[#c4a882] text-[10px] mt-0.5 italic">Handmade ceramics</div>
+                  <div class="flex justify-center mt-2"><span class="bg-[#c4a882] text-[#4a3728] text-[9px] font-bold px-2 py-0.5 rounded">View Collection</span></div>
+                </div>
                 {{end}}
                 <div class="px-3 py-2.5 border-t border-gray-100 flex items-center justify-between bg-white">
                   <div>

@@ -24,7 +24,7 @@ A done-for-you website service for local businesses. Customers fill in a form, t
 
 ## Site templates
 
-Ten templates are available: `bold`, `fresh`, `warm`, `glow`, `classic`, `pulse`, `grove`, `fleet`, `haven`, `arch`. Each is a single HTML file in `web/templates/sites/`.
+13 templates are available: `bold`, `fresh`, `warm`, `glow`, `classic`, `pulse`, `grove`, `fleet`, `haven`, `arch`, `dine`, `heal`, `craft`. Each is a single HTML file in `web/templates/sites/`.
 
 ## Project structure
 
