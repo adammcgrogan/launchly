@@ -24,17 +24,11 @@ type templateEntry struct {
 	Name        string
 	Description string
 	ExampleURL  string
-}
-
-type industryGroup struct {
-	Name      string
-	Templates []templateEntry
+	Industry    string
 }
 
 func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
-	var general []templateEntry
-	industryMap := make(map[string][]templateEntry)
-	var industryOrder []string
+	var general, industry []templateEntry
 
 	for _, t := range siteTemplates {
 		entry := templateEntry{
@@ -42,23 +36,13 @@ func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
 			Name:        t.Name,
 			Description: t.Description,
 			ExampleURL:  h.exampleURL(t.ExampleSlug),
+			Industry:    t.Industry,
 		}
 		if t.Industry == "" {
 			general = append(general, entry)
 		} else {
-			if _, seen := industryMap[t.Industry]; !seen {
-				industryOrder = append(industryOrder, t.Industry)
-			}
-			industryMap[t.Industry] = append(industryMap[t.Industry], entry)
+			industry = append(industry, entry)
 		}
-	}
-
-	var industryGroups []industryGroup
-	for _, name := range industryOrder {
-		industryGroups = append(industryGroups, industryGroup{
-			Name:      name,
-			Templates: industryMap[name],
-		})
 	}
 
 	tmpl := template.Must(template.ParseFiles(
@@ -66,8 +50,8 @@ func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
 		"web/templates/public/onboarding.html",
 	))
 	tmpl.ExecuteTemplate(w, "base", map[string]any{
-		"GeneralTemplates":  general,
-		"IndustryGroups":    industryGroups,
+		"GeneralTemplates":   general,
+		"IndustryTemplates":  industry,
 	})
 }
 
