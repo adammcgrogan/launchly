@@ -10,25 +10,27 @@ import (
 )
 
 // siteTemplates lists available templates shown in the onboarding form.
+// Industry is empty for general-purpose templates; set to the industry name for specific ones.
 var siteTemplates = []struct {
 	ID          string
 	Name        string
 	Description string
 	ExampleSlug string
+	Industry    string
 }{
-	{"bold", "Bold", "Dark, high contrast — great for trades and gyms", "example-bold"},
-	{"fresh", "Fresh", "Light and minimal — ideal for professional services", "example-fresh"},
-	{"warm", "Warm", "Earthy tones — perfect for cafés and restaurants", "example-warm"},
-	{"glow", "Glow", "Soft pastels — suited for salons and beauty", "example-glow"},
-	{"classic", "Classic", "Neutral and timeless — works for any business", "example-classic"},
-	{"pulse", "Pulse", "Dark and energetic — built for gyms and fitness", "example-pulse"},
-	{"grove", "Grove", "Forest green and organic — ideal for landscaping and garden", "example-grove"},
-	{"fleet", "Fleet", "Industrial and direct — perfect for garages and auto services", "example-fleet"},
-	{"haven", "Haven", "Warm and welcoming — great for B&Bs and holiday lets", "example-haven"},
-	{"arch", "Arch", "Ultra-minimal and editorial — suited for design and creative services", "example-arch"},
-	{"dine", "Dine", "Dark and moody — built for restaurants, pubs, and takeaways", "example-dine"},
-	{"heal", "Heal", "Clean and clinical — ideal for dentists, physios, and clinics", "example-heal"},
-	{"craft", "Craft", "Earthy and artisan — perfect for makers, bakers, and studios", "example-craft"},
+	{"bold", "Bold", "Dark, high contrast — great for trades and gyms", "example-bold", ""},
+	{"fresh", "Fresh", "Light and minimal — ideal for professional services", "example-fresh", ""},
+	{"warm", "Warm", "Earthy tones — perfect for cafés and restaurants", "example-warm", ""},
+	{"glow", "Glow", "Soft pastels — suited for salons and beauty", "example-glow", ""},
+	{"classic", "Classic", "Neutral and timeless — works for any business", "example-classic", ""},
+	{"pulse", "Pulse", "Dark and energetic — built for gyms and fitness", "example-pulse", ""},
+	{"grove", "Grove", "Forest green and organic — ideal for landscaping and garden", "example-grove", ""},
+	{"fleet", "Fleet", "Industrial and direct — perfect for garages and auto services", "example-fleet", ""},
+	{"haven", "Haven", "Warm and welcoming — great for B&Bs and holiday lets", "example-haven", ""},
+	{"arch", "Arch", "Ultra-minimal and editorial — suited for design and creative services", "example-arch", ""},
+	{"dine", "Dine", "Dark, moody layout with menu-style services section", "example-dine", "Restaurants & Food"},
+	{"heal", "Heal", "Clean and clinical with trust badges in the hero", "example-heal", "Health & Wellness"},
+	{"craft", "Craft", "Earthy and artisan with gallery as the centrepiece", "example-craft", "Makers & Studios"},
 }
 
 // buildTestimonials assembles the testimonials string from individual form fields.
