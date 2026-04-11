@@ -91,13 +91,17 @@ func effectiveHost(r *http.Request) string {
 	return r.Host
 }
 
-// subdomainRouter routes subdomain requests to the site handler,
+// subdomainRouter routes subdomain and custom-domain requests to the site handler,
 // and everything else to the main mux.
 func subdomainRouter(domain string, h *handlers.Handler, fallback http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		host := strings.ToLower(strings.Split(effectiveHost(r), ":")[0])
-		if strings.HasSuffix(host, "."+domain) {
-			// Static assets must be served on subdomains too
+		isSubdomain := strings.HasSuffix(host, "."+domain)
+		isMainDomain := host == domain || host == "www."+domain
+		isSiteDomain := isSubdomain || (!isMainDomain && host != "")
+
+		if isSiteDomain {
+			// Static assets must be served on all site domains
 			if strings.HasPrefix(r.URL.Path, "/static/") {
 				fallback.ServeHTTP(w, r)
 				return
