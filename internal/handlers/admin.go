@@ -6,7 +6,9 @@ import (
 	"html/template"
 	"io"
 	"log"
+	"net"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -71,6 +73,8 @@ func (h *Handler) AdminSite(w http.ResponseWriter, r *http.Request) {
 		"Domain":      h.domain,
 		"SiteURL":     h.siteURL(site.Slug),
 		"PaymentSent": r.URL.Query().Get("payment") == "sent",
+		"DNSResult":   r.URL.Query().Get("dns"),
+		"DNSTarget":   r.URL.Query().Get("cname"),
 	})
 }
 
@@ -448,6 +452,81 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func (h *Handler) AdminSetCustomDomain(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	site, err := h.store.GetSiteByID(id)
+	if err != nil || site == nil {
+		http.NotFound(w, r)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+	domain := normalizeDomain(r.FormValue("custom_domain"))
+	if err := h.store.SetCustomDomain(id, domain); err != nil {
+		// Unique constraint violation: another site already has this domain
+		if strings.Contains(err.Error(), "unique") || strings.Contains(err.Error(), "duplicate") {
+			http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d?domain_err=taken", id), http.StatusSeeOther)
+			return
+		}
+		http.Error(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
+}
+
+func (h *Handler) AdminCheckDomain(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	site, err := h.store.GetSiteByID(id)
+	if err != nil || site == nil {
+		http.NotFound(w, r)
+		return
+	}
+	if site.CustomDomain == "" {
+		http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
+		return
+	}
+
+	cname, lookupErr := net.LookupCNAME(site.CustomDomain)
+	cname = strings.TrimSuffix(cname, ".")
+
+	var dnsStatus string
+	if lookupErr != nil {
+		dnsStatus = "fail"
+		cname = lookupErr.Error()
+	} else if strings.HasSuffix(cname, h.domain) {
+		dnsStatus = "ok"
+	} else if cname == site.CustomDomain {
+		// CNAME returned the domain itself — Cloudflare proxy flattens CNAMEs
+		dnsStatus = "cf"
+		cname = "Cloudflare proxy active (CNAME flattened)"
+	} else {
+		dnsStatus = "warn"
+	}
+
+	target := url.QueryEscape(cname)
+	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d?dns=%s&cname=%s", id, dnsStatus, target), http.StatusSeeOther)
+}
+
+// normalizeDomain strips protocol, trailing slashes, and port from a domain input.
+func normalizeDomain(d string) string {
+	d = strings.TrimPrefix(d, "https://")
+	d = strings.TrimPrefix(d, "http://")
+	d = strings.TrimSuffix(d, "/")
+	d = strings.ToLower(strings.TrimSpace(d))
+	d = strings.Split(d, ":")[0]
+	return d
+}
+
 func (h *Handler) PaymentSuccess(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles(
 		"web/templates/public/home_base.html",
@@ -486,4 +565,6 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /admin/sites/{id}/send-payment", h.adminAuth(h.AdminSendPayment))
 	mux.HandleFunc("POST /admin/sites/{id}/cancel-subscription", h.adminAuth(h.AdminCancelSubscription))
 	mux.HandleFunc("GET /admin/sites/{id}/leads.csv", h.adminAuth(h.AdminExportLeads))
+	mux.HandleFunc("POST /admin/sites/{id}/custom-domain", h.adminAuth(h.AdminSetCustomDomain))
+	mux.HandleFunc("GET /admin/sites/{id}/check-domain", h.adminAuth(h.AdminCheckDomain))
 }

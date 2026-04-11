@@ -98,6 +98,8 @@ func (s *Store) Migrate() error {
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS stripe_subscription_id TEXT NOT NULL DEFAULT ''`)
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ`)
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS map_embed_url TEXT NOT NULL DEFAULT ''`)
+	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS custom_domain TEXT`)
+	s.db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_sites_custom_domain ON sites (custom_domain) WHERE custom_domain IS NOT NULL AND custom_domain != ''`)
 	return nil
 }
 
@@ -380,7 +382,8 @@ func (s *Store) GetSiteBySlug(slug string) (*models.Site, error) {
 		       phone, email, address, hours, map_url, map_embed_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
 		       umami_website_id, lead_email, status, created_at, published_at,
-		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at
+		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at,
+		       COALESCE(custom_domain, '')
 		FROM sites WHERE slug = $1`, slug).
 		Scan(&site.ID, &site.Slug, &site.BusinessName, &site.Template,
 			&site.Tagline, &site.About, &site.Services,
@@ -390,7 +393,8 @@ func (s *Store) GetSiteBySlug(slug string) (*models.Site, error) {
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
 			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
-			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt)
+			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt,
+			&site.CustomDomain)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
@@ -405,7 +409,8 @@ func (s *Store) GetSiteByID(id int) (*models.Site, error) {
 		       phone, email, address, hours, map_url, map_embed_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
 		       umami_website_id, lead_email, status, created_at, published_at,
-		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at
+		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at,
+		       COALESCE(custom_domain, '')
 		FROM sites WHERE id = $1`, id).
 		Scan(&site.ID, &site.Slug, &site.BusinessName, &site.Template,
 			&site.Tagline, &site.About, &site.Services,
@@ -415,7 +420,8 @@ func (s *Store) GetSiteByID(id int) (*models.Site, error) {
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
 			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
-			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt)
+			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt,
+			&site.CustomDomain)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
@@ -429,7 +435,8 @@ func (s *Store) ListSites() ([]*models.Site, error) {
 		       phone, email, address, hours, map_url, map_embed_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
 		       umami_website_id, lead_email, status, created_at, published_at,
-		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at
+		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at,
+		       COALESCE(custom_domain, '')
 		FROM sites ORDER BY created_at DESC`)
 	if err != nil {
 		return nil, err
@@ -447,7 +454,8 @@ func (s *Store) ListSites() ([]*models.Site, error) {
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
 			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
-			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt); err != nil {
+			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt,
+			&site.CustomDomain); err != nil {
 			return nil, err
 		}
 		sites = append(sites, site)
@@ -510,7 +518,8 @@ func (s *Store) GetSiteByStripeSessionID(sessionID string) (*models.Site, error)
 		       phone, email, address, hours, map_url, map_embed_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
 		       umami_website_id, lead_email, status, created_at, published_at,
-		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at
+		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at,
+		       COALESCE(custom_domain, '')
 		FROM sites WHERE stripe_session_id = $1`, sessionID).
 		Scan(&site.ID, &site.Slug, &site.BusinessName, &site.Template,
 			&site.Tagline, &site.About, &site.Services,
@@ -520,7 +529,8 @@ func (s *Store) GetSiteByStripeSessionID(sessionID string) (*models.Site, error)
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
 			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
-			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt)
+			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt,
+			&site.CustomDomain)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
@@ -535,7 +545,8 @@ func (s *Store) GetSiteByStripeSubscriptionID(subID string) (*models.Site, error
 		       phone, email, address, hours, map_url, map_embed_url,
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
 		       umami_website_id, lead_email, status, created_at, published_at,
-		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at
+		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at,
+		       COALESCE(custom_domain, '')
 		FROM sites WHERE stripe_subscription_id = $1`, subID).
 		Scan(&site.ID, &site.Slug, &site.BusinessName, &site.Template,
 			&site.Tagline, &site.About, &site.Services,
@@ -545,7 +556,8 @@ func (s *Store) GetSiteByStripeSubscriptionID(subID string) (*models.Site, error
 			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
 			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
-			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt)
+			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt,
+			&site.CustomDomain)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
@@ -565,6 +577,42 @@ func (s *Store) SetSitePaid(sessionID, subscriptionID string) error {
 
 func (s *Store) SetSiteCancelled(subscriptionID string) error {
 	_, err := s.db.Exec(`UPDATE sites SET payment_status='cancelled' WHERE stripe_subscription_id=$1`, subscriptionID)
+	return err
+}
+
+func (s *Store) GetSiteByCustomDomain(domain string) (*models.Site, error) {
+	site := &models.Site{}
+	err := s.db.QueryRow(`
+		SELECT id, slug, business_name, template, tagline, about, services,
+		       certifications, location, cta_text, testimonials, logo_url, gallery,
+		       phone, email, address, hours, map_url, map_embed_url,
+		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
+		       umami_website_id, lead_email, status, created_at, published_at,
+		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at,
+		       COALESCE(custom_domain, '')
+		FROM sites WHERE custom_domain = $1`, domain).
+		Scan(&site.ID, &site.Slug, &site.BusinessName, &site.Template,
+			&site.Tagline, &site.About, &site.Services,
+			&site.Certifications, &site.Location, &site.CTAText,
+			&site.Testimonials, &site.LogoURL, &site.Gallery,
+			&site.Phone, &site.Email, &site.Address, &site.Hours, &site.MapURL, &site.MapEmbedURL,
+			&site.FacebookURL, &site.InstagramURL, &site.WhatsAppURL,
+			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
+			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
+			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt,
+			&site.CustomDomain)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	return site, err
+}
+
+func (s *Store) SetCustomDomain(id int, domain string) error {
+	var val *string
+	if domain != "" {
+		val = &domain
+	}
+	_, err := s.db.Exec(`UPDATE sites SET custom_domain = $1 WHERE id = $2`, val, id)
 	return err
 }
 

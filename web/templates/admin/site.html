@@ -128,6 +128,51 @@
 
 </div>
 
+<!-- Custom Domain -->
+<div class="admin-card" style="margin-bottom:1.5rem;">
+  <h2>Custom Domain <span style="font-size:0.75rem;font-weight:500;color:#6366f1;background:#eef2ff;padding:0.15rem 0.5rem;border-radius:9999px;margin-left:0.4rem;">Pro</span></h2>
+
+  {{if ne .Site.Plan "pro"}}
+    <p style="color:#999;font-size:0.9rem;">Custom domains are available on the Pro plan (£39/mo).</p>
+  {{else}}
+
+    {{if .Site.CustomDomain}}
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;">
+        <span style="font-weight:600;">{{.Site.CustomDomain}}</span>
+        <a href="https://{{.Site.CustomDomain}}" target="_blank" style="font-size:0.82rem;color:#6366f1;">Visit ↗</a>
+        {{if eq .DNSResult "ok"}}
+          <span style="font-size:0.8rem;background:#dcfce7;color:#166534;padding:0.15rem 0.55rem;border-radius:9999px;">DNS verified</span>
+        {{else if eq .DNSResult "cf"}}
+          <span style="font-size:0.8rem;background:#fef9c3;color:#854d0e;padding:0.15rem 0.55rem;border-radius:9999px;">Cloudflare proxy active</span>
+        {{else if eq .DNSResult "warn"}}
+          <span style="font-size:0.8rem;background:#fee2e2;color:#991b1b;padding:0.15rem 0.55rem;border-radius:9999px;">Pointing to: {{.DNSTarget}}</span>
+        {{else if eq .DNSResult "fail"}}
+          <span style="font-size:0.8rem;background:#fee2e2;color:#991b1b;padding:0.15rem 0.55rem;border-radius:9999px;">DNS lookup failed</span>
+        {{end}}
+        <a href="/admin/sites/{{.Site.ID}}/check-domain" style="font-size:0.82rem;color:#555;text-decoration:underline;">Check DNS</a>
+      </div>
+    {{else}}
+      <p style="color:#999;font-size:0.9rem;margin-bottom:1rem;">No custom domain set yet.</p>
+    {{end}}
+
+    <form method="POST" action="/admin/sites/{{.Site.ID}}/custom-domain" style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+      <input type="text" name="custom_domain" value="{{.Site.CustomDomain}}" placeholder="e.g. joesbarbershop.com"
+        style="flex:1;min-width:220px;padding:0.45rem 0.75rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;">
+      <button type="submit" class="btn-edit" style="white-space:nowrap;">
+        {{if .Site.CustomDomain}}Update{{else}}Set Domain{{end}}
+      </button>
+      {{if .Site.CustomDomain}}
+      <button type="submit" name="custom_domain" value="" class="btn-unpublish" style="white-space:nowrap;font-size:0.82rem;">Remove</button>
+      {{end}}
+    </form>
+
+    <p style="font-size:0.8rem;color:#888;margin-top:0.6rem;">
+      In Cloudflare, add a proxied CNAME: <code>{{.Site.CustomDomain}}{{if not .Site.CustomDomain}}&lt;domain&gt;{{end}}</code> → <code>{{.Site.Slug}}.{{.Domain}}</code>
+    </p>
+
+  {{end}}
+</div>
+
 <!-- Leads -->
 <div class="admin-card">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
