@@ -11,26 +11,28 @@ import (
 
 // siteTemplates lists available templates shown in the onboarding form.
 // Industry is empty for general-purpose templates; set to the industry name for specific ones.
+// Tags are short labels describing what kind of business each template suits.
 var siteTemplates = []struct {
 	ID          string
 	Name        string
 	Description string
 	ExampleSlug string
 	Industry    string
+	Tags        []string
 }{
-	{"bold", "Bold", "Dark, high contrast — great for trades and gyms", "example-bold", ""},
-	{"fresh", "Fresh", "Light and minimal — ideal for professional services", "example-fresh", ""},
-	{"warm", "Warm", "Earthy tones — perfect for cafés and restaurants", "example-warm", ""},
-	{"glow", "Glow", "Soft pastels — suited for salons and beauty", "example-glow", ""},
-	{"classic", "Classic", "Neutral and timeless — works for any business", "example-classic", ""},
-	{"pulse", "Pulse", "Dark and energetic — built for gyms and fitness", "example-pulse", ""},
-	{"grove", "Grove", "Forest green and organic — ideal for landscaping and garden", "example-grove", ""},
-	{"fleet", "Fleet", "Industrial and direct — perfect for garages and auto services", "example-fleet", ""},
-	{"haven", "Haven", "Warm and welcoming — great for B&Bs and holiday lets", "example-haven", ""},
-	{"arch", "Arch", "Ultra-minimal and editorial — suited for design and creative services", "example-arch", ""},
-	{"dine", "Dine", "Dark, moody layout with menu-style services section", "example-dine", "Restaurants & Food"},
-	{"heal", "Heal", "Clean and clinical with trust badges in the hero", "example-heal", "Health & Wellness"},
-	{"craft", "Craft", "Earthy and artisan with gallery as the centrepiece", "example-craft", "Makers & Studios"},
+	{"bold", "Bold", "Brutalist, industrial layout with safety-yellow accents and stamped labels", "example-bold", "", []string{"Builders", "Trades", "Construction", "Scaffolding", "Roofing"}},
+	{"fresh", "Fresh", "Polished, modern layout with floating cards and soft gradients", "example-fresh", "", []string{"Accountants", "Consultants", "Solicitors", "Professional Services", "Agencies"}},
+	{"warm", "Warm", "Rustic, handcrafted feel with serif display and letter-style storytelling", "example-warm", "", []string{"Cafés", "Bakeries", "Florists", "Small Shops", "Artisans"}},
+	{"glow", "Glow", "Luxe, ornamental design with blush tones and flowing serif headlines", "example-glow", "", []string{"Salons", "Spas", "Beauty", "Nails", "Aesthetics"}},
+	{"classic", "Classic", "Formal corporate layout with navy, gold accents and numbered sections", "example-classic", "", []string{"Solicitors", "Accountants", "Financial Advisors", "Estate Agents", "Consulting"}},
+	{"pulse", "Pulse", "Aggressive, all-caps layout with electric-lime accents and oversized numbers", "example-pulse", "", []string{"Gyms", "Personal Trainers", "CrossFit", "Martial Arts", "Fitness Studios"}},
+	{"grove", "Grove", "Organic split layout with forest green, warm cream and nature accents", "example-grove", "", []string{"Landscapers", "Gardeners", "Tree Surgeons", "Garden Design", "Grounds Maintenance"}},
+	{"fleet", "Fleet", "Urgent, phone-first layout with hazard orange for call-out trades", "example-fleet", "", []string{"Mechanics", "MOT Centres", "Breakdown", "Taxi", "Removals"}},
+	{"haven", "Haven", "Warm, hospitable layout with booking focus and review bars", "example-haven", "", []string{"B&Bs", "Holiday Lets", "Guesthouses", "Cottages", "Airbnb Hosts"}},
+	{"arch", "Arch", "Editorial, minimal layout with serif typography and underline forms", "example-arch", "", []string{"Architects", "Interior Design", "Photographers", "Creative Studios", "Artists"}},
+	{"dine", "Dine", "Fine-dining layout with centred serif headings and menu-style services", "example-dine", "Restaurants & Food", []string{"Restaurants", "Bistros", "Wine Bars", "Fine Dining", "Private Chefs"}},
+	{"heal", "Heal", "Clean, clinical layout with trust badges and booking-focused contact", "example-heal", "Health & Wellness", []string{"Dentists", "Physios", "Chiropractors", "Private Clinics", "Therapists"}},
+	{"craft", "Craft", "Earthy, artisan layout with masonry gallery and story-led about section", "example-craft", "Makers & Studios", []string{"Makers", "Ceramics", "Woodwork", "Jewellery", "Print Studios"}},
 }
 
 // buildTestimonials assembles the testimonials string from individual form fields.

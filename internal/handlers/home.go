@@ -11,21 +11,21 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var general, industry []templateEntry
-
+	var all []templateEntry
 	for _, t := range siteTemplates {
-		entry := templateEntry{
+		all = append(all, templateEntry{
 			ID:          t.ID,
 			Name:        t.Name,
 			Description: t.Description,
 			ExampleURL:  h.exampleURL(t.ExampleSlug),
 			Industry:    t.Industry,
-		}
-		if t.Industry == "" {
-			general = append(general, entry)
-		} else {
-			industry = append(industry, entry)
-		}
+			Tags:        t.Tags,
+		})
+	}
+
+	featured := all
+	if len(featured) > 8 {
+		featured = featured[:8]
 	}
 
 	tmpl := template.Must(template.ParseFiles(
@@ -33,7 +33,30 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 		"web/templates/public/home.html",
 	))
 	tmpl.ExecuteTemplate(w, "base", map[string]any{
-		"GeneralTemplates":  general,
-		"IndustryTemplates": industry,
+		"FeaturedTemplates": featured,
+		"TotalTemplates":    len(all),
+	})
+}
+
+func (h *Handler) TemplatesPage(w http.ResponseWriter, r *http.Request) {
+	var all []templateEntry
+	for _, t := range siteTemplates {
+		all = append(all, templateEntry{
+			ID:          t.ID,
+			Name:        t.Name,
+			Description: t.Description,
+			ExampleURL:  h.exampleURL(t.ExampleSlug),
+			Industry:    t.Industry,
+			Tags:        t.Tags,
+		})
+	}
+
+	tmpl := template.Must(template.ParseFiles(
+		"web/templates/public/home_base.html",
+		"web/templates/public/templates.html",
+	))
+	tmpl.ExecuteTemplate(w, "base", map[string]any{
+		"AllTemplates":   all,
+		"TotalTemplates": len(all),
 	})
 }

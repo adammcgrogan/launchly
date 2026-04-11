@@ -463,6 +463,7 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /sitemap.xml", h.Sitemap)
 	mux.HandleFunc("GET /privacy", h.Privacy)
 	mux.HandleFunc("GET /terms", h.Terms)
+	mux.HandleFunc("GET /templates", h.TemplatesPage)
 	mux.HandleFunc("GET /get-started", h.OnboardingForm)
 	mux.HandleFunc("POST /get-started", h.OnboardingSubmit)
 	mux.HandleFunc("GET /payment/success", h.PaymentSuccess)

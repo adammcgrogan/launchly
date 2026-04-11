@@ -1,60 +1,98 @@
 {{define "theme"}}
-<style>body{background:#0f0f0f;color:#fff;}</style>
+<style>
+  body { background: #0b0b0b; color: #f4f4f4; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .stamp { font-family: 'Courier New', monospace; letter-spacing: 0.08em; }
+  .caution { background-image: repeating-linear-gradient(135deg, #facc15 0 20px, #0b0b0b 20px 40px); }
+  .slab { font-weight: 900; letter-spacing: -0.04em; line-height: 0.85; }
+  .svc-list { counter-reset: svc; }
+  .svc-list > div { counter-increment: svc; }
+  .svc-list > div > .num::before { content: "0" counter(svc); }
+  input, textarea { background: transparent; border: 0; border-bottom: 2px solid #333; color: #f4f4f4; padding: 0.9rem 0; width: 100%; font-size: 1rem; }
+  input::placeholder, textarea::placeholder { color: #666; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8rem; }
+  input:focus, textarea:focus { outline: none; border-bottom-color: #facc15; }
+  textarea { resize: none; }
+</style>
 {{end}}
 
 {{define "site-content"}}
+
 <!-- Nav -->
-<header class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
-  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-    {{if .Site.LogoURL}}<img src="{{.Site.LogoURL}}" alt="{{.Site.BusinessName}}" class="h-8 w-auto">{{else}}<span class="font-black text-amber-400 text-lg tracking-tight">{{.Site.BusinessName}}</span>{{end}}
-    <div class="flex gap-3">
-      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="bg-amber-400 text-zinc-900 font-black text-sm px-5 py-2 rounded-lg">Call Now</a>{{end}}
-      <a href="#contact" class="border border-zinc-700 text-zinc-300 text-sm font-semibold px-4 py-2 rounded-lg hover:border-amber-400 transition">{{.CTAText}}</a>
+<header class="sticky top-0 z-50 bg-[#0b0b0b] border-b-2 border-[#facc15]">
+  <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+    {{if .Site.LogoURL}}
+      <img src="{{.Site.LogoURL}}" alt="{{.Site.BusinessName}}" class="h-7 w-auto">
+    {{else}}
+      <span class="slab text-[#facc15] text-xl uppercase">{{.Site.BusinessName}}</span>
+    {{end}}
+    <div class="flex items-center gap-0">
+      {{if .Site.Phone}}
+        <a href="tel:{{.Site.Phone}}" class="bg-[#facc15] text-black stamp text-xs font-black uppercase px-5 h-14 flex items-center border-r-2 border-[#facc15]">☎ {{.Site.Phone}}</a>
+      {{end}}
+      <a href="#contact" class="bg-[#0b0b0b] text-[#facc15] stamp text-xs font-black uppercase px-5 h-14 flex items-center border-l-2 border-[#facc15]">{{.CTAText}} →</a>
     </div>
   </div>
 </header>
 
-<!-- Hero — full width split -->
-<section class="bg-zinc-950 min-h-[70vh] flex items-center">
-  <div class="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-16 items-center w-full">
-    <div>
-      {{if .Site.Location}}<div class="inline-block bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-widest">{{.Site.Location}}</div>{{end}}
-      <h1 class="text-5xl md:text-6xl font-black text-white leading-[1.05] mb-5">{{.Site.BusinessName}}</h1>
-      {{if .Site.Tagline}}<p class="text-zinc-400 text-xl mb-8">{{.Site.Tagline}}</p>{{end}}
-      <div class="flex flex-wrap gap-3">
-        {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="bg-amber-400 text-zinc-900 font-black text-lg px-8 py-4 rounded-xl hover:bg-amber-300 transition">{{.Site.Phone}}</a>{{end}}
-        <a href="#contact" class="border-2 border-zinc-700 text-white font-bold text-lg px-8 py-4 rounded-xl hover:border-amber-400 hover:text-amber-400 transition">{{.CTAText}}</a>
+<!-- Caution tape divider top -->
+<div class="h-3 caution"></div>
+
+<!-- Hero — gigantic name -->
+<section class="bg-[#0b0b0b] pt-20 pb-16 border-b-2 border-[#1a1a1a]">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-center gap-4 mb-8">
+      <span class="stamp text-[#facc15] text-xs uppercase font-bold">[ 001 ]</span>
+      <span class="h-px flex-1 bg-[#333]"></span>
+      {{if .Site.Location}}<span class="stamp text-[#888] text-xs uppercase font-bold">{{.Site.Location}}</span>{{end}}
+    </div>
+    <h1 class="slab text-[clamp(3rem,12vw,10rem)] text-[#f4f4f4] uppercase mb-10 break-words">{{.Site.BusinessName}}</h1>
+    <div class="grid md:grid-cols-3 gap-8 items-end">
+      <div class="md:col-span-2">
+        {{if .Site.Tagline}}
+          <p class="text-[#bbb] text-xl md:text-2xl leading-tight max-w-2xl">{{.Site.Tagline}}</p>
+        {{end}}
+      </div>
+      <div class="flex flex-col gap-3">
+        {{if .Site.Phone}}
+          <a href="tel:{{.Site.Phone}}" class="bg-[#facc15] text-black stamp font-black text-base uppercase px-6 py-5 text-center hover:bg-white transition">Call {{.Site.Phone}}</a>
+        {{end}}
+        <a href="#contact" class="border-2 border-[#facc15] text-[#facc15] stamp font-black text-base uppercase px-6 py-5 text-center hover:bg-[#facc15] hover:text-black transition">{{.CTAText}}</a>
       </div>
     </div>
-    <!-- Trust signals from data -->
-    {{if .Certifications}}
-    <div class="grid grid-cols-2 gap-4">
-      {{range .Certifications}}
-      <div class="bg-zinc-800/60 border border-zinc-700 rounded-2xl p-6">
-        <div class="text-zinc-200 font-bold">{{.}}</div>
-      </div>
-      {{end}}
+  </div>
+</section>
+
+<!-- Caution band -->
+<div class="h-4 caution"></div>
+
+<!-- Stats strip (certifications) -->
+{{if .Certifications}}
+<section class="bg-[#facc15] py-6 border-b-2 border-black">
+  <div class="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
+    {{range .Certifications}}
+    <div class="flex items-center gap-3">
+      <span class="stamp text-black font-black text-sm">■</span>
+      <span class="stamp text-black font-black text-xs uppercase">{{.}}</span>
     </div>
     {{end}}
   </div>
 </section>
+{{end}}
 
-<!-- Services — full width grid -->
+<!-- Services — numbered table layout -->
 {{if .Services}}
-<section class="bg-zinc-900 py-20" id="services">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="flex items-end justify-between mb-10">
-      <div>
-        <p class="text-amber-400 font-bold text-sm uppercase tracking-widest mb-2">What We Do</p>
-        <h2 class="text-4xl font-black text-white">Our Services</h2>
-      </div>
-      <a href="#contact" class="hidden md:block bg-amber-400 text-zinc-900 font-bold px-5 py-2.5 rounded-xl hover:bg-amber-300 transition text-sm">{{.CTAText}} →</a>
+<section class="bg-[#0b0b0b] py-20" id="services">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-baseline gap-6 mb-16">
+      <span class="stamp text-[#facc15] text-xs uppercase font-bold">[ 002 / WHAT WE DO ]</span>
+      <span class="h-px flex-1 bg-[#333]"></span>
     </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <h2 class="slab text-5xl md:text-7xl text-[#f4f4f4] uppercase mb-14">The Work.</h2>
+    <div class="svc-list border-t-2 border-[#333]">
       {{range .Services}}
-      <div class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5 flex items-start gap-4 hover:border-amber-400/40 transition">
-        <span class="text-amber-400 font-black text-2xl mt-0.5">→</span>
-        <span class="text-zinc-200 font-semibold">{{.}}</span>
+      <div class="flex items-center gap-6 md:gap-10 border-b-2 border-[#1a1a1a] py-7 hover:bg-[#111] transition group cursor-pointer">
+        <span class="num stamp text-[#facc15] font-black text-sm md:text-base w-12 md:w-16 flex-shrink-0"></span>
+        <span class="flex-1 text-[#f4f4f4] text-xl md:text-3xl font-bold uppercase tracking-tight group-hover:translate-x-2 transition">{{.}}</span>
+        <span class="stamp text-[#666] group-hover:text-[#facc15] text-xs md:text-sm uppercase hidden sm:block">→ Enquire</span>
       </div>
       {{end}}
     </div>
@@ -62,83 +100,100 @@
 </section>
 {{end}}
 
-<!-- About — wide banner -->
+<!-- About — big pull quote on yellow -->
 {{if .Site.About}}
-<section class="bg-amber-400 py-16" id="about">
-  <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-8 items-center">
-    <div class="md:col-span-2">
-      <p class="text-amber-900 font-bold text-sm uppercase tracking-widest mb-3">About Us</p>
-      <p class="text-zinc-900 text-xl leading-relaxed font-medium">{{.Site.About}}</p>
-    </div>
-    <div class="text-center md:text-right">
-      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="inline-block bg-zinc-900 text-amber-400 font-black text-lg px-8 py-4 rounded-xl hover:bg-zinc-800 transition">Ring Us</a>{{end}}
-    </div>
+<section class="bg-[#facc15] py-24 border-y-2 border-black relative overflow-hidden" id="about">
+  <div class="absolute inset-y-0 left-0 w-3 caution"></div>
+  <div class="absolute inset-y-0 right-0 w-3 caution"></div>
+  <div class="max-w-5xl mx-auto px-10">
+    <p class="stamp text-black text-xs uppercase font-bold mb-8">[ 003 / ABOUT THE FIRM ]</p>
+    <p class="slab text-black text-3xl md:text-5xl uppercase leading-[0.95]">&ldquo;{{.Site.About}}&rdquo;</p>
+    {{if .Site.Phone}}
+      <div class="mt-12 pt-8 border-t-2 border-black">
+        <a href="tel:{{.Site.Phone}}" class="inline-block bg-black text-[#facc15] stamp font-black uppercase text-base px-8 py-5 hover:bg-[#0b0b0b] transition">Call the Site Office →</a>
+      </div>
+    {{end}}
   </div>
 </section>
 {{end}}
 
-<!-- Contact + Hours — dark section -->
-<section class="bg-zinc-950 py-20" id="contact">
-  <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-5 gap-12">
-    <div class="md:col-span-3">
-      <p class="text-amber-400 font-bold text-sm uppercase tracking-widest mb-3">Get in Touch</p>
-      <h2 class="text-4xl font-black text-white mb-8">Request a Free Quote</h2>
-      {{if .LeadSent}}<div class="bg-green-900/40 border border-green-500/40 text-green-300 rounded-xl p-4 mb-6">Thanks! We'll be in touch shortly.</div>{{end}}
-      <form method="POST" action="{{.FormAction}}" class="space-y-4">
-        <div class="grid sm:grid-cols-2 gap-4">
-          <input type="text" name="name" required placeholder="Your Name" class="bg-zinc-800 border border-zinc-700 text-white rounded-xl px-4 py-3 text-sm placeholder-zinc-500 focus:outline-none focus:border-amber-400 w-full">
-          <input type="tel" name="phone" placeholder="Your Phone" class="bg-zinc-800 border border-zinc-700 text-white rounded-xl px-4 py-3 text-sm placeholder-zinc-500 focus:outline-none focus:border-amber-400 w-full">
-          <input type="email" name="email" placeholder="Your Email" class="bg-zinc-800 border border-zinc-700 text-white rounded-xl px-4 py-3 text-sm placeholder-zinc-500 focus:outline-none focus:border-amber-400 w-full sm:col-span-2">
-        </div>
-        <textarea name="message" rows="4" placeholder="Describe the job..." class="w-full bg-zinc-800 border border-zinc-700 text-white rounded-xl px-4 py-3 text-sm placeholder-zinc-500 focus:outline-none focus:border-amber-400 resize-none"></textarea>
-        <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
-        <button type="submit" class="w-full bg-amber-400 text-zinc-900 font-black py-4 rounded-xl hover:bg-amber-300 transition text-base">Send Message</button>
-      </form>
+<!-- Contact — dark split panel -->
+<section class="bg-[#0b0b0b] py-24" id="contact">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-baseline gap-6 mb-16">
+      <span class="stamp text-[#facc15] text-xs uppercase font-bold">[ 004 / CONTACT ]</span>
+      <span class="h-px flex-1 bg-[#333]"></span>
     </div>
-    <div class="md:col-span-2 space-y-8">
-      {{if .Hours}}
-      <div>
-        <p class="text-amber-400 font-bold text-sm uppercase tracking-widest mb-4">Opening Hours</p>
-        <ul class="space-y-2">{{range .Hours}}<li class="text-zinc-300 border-b border-zinc-800 pb-2 text-sm">{{.}}</li>{{end}}</ul>
+    <div class="grid md:grid-cols-12 gap-14">
+      <div class="md:col-span-7">
+        <h2 class="slab text-4xl md:text-6xl text-[#f4f4f4] uppercase mb-10">Request<br>a Quote.</h2>
+        {{if .LeadSent}}
+          <div class="border-2 border-[#facc15] text-[#facc15] stamp uppercase text-xs font-bold px-5 py-4 mb-8">✓ Enquiry Received. We'll be in Touch.</div>
+        {{end}}
+        <form method="POST" action="{{.FormAction}}" class="space-y-2">
+          <input type="text" name="name" required placeholder="Name *">
+          <input type="tel" name="phone" placeholder="Phone">
+          <input type="email" name="email" placeholder="Email">
+          <textarea name="message" rows="3" placeholder="Describe the job..."></textarea>
+          <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+          <div class="pt-6">
+            <button type="submit" class="w-full bg-[#facc15] text-black stamp font-black uppercase text-base py-5 hover:bg-white transition">Send Enquiry →</button>
+          </div>
+        </form>
       </div>
-      {{end}}
-      {{if .Site.Address}}
-      <div>
-        <p class="text-amber-400 font-bold text-sm uppercase tracking-widest mb-2">Location</p>
-        <p class="text-zinc-300 text-sm mb-3">{{.Site.Address}}</p>
-        {{if .Site.MapURL}}<a href="{{.Site.MapURL}}" target="_blank" class="text-amber-400 text-sm font-semibold hover:underline">View on Google Maps →</a>{{end}}
-        {{if .Site.MapEmbedURL}}<div class="mt-3 rounded-xl overflow-hidden"><iframe src="{{.Site.MapEmbedURL}}" width="100%" height="180" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>{{end}}
-      </div>
-      {{end}}
-      {{if or .Site.FacebookURL .Site.InstagramURL .Site.WhatsAppURL .Site.TwitterURL .Site.TikTokURL .Site.LinkedInURL .Site.YouTubeURL}}
-      <div class="flex flex-wrap gap-4">
-        {{if .Site.FacebookURL}}<a href="{{.Site.FacebookURL}}" target="_blank" class="text-amber-400 text-sm font-bold hover:underline">Facebook</a>{{end}}
-        {{if .Site.InstagramURL}}<a href="{{.Site.InstagramURL}}" target="_blank" class="text-amber-400 text-sm font-bold hover:underline">Instagram</a>{{end}}
-        {{if .Site.WhatsAppURL}}<a href="{{.Site.WhatsAppURL}}" target="_blank" class="text-amber-400 text-sm font-bold hover:underline">WhatsApp</a>{{end}}
-        {{if .Site.TwitterURL}}<a href="{{.Site.TwitterURL}}" target="_blank" class="text-amber-400 text-sm font-bold hover:underline">X / Twitter</a>{{end}}
-        {{if .Site.TikTokURL}}<a href="{{.Site.TikTokURL}}" target="_blank" class="text-amber-400 text-sm font-bold hover:underline">TikTok</a>{{end}}
-        {{if .Site.LinkedInURL}}<a href="{{.Site.LinkedInURL}}" target="_blank" class="text-amber-400 text-sm font-bold hover:underline">LinkedIn</a>{{end}}
-        {{if .Site.YouTubeURL}}<a href="{{.Site.YouTubeURL}}" target="_blank" class="text-amber-400 text-sm font-bold hover:underline">YouTube</a>{{end}}
-      </div>
-      {{end}}
-    </div>
-  </div>
-</section>
-
-<!-- Testimonials -->
-{{if .Testimonials}}
-<section class="bg-zinc-900 py-20 border-t border-zinc-800">
-  <div class="max-w-6xl mx-auto px-6">
-    <p class="text-amber-400 font-bold text-sm uppercase tracking-widest mb-2">What Customers Say</p>
-    <h2 class="text-4xl font-black text-white mb-10">Reviews</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {{range .Testimonials}}
-      <div class="bg-zinc-800 border border-zinc-700 rounded-2xl p-6">
-        <p class="text-zinc-300 text-sm leading-relaxed mb-5">"{{.Quote}}"</p>
+      <div class="md:col-span-5 space-y-10 md:pl-10 md:border-l-2 md:border-[#1a1a1a]">
+        {{if .Site.Phone}}
         <div>
-          <div class="text-white font-bold text-sm">{{.Name}}</div>
-          {{if .Role}}<div class="text-zinc-500 text-xs mt-0.5">{{.Role}}</div>{{end}}
+          <p class="stamp text-[#facc15] text-xs uppercase font-bold mb-3">Direct Line</p>
+          <a href="tel:{{.Site.Phone}}" class="slab text-[#f4f4f4] text-3xl md:text-4xl uppercase hover:text-[#facc15] transition block">{{.Site.Phone}}</a>
         </div>
+        {{end}}
+        {{if .Hours}}
+        <div>
+          <p class="stamp text-[#facc15] text-xs uppercase font-bold mb-3">Hours of Operation</p>
+          <ul>{{range .Hours}}<li class="stamp text-[#bbb] text-xs uppercase border-b border-[#1a1a1a] py-2.5">{{.}}</li>{{end}}</ul>
+        </div>
+        {{end}}
+        {{if .Site.Address}}
+        <div>
+          <p class="stamp text-[#facc15] text-xs uppercase font-bold mb-3">Workshop</p>
+          <p class="stamp text-[#bbb] text-xs uppercase">{{.Site.Address}}</p>
+          {{if .Site.MapURL}}<a href="{{.Site.MapURL}}" target="_blank" class="stamp text-[#facc15] text-xs uppercase mt-2 inline-block hover:underline">→ Directions</a>{{end}}
+          {{if .Site.MapEmbedURL}}<div class="mt-4 border-2 border-[#1a1a1a]"><iframe src="{{.Site.MapEmbedURL}}" width="100%" height="160" style="border:0;filter:grayscale(1) invert(0.9) contrast(0.8);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>{{end}}
+        </div>
+        {{end}}
+        {{if or .Site.FacebookURL .Site.InstagramURL .Site.WhatsAppURL .Site.TwitterURL .Site.TikTokURL .Site.LinkedInURL .Site.YouTubeURL}}
+        <div class="flex flex-wrap gap-x-5 gap-y-2 pt-2">
+          {{if .Site.FacebookURL}}<a href="{{.Site.FacebookURL}}" target="_blank" class="stamp text-[#facc15] text-xs uppercase hover:underline">Facebook</a>{{end}}
+          {{if .Site.InstagramURL}}<a href="{{.Site.InstagramURL}}" target="_blank" class="stamp text-[#facc15] text-xs uppercase hover:underline">Instagram</a>{{end}}
+          {{if .Site.WhatsAppURL}}<a href="{{.Site.WhatsAppURL}}" target="_blank" class="stamp text-[#facc15] text-xs uppercase hover:underline">WhatsApp</a>{{end}}
+          {{if .Site.TwitterURL}}<a href="{{.Site.TwitterURL}}" target="_blank" class="stamp text-[#facc15] text-xs uppercase hover:underline">X</a>{{end}}
+          {{if .Site.TikTokURL}}<a href="{{.Site.TikTokURL}}" target="_blank" class="stamp text-[#facc15] text-xs uppercase hover:underline">TikTok</a>{{end}}
+          {{if .Site.LinkedInURL}}<a href="{{.Site.LinkedInURL}}" target="_blank" class="stamp text-[#facc15] text-xs uppercase hover:underline">LinkedIn</a>{{end}}
+          {{if .Site.YouTubeURL}}<a href="{{.Site.YouTubeURL}}" target="_blank" class="stamp text-[#facc15] text-xs uppercase hover:underline">YouTube</a>{{end}}
+        </div>
+        {{end}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Caution band -->
+<div class="h-4 caution"></div>
+
+<!-- Testimonials — sequential large quotes -->
+{{if .Testimonials}}
+<section class="bg-[#0b0b0b] py-24 border-b-2 border-[#1a1a1a]">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="flex items-baseline gap-6 mb-16">
+      <span class="stamp text-[#facc15] text-xs uppercase font-bold">[ 005 / TESTIMONIALS ]</span>
+      <span class="h-px flex-1 bg-[#333]"></span>
+    </div>
+    <div class="space-y-14">
+      {{range .Testimonials}}
+      <div class="border-l-4 border-[#facc15] pl-8">
+        <p class="slab text-[#f4f4f4] text-2xl md:text-3xl uppercase leading-tight mb-5">&ldquo;{{.Quote}}&rdquo;</p>
+        <div class="stamp text-[#facc15] text-xs font-bold uppercase">— {{.Name}}{{if .Role}}, {{.Role}}{{end}}</div>
       </div>
       {{end}}
     </div>
@@ -146,20 +201,26 @@
 </section>
 {{end}}
 
-<!-- Gallery -->
+<!-- Gallery — uniform strip, no rounding -->
 {{if .Gallery}}
-<section class="bg-zinc-950 py-20 border-t border-zinc-800">
-  <div class="max-w-6xl mx-auto px-6">
-    <p class="text-amber-400 font-bold text-sm uppercase tracking-widest mb-2">Our Work</p>
-    <h2 class="text-4xl font-black text-white mb-10">Photos</h2>
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+<section class="bg-[#0b0b0b] py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-baseline gap-6 mb-16">
+      <span class="stamp text-[#facc15] text-xs uppercase font-bold">[ 006 / JOBS COMPLETED ]</span>
+      <span class="h-px flex-1 bg-[#333]"></span>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#1a1a1a]">
       {{range .Gallery}}
-      <div class="aspect-square overflow-hidden rounded-2xl">
-        <img src="{{.}}" alt="Gallery photo" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+      <div class="aspect-square overflow-hidden bg-[#0b0b0b]">
+        <img src="{{.}}" alt="Job" class="w-full h-full object-cover grayscale hover:grayscale-0 hover:scale-105 transition duration-500">
       </div>
       {{end}}
     </div>
   </div>
 </section>
 {{end}}
+
+<!-- Caution band footer -->
+<div class="h-3 caution"></div>
+
 {{end}}

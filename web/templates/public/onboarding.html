@@ -299,14 +299,21 @@
                   <div class="flex justify-center mt-2"><span class="bg-[#0a0a0a] text-white text-[9px] font-bold px-2 py-0.5 rounded">Start a Project</span></div>
                 </div>
                 {{end}}
-                <div class="px-3 py-2.5 border-t border-gray-100 flex items-center justify-between bg-white">
-                  <div>
-                    <div class="text-xs font-bold">{{.Name}}</div>
-                    <div class="text-[10px] text-gray-400">{{.Description}}</div>
+                <div class="px-3 py-2.5 border-t border-gray-100 bg-white">
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="min-w-0">
+                      <div class="text-xs font-bold">{{.Name}}</div>
+                      <div class="text-[10px] text-gray-400 truncate">{{.Description}}</div>
+                    </div>
+                    <a href="{{.ExampleURL}}" target="_blank" rel="noopener"
+                      class="text-[10px] text-indigo-600 font-semibold hover:underline whitespace-nowrap flex-shrink-0"
+                      onclick="event.stopPropagation()">Preview →</a>
                   </div>
-                  <a href="{{.ExampleURL}}" target="_blank" rel="noopener"
-                    class="text-[10px] text-indigo-600 font-semibold hover:underline whitespace-nowrap"
-                    onclick="event.stopPropagation()">Preview →</a>
+                  {{if .Tags}}
+                  <div class="flex flex-wrap gap-1 mt-2">
+                    {{range .Tags}}<span class="text-[9px] font-semibold text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded-md">{{.}}</span>{{end}}
+                  </div>
+                  {{end}}
                 </div>
               </div>
             </label>
@@ -355,8 +362,13 @@
                         </div>
                         <span class="flex-shrink-0 bg-indigo-50 text-indigo-600 text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-0.5">{{.Industry}}</span>
                       </div>
+                      {{if .Tags}}
+                      <div class="flex flex-wrap gap-1 mt-2">
+                        {{range .Tags}}<span class="text-[9px] font-semibold text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded-md">{{.}}</span>{{end}}
+                      </div>
+                      {{end}}
                       <a href="{{.ExampleURL}}" target="_blank" rel="noopener"
-                        class="text-[10px] text-indigo-600 font-semibold hover:underline mt-1.5 inline-block"
+                        class="text-[10px] text-indigo-600 font-semibold hover:underline mt-2 inline-block"
                         onclick="event.stopPropagation()">Preview →</a>
                     </div>
                   </div>

@@ -25,6 +25,7 @@ type templateEntry struct {
 	Description string
 	ExampleURL  string
 	Industry    string
+	Tags        []string
 }
 
 func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
@@ -37,6 +38,7 @@ func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
 			Description: t.Description,
 			ExampleURL:  h.exampleURL(t.ExampleSlug),
 			Industry:    t.Industry,
+			Tags:        t.Tags,
 		}
 		if t.Industry == "" {
 			general = append(general, entry)
