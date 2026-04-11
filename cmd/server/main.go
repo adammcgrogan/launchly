@@ -15,6 +15,7 @@ import (
 )
 
 func main() {
+	log.SetOutput(os.Stdout)
 	_ = godotenv.Load()
 
 	dsn := mustEnv("DATABASE_URL")
