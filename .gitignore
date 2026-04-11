@@ -3,4 +3,6 @@ bin/
 .idea/
 fly.toml
 docs/
+.env.example
+CLAUDE.md
 .DS_Store
