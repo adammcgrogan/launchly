@@ -1,3 +1,6 @@
 .env
 bin/
 .idea/
+fly.toml
+docs/
+.DS_Store
