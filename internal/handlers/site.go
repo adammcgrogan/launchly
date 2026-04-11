@@ -116,15 +116,7 @@ func (h *Handler) resolveSite(r *http.Request) (*models.Site, error) {
 		return h.store.GetSiteBySlug(slug)
 	}
 	host := effectiveHost(r)
-	site, err := h.store.GetSiteByCustomDomain(host)
-	if err != nil || site == nil {
-		return nil, err
-	}
-	// Custom domain serving is a Pro feature
-	if site.Plan != "pro" || site.PaymentStatus != "paid" {
-		return nil, nil
-	}
-	return site, nil
+	return h.store.GetSiteByCustomDomain(host)
 }
 
 // effectiveHost returns the cleaned hostname for the current request.
