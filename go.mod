@@ -1,4 +1,4 @@
-module github.com/adammcgrogan/locallaunch
+module github.com/adammcgrogan/launchly
 
 go 1.22
 

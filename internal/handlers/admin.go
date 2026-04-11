@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/adammcgrogan/locallaunch/internal/models"
+	"github.com/adammcgrogan/launchly/internal/models"
 )
 
 func (h *Handler) adminAuth(next http.HandlerFunc) http.HandlerFunc {

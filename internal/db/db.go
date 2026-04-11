@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/adammcgrogan/locallaunch/internal/models"
+	"github.com/adammcgrogan/launchly/internal/models"
 	_ "github.com/lib/pq"
 )
 

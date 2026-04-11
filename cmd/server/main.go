@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/adammcgrogan/locallaunch/internal/db"
-	"github.com/adammcgrogan/locallaunch/internal/email"
-	"github.com/adammcgrogan/locallaunch/internal/handlers"
-	"github.com/adammcgrogan/locallaunch/internal/payment"
+	"github.com/adammcgrogan/launchly/internal/db"
+	"github.com/adammcgrogan/launchly/internal/email"
+	"github.com/adammcgrogan/launchly/internal/handlers"
+	"github.com/adammcgrogan/launchly/internal/payment"
 	"github.com/joho/godotenv"
 )
 

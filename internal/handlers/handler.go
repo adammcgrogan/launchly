@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/adammcgrogan/locallaunch/internal/db"
-	"github.com/adammcgrogan/locallaunch/internal/email"
-	"github.com/adammcgrogan/locallaunch/internal/payment"
+	"github.com/adammcgrogan/launchly/internal/db"
+	"github.com/adammcgrogan/launchly/internal/email"
+	"github.com/adammcgrogan/launchly/internal/payment"
 )
 
 // siteTemplates lists available templates shown in the onboarding form.

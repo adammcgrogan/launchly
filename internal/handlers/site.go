@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/adammcgrogan/locallaunch/internal/models"
+	"github.com/adammcgrogan/launchly/internal/models"
 )
 
 // ServeSite handles subdomain and custom-domain requests.

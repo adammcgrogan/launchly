@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/adammcgrogan/locallaunch/internal/models"
+	"github.com/adammcgrogan/launchly/internal/models"
 )
 
 var slugRe = regexp.MustCompile(`[^a-z0-9]+`)
