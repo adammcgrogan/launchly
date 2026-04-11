@@ -113,8 +113,8 @@
     {{else}}
       <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" style="display:flex;flex-direction:column;gap:0.6rem;">
         <select name="plan" class="plan-select" style="width:100%;">
-          <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter — £19/mo</option>
-          <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro — £39/mo</option>
+          <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter — £14/mo</option>
+          <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro — £34/mo</option>
         </select>
         <button type="submit" class="btn-publish" style="width:100%;font-size:0.875rem;padding:0.55rem 1rem;">
           {{if eq .Site.PaymentStatus "pending"}}Resend Payment Link{{else}}Send Payment Link{{end}}
