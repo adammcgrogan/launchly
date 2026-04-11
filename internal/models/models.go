@@ -49,6 +49,29 @@ type Site struct {
 	PaidAt                 *time.Time `db:"paid_at"`
 	CustomDomain           string     `db:"custom_domain"`           // e.g. "joesbarbershop.com" (Pro only)
 	Notes                  string     `db:"notes"`                   // internal admin notes, never shown to customer
+	AnalyticsFrequency     string     `db:"analytics_frequency"`     // "off", "weekly", "monthly"
+	AnalyticsLastSent      *time.Time `db:"analytics_last_sent"`
+}
+
+// ReferrerCount is a referrer hostname with its visit count.
+type ReferrerCount struct {
+	Referrer string
+	Count    int
+}
+
+// DayCount is a single day's view count.
+type DayCount struct {
+	Day   time.Time
+	Count int
+}
+
+// SiteStats holds aggregated analytics for a site over a period.
+type SiteStats struct {
+	TotalViews     int
+	UniqueVisitors int
+	TopReferrers   []ReferrerCount
+	ViewsByDay     []DayCount
+	PeriodDays     int
 }
 
 // Lead represents a contact form submission from a site visitor.

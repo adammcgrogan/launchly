@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/adammcgrogan/launchly/internal/models"
 )
 
 type Client struct {
@@ -214,6 +216,84 @@ func (c *Client) SendCancellationConfirmation(to, businessName string) error {
 		divider() +
 		p(`<span style="color:#6b7280;font-size:13px;">We're sorry to see you go. Contact us at <a href="mailto:hello@launchly.ltd" style="color:#4f46e5;">hello@launchly.ltd</a></span>`)
 	return c.Send(to, fmt.Sprintf("Subscription cancelled — %s", businessName), wrap(content))
+}
+
+func (c *Client) SendAnalyticsDigest(to, businessName, frequency string, stats *models.SiteStats, siteURL string) error {
+	period := "weekly"
+	days := "7 days"
+	if frequency == "monthly" {
+		period = "monthly"
+		days = "30 days"
+	}
+
+	statsRow := fmt.Sprintf(`
+<table width="100%%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+  <tr>
+    <td width="50%%" style="padding:0 8px 0 0;">
+      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:20px;text-align:center;">
+        <div style="font-size:36px;font-weight:900;color:#111827;line-height:1;">%d</div>
+        <div style="font-size:13px;color:#6b7280;margin-top:4px;">Total visits</div>
+      </div>
+    </td>
+    <td width="50%%" style="padding:0 0 0 8px;">
+      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:20px;text-align:center;">
+        <div style="font-size:36px;font-weight:900;color:#111827;line-height:1;">%d</div>
+        <div style="font-size:13px;color:#6b7280;margin-top:4px;">Unique visitors</div>
+      </div>
+    </td>
+  </tr>
+</table>`, stats.TotalViews, stats.UniqueVisitors)
+
+	var daysTable string
+	if len(stats.ViewsByDay) > 0 {
+		rows := ""
+		for _, d := range stats.ViewsByDay {
+			rows += fmt.Sprintf(`<tr>
+  <td style="padding:7px 14px;font-size:13px;color:#374151;border-bottom:1px solid #f3f4f6;">%s</td>
+  <td style="padding:7px 14px;font-size:13px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;text-align:right;">%d</td>
+</tr>`, d.Day.Format("Mon 2 Jan"), d.Count)
+		}
+		daysTable = fmt.Sprintf(`<p style="margin:0 0 8px;font-size:12px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.07em;">Views by day</p>
+<table width="100%%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;margin:0 0 24px;border-collapse:separate;border-spacing:0;">%s</table>`, rows)
+	}
+
+	var refTable string
+	if len(stats.TopReferrers) > 0 {
+		rows := ""
+		for _, ref := range stats.TopReferrers {
+			label := ref.Referrer
+			if label == "" {
+				label = "Direct / unknown"
+			}
+			rows += fmt.Sprintf(`<tr>
+  <td style="padding:7px 14px;font-size:13px;color:#374151;border-bottom:1px solid #f3f4f6;">%s</td>
+  <td style="padding:7px 14px;font-size:13px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;text-align:right;">%d</td>
+</tr>`, label, ref.Count)
+		}
+		refTable = fmt.Sprintf(`<p style="margin:0 0 8px;font-size:12px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.07em;">Where visitors came from</p>
+<table width="100%%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;margin:0 0 24px;border-collapse:separate;border-spacing:0;">%s</table>`, rows)
+	}
+
+	noDataNote := ""
+	if stats.TotalViews == 0 {
+		noDataNote = p(`<span style="color:#6b7280;">No visits were recorded in this period. Once your site gets traffic, you'll see a full breakdown here.</span>`)
+	}
+
+	content := h1(fmt.Sprintf("Your %s website report", period)) +
+		p(fmt.Sprintf("Here's how <strong>%s</strong> performed over the last %s.", businessName, days)) +
+		statsRow +
+		noDataNote +
+		daysTable +
+		refTable +
+		button(siteURL, "View Your Website", "#4f46e5") +
+		divider() +
+		p(`<span style="color:#6b7280;font-size:13px;">You're receiving this report because analytics is enabled for your site. To change your report frequency, contact us at <a href="mailto:hello@launchly.ltd" style="color:#4f46e5;">hello@launchly.ltd</a>.</span>`)
+
+	subject := fmt.Sprintf("Your weekly website report — %s", businessName)
+	if frequency == "monthly" {
+		subject = fmt.Sprintf("Your monthly website report — %s", businessName)
+	}
+	return c.Send(to, subject, wrap(content))
 }
 
 func (c *Client) SendLeadNotification(to, businessName, visitorName, visitorEmail, phone, message string) error {

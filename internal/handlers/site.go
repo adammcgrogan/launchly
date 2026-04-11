@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/adammcgrogan/launchly/internal/models"
@@ -16,6 +17,7 @@ func (h *Handler) ServeSite(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+	go h.recordPageView(r, site.ID)
 	h.renderSite(w, r, site, "/contact")
 }
 
@@ -27,7 +29,48 @@ func (h *Handler) ServeSitePath(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+	go h.recordPageView(r, site.ID)
 	h.renderSite(w, r, site, "/sites/"+slug+"/contact")
+}
+
+// recordPageView asynchronously records a page view, filtering out bots.
+func (h *Handler) recordPageView(r *http.Request, siteID int) {
+	ua := r.Header.Get("User-Agent")
+	if isBot(ua) {
+		return
+	}
+	ip := r.Header.Get("CF-Connecting-IP")
+	if ip == "" {
+		ip = r.Header.Get("X-Forwarded-For")
+	}
+	if ip == "" {
+		ip = strings.Split(r.RemoteAddr, ":")[0]
+	}
+	if i := strings.Index(ip, ","); i != -1 {
+		ip = strings.TrimSpace(ip[:i])
+	}
+	country := r.Header.Get("CF-IPCountry")
+	ref := r.Referer()
+	if u, err := url.Parse(ref); err == nil && u.Host != "" {
+		ref = u.Host
+	}
+	path := r.URL.Path
+	if path == "" {
+		path = "/"
+	}
+	if err := h.store.RecordPageView(siteID, path, ref, ip, ua, country); err != nil {
+		log.Printf("record page view: %v", err)
+	}
+}
+
+func isBot(ua string) bool {
+	lower := strings.ToLower(ua)
+	for _, pat := range []string{"bot", "crawler", "spider", "slurp", "wget", "curl", "python", "java/", "go-http", "libwww", "scrapy", "postman", "headless"} {
+		if strings.Contains(lower, pat) {
+			return true
+		}
+	}
+	return ua == ""
 }
 
 // renderSite renders a site template for the given site.

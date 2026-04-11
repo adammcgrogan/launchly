@@ -185,6 +185,51 @@
   </form>
 </div>
 
+<!-- Analytics -->
+<div class="admin-card" style="margin-bottom:1.5rem;">
+  <h2>Analytics</h2>
+
+  {{if .AnalyticsSent}}
+  <div class="payment-sent-notice" style="margin-bottom:1rem;">✓ Report sent to {{.Site.LeadEmail}}</div>
+  {{end}}
+
+  <!-- Quick stats: last 7 days -->
+  {{if .Stats}}
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.25rem;">
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:1rem;text-align:center;">
+      <div style="font-size:1.75rem;font-weight:900;color:#111827;line-height:1;">{{.Stats.TotalViews}}</div>
+      <div style="font-size:0.8rem;color:#6b7280;margin-top:2px;">Visits (7 days)</div>
+    </div>
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:1rem;text-align:center;">
+      <div style="font-size:1.75rem;font-weight:900;color:#111827;line-height:1;">{{.Stats.UniqueVisitors}}</div>
+      <div style="font-size:0.8rem;color:#6b7280;margin-top:2px;">Unique visitors</div>
+    </div>
+  </div>
+  {{end}}
+
+  <!-- Report frequency -->
+  <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+    <form method="POST" action="/admin/sites/{{.Site.ID}}/analytics-frequency" style="display:flex;align-items:center;gap:0.5rem;">
+      <label style="font-size:0.875rem;font-weight:600;color:#374151;white-space:nowrap;">Email reports:</label>
+      <select name="analytics_frequency" style="padding:0.4rem 0.65rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.875rem;">
+        <option value="off"{{if eq .Site.AnalyticsFrequency "off"}} selected{{end}}>Off</option>
+        <option value="weekly"{{if or (eq .Site.AnalyticsFrequency "weekly") (eq .Site.AnalyticsFrequency "")}} selected{{end}}>Weekly</option>
+        <option value="monthly"{{if eq .Site.AnalyticsFrequency "monthly"}} selected{{end}}>Monthly</option>
+      </select>
+      <button type="submit" class="btn-edit" style="font-size:0.82rem;padding:0.4rem 0.75rem;">Save</button>
+    </form>
+    <form method="POST" action="/admin/sites/{{.Site.ID}}/send-analytics">
+      <button type="submit" class="btn-secondary" style="font-size:0.82rem;padding:0.4rem 0.75rem;">Send Report Now</button>
+    </form>
+  </div>
+
+  {{if .Site.AnalyticsLastSent}}
+  <p style="font-size:0.8rem;color:#9ca3af;margin:0;">Last sent: {{.Site.AnalyticsLastSent.Format "02 Jan 2006, 15:04"}}</p>
+  {{else}}
+  <p style="font-size:0.8rem;color:#9ca3af;margin:0;">No report sent yet.</p>
+  {{end}}
+</div>
+
 <!-- Leads -->
 <div class="admin-card">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">

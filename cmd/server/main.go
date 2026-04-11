@@ -57,6 +57,8 @@ func main() {
 	// All other requests go to the main mux
 	finalHandler := loggingMiddleware(subdomainRouter(domain, h, mux))
 
+	h.StartAnalyticsCron()
+
 	log.Printf("Launchly listening on %s (domain: %s)", addr, domain)
 	log.Fatal(http.ListenAndServe(addr, finalHandler))
 }

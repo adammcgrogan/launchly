@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/adammcgrogan/launchly/internal/models"
 )
@@ -63,18 +64,23 @@ func (h *Handler) AdminSite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	since7 := time.Now().UTC().Add(-7 * 24 * time.Hour)
+	stats, _ := h.store.GetSiteStats(site.ID, since7)
+
 	tmpl := template.Must(template.ParseFiles(
 		"web/templates/admin/base.html",
 		"web/templates/admin/site.html",
 	))
 	tmpl.ExecuteTemplate(w, "base", map[string]any{
-		"Site":        site,
-		"Leads":       leads,
-		"Domain":      h.domain,
-		"SiteURL":     h.siteURL(site.Slug),
-		"PaymentSent": r.URL.Query().Get("payment") == "sent",
-		"DNSResult":   r.URL.Query().Get("dns"),
-		"DNSTarget":   r.URL.Query().Get("cname"),
+		"Site":           site,
+		"Leads":          leads,
+		"Domain":         h.domain,
+		"SiteURL":        h.siteURL(site.Slug),
+		"PaymentSent":    r.URL.Query().Get("payment") == "sent",
+		"DNSResult":      r.URL.Query().Get("dns"),
+		"DNSTarget":      r.URL.Query().Get("cname"),
+		"Stats":          stats,
+		"AnalyticsSent":  r.URL.Query().Get("analytics") == "sent",
 	})
 }
 
@@ -545,6 +551,94 @@ func normalizeDomain(d string) string {
 	return d
 }
 
+func (h *Handler) AdminUpdateAnalyticsFrequency(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+	freq := r.FormValue("analytics_frequency")
+	if freq != "off" && freq != "weekly" && freq != "monthly" {
+		http.Error(w, "invalid frequency", http.StatusBadRequest)
+		return
+	}
+	if err := h.store.UpdateAnalyticsFrequency(id, freq); err != nil {
+		http.Error(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
+}
+
+func (h *Handler) AdminSendAnalytics(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	site, err := h.store.GetSiteByID(id)
+	if err != nil || site == nil {
+		http.NotFound(w, r)
+		return
+	}
+	days := 7
+	if site.AnalyticsFrequency == "monthly" {
+		days = 30
+	}
+	if err := h.sendAnalyticsReport(site, days); err != nil {
+		log.Printf("admin send analytics for %s: %v", site.Slug, err)
+	}
+	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d?analytics=sent", id), http.StatusSeeOther)
+}
+
+// sendAnalyticsReport builds stats and emails the analytics digest for a site.
+func (h *Handler) sendAnalyticsReport(site *models.Site, days int) error {
+	since := time.Now().UTC().Add(-time.Duration(days) * 24 * time.Hour)
+	stats, err := h.store.GetSiteStats(site.ID, since)
+	if err != nil {
+		return fmt.Errorf("get stats: %w", err)
+	}
+	siteURL := h.siteURL(site.Slug)
+	if site.CustomDomain != "" {
+		siteURL = "https://" + site.CustomDomain
+	}
+	freq := site.AnalyticsFrequency
+	if freq == "" || freq == "off" {
+		freq = "weekly"
+	}
+	if err := h.email.SendAnalyticsDigest(site.LeadEmail, site.BusinessName, freq, stats, siteURL); err != nil {
+		return fmt.Errorf("send email: %w", err)
+	}
+	return h.store.UpdateAnalyticsLastSent(site.ID)
+}
+
+// StartAnalyticsCron starts a background goroutine that sends scheduled analytics emails.
+func (h *Handler) StartAnalyticsCron() {
+	go func() {
+		ticker := time.NewTicker(1 * time.Hour)
+		defer ticker.Stop()
+		for range ticker.C {
+			sites, err := h.store.GetSitesDueForAnalytics()
+			if err != nil {
+				log.Printf("analytics cron: list sites: %v", err)
+				continue
+			}
+			for _, site := range sites {
+				days := 7
+				if site.AnalyticsFrequency == "monthly" {
+					days = 30
+				}
+				if err := h.sendAnalyticsReport(site, days); err != nil {
+					log.Printf("analytics cron: send %s: %v", site.Slug, err)
+				}
+			}
+		}
+	}()
+}
+
 func (h *Handler) PaymentSuccess(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles(
 		"web/templates/public/home_base.html",
@@ -586,4 +680,6 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /admin/sites/{id}/notes", h.adminAuth(h.AdminUpdateNotes))
 	mux.HandleFunc("POST /admin/sites/{id}/custom-domain", h.adminAuth(h.AdminSetCustomDomain))
 	mux.HandleFunc("GET /admin/sites/{id}/check-domain", h.adminAuth(h.AdminCheckDomain))
+	mux.HandleFunc("POST /admin/sites/{id}/analytics-frequency", h.adminAuth(h.AdminUpdateAnalyticsFrequency))
+	mux.HandleFunc("POST /admin/sites/{id}/send-analytics", h.adminAuth(h.AdminSendAnalytics))
 }
