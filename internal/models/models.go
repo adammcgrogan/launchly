@@ -48,6 +48,7 @@ type Site struct {
 	StripeSubscriptionID   string     `db:"stripe_subscription_id"`
 	PaidAt                 *time.Time `db:"paid_at"`
 	CustomDomain           string     `db:"custom_domain"`           // e.g. "joesbarbershop.com" (Pro only)
+	Notes                  string     `db:"notes"`                   // internal admin notes, never shown to customer
 }
 
 // Lead represents a contact form submission from a site visitor.

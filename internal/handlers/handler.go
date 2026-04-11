@@ -33,6 +33,8 @@ var siteTemplates = []struct {
 	{"dine", "Dine", "Fine-dining layout with centred serif headings and menu-style services", "example-dine", "Restaurants & Food", []string{"Restaurants", "Bistros", "Wine Bars", "Fine Dining", "Private Chefs"}},
 	{"heal", "Heal", "Clean, clinical layout with trust badges and booking-focused contact", "example-heal", "Health & Wellness", []string{"Dentists", "Physios", "Chiropractors", "Private Clinics", "Therapists"}},
 	{"craft", "Craft", "Earthy, artisan layout with masonry gallery and story-led about section", "example-craft", "Makers & Studios", []string{"Makers", "Ceramics", "Woodwork", "Jewellery", "Print Studios"}},
+	{"shop", "Shop", "Clean, terracotta-accented retail layout with product grid and strong opening hours", "example-shop", "Retail & Shops", []string{"Gift Shops", "Boutiques", "Homeware", "Florists", "Delis", "Bookshops"}},
+	{"vow", "Vow", "Elegant, serif-led wedding layout with prominent testimonials and enquiry focus", "example-vow", "Events & Weddings", []string{"Wedding Planners", "Event Stylists", "Venues", "Florists", "Photographers", "Celebrants"}},
 }
 
 // buildTestimonials assembles the testimonials string from individual form fields.

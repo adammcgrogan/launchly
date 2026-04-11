@@ -109,6 +109,49 @@
               <div style="display:flex;justify-content:space-between;"><span style="font-size:0.6rem;color:#444;">Space Planning</span><span style="font-size:0.6rem;color:#ccc;">→</span></div>
             </div>
           </div>
+          {{else if eq .ID "dine"}}
+          <div style="background:#1a1208;padding:1rem;text-align:center;">
+            <div style="color:#c8a96e;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;">Cathedral Quarter, Belfast</div>
+            <div style="color:#f5f0e8;font-weight:900;font-size:0.8rem;margin-bottom:2px;">The Ember Room</div>
+            <div style="color:#8a7a62;font-size:0.6rem;font-style:italic;margin-bottom:8px;">Wood-fired food &amp; natural wine</div>
+            <span style="border:1px solid #c8a96e;color:#c8a96e;font-size:0.6rem;padding:2px 10px;border-radius:20px;">Book a Table</span>
+          </div>
+          {{else if eq .ID "heal"}}
+          <div style="background:#fff;padding:1rem;">
+            <div style="display:inline-block;background:#e0f2fe;color:#0369a1;font-size:0.55rem;padding:1px 6px;border-radius:20px;margin-bottom:6px;">GDC Registered</div>
+            <div style="color:#0f172a;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Greenfield Dental</div>
+            <div style="color:#64748b;font-size:0.6rem;margin-bottom:8px;">Gentle, modern dentistry</div>
+            <div style="display:flex;gap:6px;">
+              <span style="background:#0284c7;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book Appointment</span>
+            </div>
+          </div>
+          {{else if eq .ID "craft"}}
+          <div style="background:#f7f3ee;padding:1rem;">
+            <div style="color:#92704e;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Ballymena, Co. Antrim</div>
+            <div style="color:#2c1f14;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Willow &amp; Thread</div>
+            <div style="color:#a08060;font-size:0.6rem;font-style:italic;margin-bottom:8px;">Handthrown ceramics</div>
+            <div style="display:flex;gap:4px;">
+              <span style="background:#2c1f14;color:#f7f3ee;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">View Collection</span>
+            </div>
+          </div>
+          {{else if eq .ID "shop"}}
+          <div style="background:#fff;padding:1rem;">
+            <div style="display:inline-flex;align-items:center;gap:4px;background:#fff7ed;border:1px solid #fed7aa;color:#c2410c;font-size:0.55rem;font-weight:700;padding:1px 6px;border-radius:20px;margin-bottom:6px;text-transform:uppercase;">📍 Lisburn Road, Belfast</div>
+            <div style="color:#1c1917;font-weight:900;font-size:0.8rem;margin-bottom:2px;">The Corner Collective</div>
+            <div style="color:#78716c;font-size:0.6rem;margin-bottom:8px;">Gifts, homewares &amp; local finds</div>
+            <div style="display:flex;gap:6px;">
+              <span style="background:#c2410c;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:6px;">Visit Us</span>
+              <span style="border:1px solid #e7e5e4;color:#78716c;font-size:0.6rem;padding:2px 8px;border-radius:6px;">Open 7 Days</span>
+            </div>
+          </div>
+          {{else if eq .ID "vow"}}
+          <div style="background:#fdf9f6;padding:1rem;text-align:center;">
+            <div style="color:#a8a29e;font-size:0.5rem;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:6px;">Co. Down, Ireland</div>
+            <div style="color:#1c1917;font-size:0.85rem;font-weight:700;font-style:italic;margin-bottom:3px;">Clover &amp; White Events</div>
+            <div style="color:#78716c;font-size:0.6rem;font-style:italic;margin-bottom:10px;">Beautifully planned weddings</div>
+            <div style="width:24px;height:1px;background:#d6d3d1;margin:0 auto 8px;"></div>
+            <span style="border:1px solid #1c1917;color:#1c1917;font-size:0.6rem;font-weight:600;padding:2px 10px;border-radius:20px;">Get in Touch</span>
+          </div>
           {{end}}
           <div style="padding:0.75rem;border-top:1px solid #e5e7eb;background:#fff;">
             <div style="font-size:0.8rem;font-weight:700;color:#111827;">{{.Name}} {{if .Current}}<span style="color:#6366f1;font-size:0.7rem;">(current)</span>{{end}}</div>

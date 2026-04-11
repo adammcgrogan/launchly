@@ -100,6 +100,7 @@ func (s *Store) Migrate() error {
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS map_embed_url TEXT NOT NULL DEFAULT ''`)
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS custom_domain TEXT`)
 	s.db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_sites_custom_domain ON sites (custom_domain) WHERE custom_domain IS NOT NULL AND custom_domain != ''`)
+	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS notes TEXT NOT NULL DEFAULT ''`)
 	return nil
 }
 
@@ -277,6 +278,36 @@ func (s *Store) SeedExamples() error {
 			LeadEmail:      "example@locallaunch.co",
 		},
 		{
+			Slug: "example-shop", BusinessName: "The Corner Collective", Template: "shop",
+			CTAText:        "Visit Us",
+			Tagline:        "Thoughtfully chosen gifts, homewares and local finds",
+			About:          "The Corner Collective has been a fixture of the Lisburn Road since 2016. We stock an ever-changing mix of gifts, ceramics, candles and homewares — most of it sourced from small Irish and British makers. Pop in and have a browse, you'll always find something worth taking home.",
+			Services:       "Gifts & Keepsakes\nHomeware & Ceramics\nCandles & Fragrance\nCards & Stationery\nLocal Maker Collection\nCorporate & Bulk Gifting",
+			Certifications: "Local Makers Stocked\nGift Wrapping Available\nClick & Collect\nOpen 7 Days",
+			Testimonials:   "Claire Donnelly||The most beautiful little shop — I always end up spending way more than I planned. The staff are so helpful and the gift wrapping is gorgeous.\nMark & Louise Forde|Regular Customers|We've bought almost every birthday and Christmas present here for the last three years. There's always something new in and the quality is brilliant.\nSophie McAuley||Found the perfect wedding gift here that I couldn't find anywhere else. The owner took time to help me and even added a handwritten note.",
+			Location:       "Lisburn Road, Belfast",
+			Phone:          "028 9066 1234",
+			Email:          "hello@cornercollective.co.uk",
+			Address:        "142 Lisburn Road, Belfast, BT9 6AJ",
+			Hours:          "Mon–Sat: 9:30am – 5:30pm\nSunday: 12pm – 4pm",
+			LeadEmail:      "example@locallaunch.co",
+		},
+		{
+			Slug: "example-vow", BusinessName: "Clover & White Events", Template: "vow",
+			CTAText:        "Get in Touch",
+			Tagline:        "Beautifully planned weddings and events across Ireland",
+			About:          "Clover & White is a wedding and events planning studio based in Co. Down. Founded by Aoife Connolly in 2018, we believe every wedding should feel entirely personal — a true reflection of the people at the heart of it. We take care of every detail so you can be present for every moment.",
+			Services:       "Full Wedding Planning\nPartial Planning & Support\nDay-of Coordination\nVenue Styling & Décor\nFloral Design & Arrangements\nElopements & Intimate Weddings",
+			Certifications: "Fully Insured\nFree Initial Consultation\nIreland & UK Wide\nAvailable Weekends",
+			Testimonials:   "Niamh & Ciarán Kelly||We genuinely couldn't have done it without Aoife. She thought of things we'd never have considered and kept everything calm on the day. Our wedding was absolutely perfect.\nEmma Doherty|Maid of Honour|As the maid of honour I was dreading all the logistics. Clover & White handled everything — the venue looked stunning and the whole day ran like clockwork.\nPaul & Sarah McBride||From our first call to the last dance, Aoife was warm, professional and completely on top of everything. Worth every penny and more.",
+			Location:       "Co. Down, Ireland",
+			Phone:          "077 9900 1122",
+			Email:          "hello@cloverandwhite.co.uk",
+			Address:        "Downpatrick, Co. Down, BT30",
+			Hours:          "Consultations by appointment\nMon–Fri: 9am – 6pm\nWeekends: Available for events",
+			LeadEmail:      "example@locallaunch.co",
+		},
+		{
 			Slug: "example-craft", BusinessName: "Willow & Thread", Template: "craft",
 			CTAText:        "View Collection",
 			Tagline:        "Handthrown ceramics and homeware made in Co. Antrim",
@@ -374,6 +405,11 @@ func (s *Store) UpdateSite(site *models.Site) error {
 	return err
 }
 
+func (s *Store) UpdateSiteNotes(id int, notes string) error {
+	_, err := s.db.Exec(`UPDATE sites SET notes = $1 WHERE id = $2`, notes, id)
+	return err
+}
+
 func (s *Store) GetSiteBySlug(slug string) (*models.Site, error) {
 	site := &models.Site{}
 	err := s.db.QueryRow(`
@@ -383,7 +419,7 @@ func (s *Store) GetSiteBySlug(slug string) (*models.Site, error) {
 		       facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
 		       umami_website_id, lead_email, status, created_at, published_at,
 		       plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at,
-		       COALESCE(custom_domain, '')
+		       COALESCE(custom_domain, ''), notes
 		FROM sites WHERE slug = $1`, slug).
 		Scan(&site.ID, &site.Slug, &site.BusinessName, &site.Template,
 			&site.Tagline, &site.About, &site.Services,
@@ -394,7 +430,7 @@ func (s *Store) GetSiteBySlug(slug string) (*models.Site, error) {
 			&site.TwitterURL, &site.TikTokURL, &site.LinkedInURL, &site.YouTubeURL,
 			&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
 			&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt,
-			&site.CustomDomain)
+			&site.CustomDomain, &site.Notes)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}

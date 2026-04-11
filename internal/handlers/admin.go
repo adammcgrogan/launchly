@@ -452,6 +452,24 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func (h *Handler) AdminUpdateNotes(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+	notes := strings.TrimSpace(r.FormValue("notes"))
+	if err := h.store.UpdateSiteNotes(id, notes); err != nil {
+		http.Error(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
+}
+
 func (h *Handler) AdminSetCustomDomain(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
@@ -565,6 +583,7 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /admin/sites/{id}/send-payment", h.adminAuth(h.AdminSendPayment))
 	mux.HandleFunc("POST /admin/sites/{id}/cancel-subscription", h.adminAuth(h.AdminCancelSubscription))
 	mux.HandleFunc("GET /admin/sites/{id}/leads.csv", h.adminAuth(h.AdminExportLeads))
+	mux.HandleFunc("POST /admin/sites/{id}/notes", h.adminAuth(h.AdminUpdateNotes))
 	mux.HandleFunc("POST /admin/sites/{id}/custom-domain", h.adminAuth(h.AdminSetCustomDomain))
 	mux.HandleFunc("GET /admin/sites/{id}/check-domain", h.adminAuth(h.AdminCheckDomain))
 }

@@ -176,6 +176,15 @@
   </div>
 </div>
 
+<!-- Notes -->
+<div class="admin-card" style="margin-bottom:1.5rem;">
+  <h2>Notes</h2>
+  <form method="POST" action="/admin/sites/{{.Site.ID}}/notes">
+    <textarea name="notes" rows="4" placeholder="Internal notes — domain renewal dates, change requests, customer preferences…" style="width:100%;padding:0.6rem 0.75rem;border:1px solid #d1d5db;border-radius:8px;font-size:0.875rem;resize:vertical;font-family:inherit;box-sizing:border-box;">{{.Site.Notes}}</textarea>
+    <button type="submit" class="btn-edit" style="margin-top:0.6rem;">Save Notes</button>
+  </form>
+</div>
+
 <!-- Leads -->
 <div class="admin-card">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
