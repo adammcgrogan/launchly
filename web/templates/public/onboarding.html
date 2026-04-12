@@ -43,6 +43,7 @@
             <input id="ob_business_name" type="text" name="business_name" required
               placeholder="e.g. Adam's Barbershop"
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            <p class="text-gray-400 text-xs mt-1">Your site will be at: <span id="slug-preview" class="font-semibold text-gray-500">yourname.launchly.ltd</span></p>
           </div>
           <div>
             <label for="ob_tagline" class="block text-sm font-semibold text-gray-700 mb-1.5">Tagline <span class="font-normal text-gray-400">(optional)</span></label>
@@ -53,7 +54,7 @@
           <div>
             <label for="ob_about" class="block text-sm font-semibold text-gray-700 mb-1.5">About Your Business <span class="font-normal text-gray-400">(optional)</span></label>
             <textarea id="ob_about" name="about" rows="4"
-              placeholder="Tell visitors who you are and what makes you different..."
+              placeholder="e.g. We've been serving Belfast for over 10 years. Our team specialises in boiler repairs and full heating installations. We're Gas Safe registered, fully insured, and available 7 days a week."
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
           </div>
           <div>
@@ -154,6 +155,7 @@
                 <label for="ob_whatsapp_url" class="block text-sm font-semibold text-gray-700 mb-1.5">WhatsApp</label>
                 <input id="ob_whatsapp_url" type="url" name="whatsapp_url" placeholder="https://wa.me/447700900000"
                   class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                <p class="text-gray-400 text-xs mt-1">Use your mobile number starting with 44 — e.g. 07342 636091 becomes wa.me/447342636091</p>
               </div>
               <div>
                 <label for="ob_twitter_url" class="block text-sm font-semibold text-gray-700 mb-1.5">X / Twitter</label>
@@ -224,7 +226,7 @@
         <!-- Template picker -->
         <div class="bg-white rounded-2xl border border-gray-200 p-8 mb-5">
           <h3 class="font-bold text-base text-gray-800 mb-1">Choose a Template</h3>
-          <p class="text-gray-500 text-sm mb-6">Click to select. Hit Preview to see a live example.</p>
+          <p class="text-gray-500 text-sm mb-6">Click to select. Hit Preview to see a live example. Not sure? Pick the closest match — you can always change it before we go live.</p>
 
           <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {{range .AllTemplates}}
@@ -402,7 +404,7 @@
         <div class="text-center pb-4">
           <button type="submit"
             class="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-lg px-10 py-4 rounded-xl transition shadow-lg shadow-indigo-500/25 w-full sm:w-auto">
-            Submit - Get My Site Live
+            Send My Request →
           </button>
           <p class="text-gray-400 text-sm mt-3">We'll review your details and be in touch within 24 hours.</p>
         </div>
@@ -466,6 +468,20 @@
   addBtn.addEventListener('click', function () {
     container.appendChild(makeTestimonial());
     syncTestimonials();
+  });
+
+  // Pre-seed one open testimonial entry
+  container.appendChild(makeTestimonial());
+  syncTestimonials();
+
+  /* ── Slug preview ─────────────────────────────────────────── */
+  var nameInput = document.getElementById('ob_business_name');
+  var slugPreview = document.getElementById('slug-preview');
+  function toSlug(s) {
+    return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'yourname';
+  }
+  nameInput.addEventListener('input', function () {
+    slugPreview.textContent = toSlug(nameInput.value) + '.launchly.ltd';
   });
 
   /* ── Wizard ───────────────────────────────────────────────── */
