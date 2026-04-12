@@ -1,0 +1,107 @@
+{{define "content"}}
+<div class="admin-header">
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <a href="/admin/prospects" class="btn-back">← Prospects</a>
+    <h1 style="font-size:1.4rem;font-weight:800;">{{.Prospect.BusinessName}}</h1>
+    <span class="badge
+      {{if eq .Prospect.Status "new"}}badge-draft
+      {{else if eq .Prospect.Status "won"}}badge-live
+      {{end}}" style="text-transform:capitalize;">{{.Prospect.Status}}</span>
+  </div>
+</div>
+
+{{if .Updated}}
+<div style="background:#d1fae5;border:1px solid #6ee7b7;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;color:#065f46;font-size:0.9rem;">
+  Prospect updated.
+</div>
+{{end}}
+
+<div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;">
+
+  <!-- Edit form -->
+  <div class="admin-card" style="margin-bottom:0;">
+    <h2>Details</h2>
+    <form method="POST" action="/admin/prospects/{{.Prospect.ID}}" style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+      <div>
+        <label class="detail-label">Business Name *</label>
+        <input class="admin-input" type="text" name="business_name" value="{{.Prospect.BusinessName}}" required>
+      </div>
+      <div>
+        <label class="detail-label">Trade</label>
+        <input class="admin-input" type="text" name="trade" value="{{.Prospect.Trade}}" placeholder="e.g. Plumber">
+      </div>
+      <div>
+        <label class="detail-label">Location</label>
+        <input class="admin-input" type="text" name="location" value="{{.Prospect.Location}}">
+      </div>
+      <div>
+        <label class="detail-label">Status</label>
+        <select class="admin-input" name="status">
+          {{range .Statuses}}
+          <option value="{{.}}" {{if eq . $.Prospect.Status}}selected{{end}} style="text-transform:capitalize;">{{.}}</option>
+          {{end}}
+        </select>
+      </div>
+      <div>
+        <label class="detail-label">Phone</label>
+        <input class="admin-input" type="text" name="phone" value="{{.Prospect.Phone}}">
+      </div>
+      <div>
+        <label class="detail-label">Email</label>
+        <input class="admin-input" type="email" name="email" value="{{.Prospect.Email}}">
+      </div>
+      <div>
+        <label class="detail-label">Current Website</label>
+        <input class="admin-input" type="text" name="website" value="{{.Prospect.Website}}" placeholder="Leave blank if none">
+      </div>
+      <div>
+        <label class="detail-label">Source</label>
+        <input class="admin-input" type="text" name="source" value="{{.Prospect.Source}}" placeholder="e.g. Yell, Google Maps">
+      </div>
+      <div style="grid-column:1/-1;">
+        <label class="detail-label">Notes</label>
+        <textarea class="admin-input" name="notes" rows="4" style="resize:vertical;">{{.Prospect.Notes}}</textarea>
+      </div>
+      <div style="grid-column:1/-1;display:flex;gap:0.5rem;">
+        <button type="submit" class="btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Sidebar -->
+  <div>
+    <div class="admin-card" style="margin-bottom:1rem;">
+      <h2>Info</h2>
+      <div class="detail-item">
+        <div class="detail-label">Added</div>
+        <div class="detail-value">{{.Prospect.CreatedAt.Format "02 Jan 2006"}}</div>
+      </div>
+      {{if .Prospect.ContactedAt}}
+      <div class="detail-item">
+        <div class="detail-label">First Contacted</div>
+        <div class="detail-value">{{.Prospect.ContactedAt.Format "02 Jan 2006"}}</div>
+      </div>
+      {{end}}
+      {{if .Prospect.Website}}
+      <div class="detail-item">
+        <div class="detail-label">Their Website</div>
+        <div class="detail-value"><a href="{{.Prospect.Website}}" target="_blank" rel="noopener">{{.Prospect.Website}}</a></div>
+      </div>
+      {{else}}
+      <div class="detail-item">
+        <div class="detail-label">Website</div>
+        <div class="detail-value" style="color:#dc2626;font-weight:600;">None — strong lead</div>
+      </div>
+      {{end}}
+    </div>
+
+    <div class="admin-card">
+      <h2>Danger Zone</h2>
+      <form method="POST" action="/admin/prospects/{{.Prospect.ID}}/delete" onsubmit="return confirm('Delete this prospect?')">
+        <button type="submit" class="btn-danger" style="width:100%;">Delete Prospect</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+{{end}}

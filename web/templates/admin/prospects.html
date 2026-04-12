@@ -1,0 +1,107 @@
+{{define "content"}}
+<div class="admin-header">
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <a href="/admin" class="btn-back">← Sites</a>
+    <h1 style="font-size:1.4rem;font-weight:800;">Prospects</h1>
+  </div>
+</div>
+
+<!-- Add prospect form -->
+<div class="admin-card" style="margin-bottom:1.5rem;">
+  <h2>Add Prospect</h2>
+  <form method="POST" action="/admin/prospects" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.75rem;align-items:end;">
+    <div>
+      <label class="detail-label">Business Name *</label>
+      <input class="admin-input" type="text" name="business_name" required placeholder="e.g. Joe's Plumbing">
+    </div>
+    <div>
+      <label class="detail-label">Trade</label>
+      <input class="admin-input" type="text" name="trade" placeholder="e.g. Plumber">
+    </div>
+    <div>
+      <label class="detail-label">Location</label>
+      <input class="admin-input" type="text" name="location" placeholder="e.g. Belfast">
+    </div>
+    <div>
+      <label class="detail-label">Phone</label>
+      <input class="admin-input" type="text" name="phone" placeholder="07...">
+    </div>
+    <div>
+      <label class="detail-label">Email</label>
+      <input class="admin-input" type="email" name="email" placeholder="joe@...">
+    </div>
+    <div>
+      <label class="detail-label">Current Website</label>
+      <input class="admin-input" type="text" name="website" placeholder="Leave blank if none">
+    </div>
+    <div>
+      <label class="detail-label">Source</label>
+      <input class="admin-input" type="text" name="source" placeholder="e.g. Yell, Google Maps">
+    </div>
+    <div>
+      <label class="detail-label">Notes</label>
+      <input class="admin-input" type="text" name="notes" placeholder="Optional">
+    </div>
+    <div>
+      <button type="submit" class="btn-primary" style="width:100%;">Add Prospect</button>
+    </div>
+  </form>
+</div>
+
+<!-- Filter tabs -->
+<div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+  <a href="/admin/prospects" class="badge {{if eq .Filter ""}}badge-live{{else}}badge-draft{{end}}" style="text-decoration:none;cursor:pointer;">All</a>
+  {{range .Statuses}}
+  <a href="/admin/prospects?status={{.}}" class="badge {{if eq . $.Filter}}badge-live{{else}}badge-draft{{end}}" style="text-decoration:none;cursor:pointer;text-transform:capitalize;">{{.}}</a>
+  {{end}}
+</div>
+
+{{if not .Prospects}}
+  <p class="empty">No prospects yet. Add one above.</p>
+{{else}}
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Business</th>
+      <th>Trade</th>
+      <th>Location</th>
+      <th>Phone</th>
+      <th>Website</th>
+      <th>Source</th>
+      <th>Status</th>
+      <th>Added</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{range .Prospects}}
+    <tr>
+      <td><strong>{{.BusinessName}}</strong></td>
+      <td>{{or .Trade "—"}}</td>
+      <td>{{or .Location "—"}}</td>
+      <td>{{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}</td>
+      <td>
+        {{if .Website}}
+          <a href="{{.Website}}" target="_blank" rel="noopener" style="font-size:0.8rem;">{{.Website}}</a>
+        {{else}}
+          <span style="color:#dc2626;font-size:0.8rem;font-weight:600;">No website</span>
+        {{end}}
+      </td>
+      <td>{{or .Source "—"}}</td>
+      <td>
+        <span class="badge
+          {{if eq .Status "new"}}badge-draft
+          {{else if eq .Status "contacted"}}" style="background:#dbeafe;color:#1e40af;"
+          {{else if eq .Status "interested"}}" style="background:#fef9c3;color:#854d0e;"
+          {{else if eq .Status "won"}}badge-live
+          {{else if eq .Status "lost"}}badge-draft" style="background:#fee2e2;color:#991b1b;"
+          {{end}}">{{.Status}}</span>
+      </td>
+      <td style="white-space:nowrap;">{{.CreatedAt.Format "02 Jan 06"}}</td>
+      <td><a href="/admin/prospects/{{.ID}}">Edit →</a></td>
+    </tr>
+    {{end}}
+  </tbody>
+</table>
+{{end}}
+{{end}}

@@ -73,7 +73,7 @@ func (h *Handler) loadTemplates() error {
 			return err
 		}
 	}
-	for _, p := range []string{"dashboard", "site", "edit", "switch_template"} {
+	for _, p := range []string{"dashboard", "site", "edit", "switch_template", "prospects", "prospect"} {
 		if err := adm(p, p); err != nil {
 			return err
 		}

@@ -10,6 +10,10 @@
 <body>
   <nav class="admin-nav">
     <a href="/admin" class="admin-logo">Launchly Admin</a>
+    <div style="display:flex;gap:1rem;align-items:center;">
+      <a href="/admin" style="font-size:0.9rem;color:#6b7280;text-decoration:none;">Sites</a>
+      <a href="/admin/prospects" style="font-size:0.9rem;color:#6b7280;text-decoration:none;">Prospects</a>
+    </div>
   </nav>
   <main class="admin-main">
     {{template "content" .}}

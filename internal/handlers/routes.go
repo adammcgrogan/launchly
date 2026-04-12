@@ -40,4 +40,11 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /admin/sites/{id}/check-domain", h.adminAuth(h.AdminCheckDomain))
 	mux.HandleFunc("POST /admin/sites/{id}/analytics-frequency", h.adminAuth(h.AdminUpdateAnalyticsFrequency))
 	mux.HandleFunc("POST /admin/sites/{id}/send-analytics", h.adminAuth(h.AdminSendAnalytics))
+
+	// Prospects (CRM)
+	mux.HandleFunc("GET /admin/prospects", h.adminAuth(h.AdminProspects))
+	mux.HandleFunc("POST /admin/prospects", h.adminAuth(h.AdminCreateProspect))
+	mux.HandleFunc("GET /admin/prospects/{id}", h.adminAuth(h.AdminProspect))
+	mux.HandleFunc("POST /admin/prospects/{id}", h.adminAuth(h.AdminUpdateProspect))
+	mux.HandleFunc("POST /admin/prospects/{id}/delete", h.adminAuth(h.AdminDeleteProspect))
 }
