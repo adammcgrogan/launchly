@@ -101,7 +101,8 @@ func (c *Client) CancelSubscription(subscriptionID string) error {
 type WebhookEvent struct {
 	Type           string
 	SessionID      string // populated for checkout.session.completed
-	SubscriptionID string // populated for checkout.session.completed and customer.subscription.deleted
+	SubscriptionID string // populated for checkout.session.completed, customer.subscription.deleted, invoice.payment_failed
+	CustomerEmail  string // populated for invoice.payment_failed
 }
 
 // ParseWebhook verifies the Stripe webhook signature and returns a parsed event.
@@ -129,6 +130,15 @@ func (c *Client) ParseWebhook(payload []byte, sigHeader string) (*WebhookEvent, 
 			return nil, fmt.Errorf("unmarshal subscription: %w", err)
 		}
 		we.SubscriptionID = sub.ID
+	case "invoice.payment_failed":
+		var inv stripe.Invoice
+		if err := json.Unmarshal(event.Data.Raw, &inv); err != nil {
+			return nil, fmt.Errorf("unmarshal invoice: %w", err)
+		}
+		if inv.Subscription != nil {
+			we.SubscriptionID = inv.Subscription.ID
+		}
+		we.CustomerEmail = inv.CustomerEmail
 	}
 	return we, nil
 }

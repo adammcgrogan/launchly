@@ -224,6 +224,21 @@ func (c *Client) SendCancellationConfirmation(to, businessName string) error {
 	return c.Send(to, fmt.Sprintf("Subscription cancelled - %s", businessName), wrap(content))
 }
 
+func (c *Client) SendPaymentFailed(to, businessName string) error {
+	content := h1("There was a problem with your payment") +
+		p(fmt.Sprintf("We weren't able to collect your subscription payment for <strong>%s</strong>.", businessName)) +
+		p("This can happen if a card has expired or has insufficient funds. Stripe will automatically retry the payment over the next few days.") +
+		p("To avoid any disruption to your site, please reply to this email or get in touch and we'll help you update your payment details.") +
+		divider() +
+		p(`<span style="color:#6b7280;font-size:13px;">Questions? Contact us at <a href="mailto:hello@launchly.ltd" style="color:#4f46e5;">hello@launchly.ltd</a></span>`)
+	return c.Send(to, fmt.Sprintf("Action needed - payment failed for %s", businessName), wrap(content))
+}
+
+func (c *Client) SendAdminAlert(to, subject, message string) error {
+	content := h1(subject) + p(message)
+	return c.Send(to, subject, wrap(content))
+}
+
 func (c *Client) SendAnalyticsDigest(to, businessName, frequency string, stats *models.SiteStats, siteURL string) error {
 	period := "weekly"
 	days := "7 days"

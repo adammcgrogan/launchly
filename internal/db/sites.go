@@ -174,10 +174,16 @@ func (s *Store) SetSitePending(id int, plan, sessionID string) error {
 	return err
 }
 
-func (s *Store) SetSitePaid(sessionID, subscriptionID string) error {
+// SetSitePaid marks a site as paid. Returns (true, nil) if this was the first time
+// (i.e. the row was updated), (false, nil) if already paid (idempotent retry).
+func (s *Store) SetSitePaid(sessionID, subscriptionID string) (bool, error) {
 	now := time.Now().UTC()
-	_, err := s.db.Exec(`UPDATE sites SET payment_status='paid', paid_at=$1, stripe_subscription_id=$2 WHERE stripe_session_id=$3`, now, subscriptionID, sessionID)
-	return err
+	res, err := s.db.Exec(`UPDATE sites SET payment_status='paid', paid_at=$1, stripe_subscription_id=$2 WHERE stripe_session_id=$3 AND payment_status != 'paid'`, now, subscriptionID, sessionID)
+	if err != nil {
+		return false, err
+	}
+	rows, _ := res.RowsAffected()
+	return rows > 0, nil
 }
 
 func (s *Store) SetSiteCancelled(subscriptionID string) error {

@@ -408,12 +408,14 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 	switch event.Type {
 	case "checkout.session.completed":
 		if event.SessionID != "" {
-			if err := h.store.SetSitePaid(event.SessionID, event.SubscriptionID); err != nil {
+			first, err := h.store.SetSitePaid(event.SessionID, event.SubscriptionID)
+			if err != nil {
 				log.Printf("set site paid error: %v", err)
 				http.Error(w, "database error", http.StatusInternalServerError)
 				return
-			} else {
-				log.Printf("payment received for session %s", event.SessionID)
+			}
+			log.Printf("payment received for session %s (first=%v)", event.SessionID, first)
+			if first {
 				if site, err := h.store.GetSiteByStripeSessionID(event.SessionID); err == nil && site != nil && site.LeadEmail != "" {
 					if err := h.email.SendPaymentConfirmation(site.LeadEmail, site.BusinessName, site.Plan); err != nil {
 						log.Printf("send payment confirmation email error: %v", err)
@@ -428,13 +430,36 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 				log.Printf("set site cancelled error: %v", err)
 				http.Error(w, "database error", http.StatusInternalServerError)
 				return
-			} else {
-				log.Printf("subscription cancelled: %s", event.SubscriptionID)
-				if site != nil && site.LeadEmail != "" {
+			}
+			log.Printf("subscription cancelled: %s", event.SubscriptionID)
+			if site != nil {
+				if site.LeadEmail != "" {
 					if err := h.email.SendCancellationConfirmation(site.LeadEmail, site.BusinessName); err != nil {
 						log.Printf("send cancellation confirmation email error: %v", err)
 					}
 				}
+				h.email.SendAdminAlert(
+					"hello@launchly.ltd",
+					fmt.Sprintf("Subscription cancelled - %s", site.BusinessName),
+					fmt.Sprintf("<strong>%s</strong> has cancelled their subscription (or payment ultimately failed). Their site has been marked as cancelled.", site.BusinessName),
+				)
+			}
+		}
+	case "invoice.payment_failed":
+		if event.SubscriptionID != "" {
+			site, _ := h.store.GetSiteByStripeSubscriptionID(event.SubscriptionID)
+			log.Printf("payment failed for subscription %s", event.SubscriptionID)
+			if site != nil {
+				if site.LeadEmail != "" {
+					if err := h.email.SendPaymentFailed(site.LeadEmail, site.BusinessName); err != nil {
+						log.Printf("send payment failed email error: %v", err)
+					}
+				}
+				h.email.SendAdminAlert(
+					"hello@launchly.ltd",
+					fmt.Sprintf("Payment failed - %s", site.BusinessName),
+					fmt.Sprintf("A monthly payment has failed for <strong>%s</strong> (%s). Stripe will retry automatically. The customer has been emailed to update their card details.", site.BusinessName, site.LeadEmail),
+				)
 			}
 		}
 	}
