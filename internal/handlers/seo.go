@@ -18,6 +18,10 @@ func (h *Handler) Terms(w http.ResponseWriter, r *http.Request) {
 	h.render(w, "terms", nil)
 }
 
+func (h *Handler) PaymentSuccess(w http.ResponseWriter, r *http.Request) {
+	h.render(w, "payment_success", nil)
+}
+
 func (h *Handler) Sitemap(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/xml; charset=utf-8")
 	fmt.Fprintf(w, `<?xml version="1.0" encoding="UTF-8"?>

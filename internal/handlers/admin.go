@@ -251,16 +251,16 @@ func (h *Handler) AdminSwitchTemplate(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	type templateEntry struct {
+	type templateOption struct {
 		ID          string
 		Name        string
 		Description string
 		ExampleURL  string
 		Current     bool
 	}
-	entries := make([]templateEntry, len(siteTemplates))
+	entries := make([]templateOption, len(siteTemplates))
 	for i, t := range siteTemplates {
-		entries[i] = templateEntry{
+		entries[i] = templateOption{
 			ID:          t.ID,
 			Name:        t.Name,
 			Description: t.Description,
@@ -622,46 +622,3 @@ func (h *Handler) StartAnalyticsCron() {
 	}()
 }
 
-func (h *Handler) PaymentSuccess(w http.ResponseWriter, r *http.Request) {
-	h.render(w, "payment_success", nil)
-}
-
-func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
-	// Health check (no auth — used by Railway)
-	mux.HandleFunc("GET /healthz", h.HealthCheck)
-
-	// Public
-	mux.HandleFunc("GET /", h.Home)
-	mux.HandleFunc("GET /robots.txt", h.RobotsTxt)
-	mux.HandleFunc("GET /sitemap.xml", h.Sitemap)
-	mux.HandleFunc("GET /privacy", h.Privacy)
-	mux.HandleFunc("GET /terms", h.Terms)
-	mux.HandleFunc("GET /templates", h.TemplatesPage)
-	mux.HandleFunc("GET /get-started", h.OnboardingForm)
-	mux.HandleFunc("POST /get-started", h.OnboardingSubmit)
-	mux.HandleFunc("GET /payment/success", h.PaymentSuccess)
-	mux.HandleFunc("POST /webhooks/stripe", h.StripeWebhook)
-
-	// Path-based site routing (works without wildcard subdomain)
-	mux.HandleFunc("GET /sites/{slug}", h.ServeSitePath)
-	mux.HandleFunc("POST /sites/{slug}/contact", h.SubmitLeadPath)
-
-	// Admin (basic auth protected)
-	mux.HandleFunc("GET /admin", h.adminAuth(h.AdminDashboard))
-	mux.HandleFunc("GET /admin/sites/{id}", h.adminAuth(h.AdminSite))
-	mux.HandleFunc("GET /admin/sites/{id}/edit", h.adminAuth(h.AdminEditSite))
-	mux.HandleFunc("POST /admin/sites/{id}/edit", h.adminAuth(h.AdminUpdateSite))
-	mux.HandleFunc("POST /admin/sites/{id}/publish", h.adminAuth(h.AdminPublish))
-	mux.HandleFunc("POST /admin/sites/{id}/unpublish", h.adminAuth(h.AdminUnpublish))
-	mux.HandleFunc("POST /admin/sites/{id}/delete", h.adminAuth(h.AdminDeleteSite))
-	mux.HandleFunc("GET /admin/sites/{id}/switch-template", h.adminAuth(h.AdminSwitchTemplate))
-	mux.HandleFunc("POST /admin/sites/{id}/switch-template", h.adminAuth(h.AdminDoSwitchTemplate))
-	mux.HandleFunc("POST /admin/sites/{id}/send-payment", h.adminAuth(h.AdminSendPayment))
-	mux.HandleFunc("POST /admin/sites/{id}/cancel-subscription", h.adminAuth(h.AdminCancelSubscription))
-	mux.HandleFunc("GET /admin/sites/{id}/leads.csv", h.adminAuth(h.AdminExportLeads))
-	mux.HandleFunc("POST /admin/sites/{id}/notes", h.adminAuth(h.AdminUpdateNotes))
-	mux.HandleFunc("POST /admin/sites/{id}/custom-domain", h.adminAuth(h.AdminSetCustomDomain))
-	mux.HandleFunc("GET /admin/sites/{id}/check-domain", h.adminAuth(h.AdminCheckDomain))
-	mux.HandleFunc("POST /admin/sites/{id}/analytics-frequency", h.adminAuth(h.AdminUpdateAnalyticsFrequency))
-	mux.HandleFunc("POST /admin/sites/{id}/send-analytics", h.adminAuth(h.AdminSendAnalytics))
-}
