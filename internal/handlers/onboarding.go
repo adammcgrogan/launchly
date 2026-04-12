@@ -29,22 +29,17 @@ type templateEntry struct {
 }
 
 func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
-	var general, industry []templateEntry
+	var all []templateEntry
 
 	for _, t := range siteTemplates {
-		entry := templateEntry{
+		all = append(all, templateEntry{
 			ID:          t.ID,
 			Name:        t.Name,
 			Description: t.Description,
 			ExampleURL:  h.exampleURL(t.ExampleSlug),
 			Industry:    t.Industry,
 			Tags:        t.Tags,
-		}
-		if t.Industry == "" {
-			general = append(general, entry)
-		} else {
-			industry = append(industry, entry)
-		}
+		})
 	}
 
 	tmpl := template.Must(template.ParseFiles(
@@ -52,8 +47,7 @@ func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
 		"web/templates/public/onboarding.html",
 	))
 	tmpl.ExecuteTemplate(w, "base", map[string]any{
-		"GeneralTemplates":   general,
-		"IndustryTemplates":  industry,
+		"AllTemplates": all,
 	})
 }
 
