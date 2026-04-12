@@ -12,7 +12,7 @@ const (
 // Site represents a business's landing page.
 type Site struct {
 	ID               int        `db:"id"`
-	Slug             string     `db:"slug"`             // used for subdomain: slug.locallaunch.co
+	Slug             string     `db:"slug"`             // used for subdomain: slug.launchly.ltd
 	BusinessName     string     `db:"business_name"`
 	Template         string     `db:"template"`
 	Tagline          string     `db:"tagline"`

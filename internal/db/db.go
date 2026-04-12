@@ -101,7 +101,7 @@ func (s *Store) Migrate() error {
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS custom_domain TEXT`)
 	s.db.Exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_sites_custom_domain ON sites (custom_domain) WHERE custom_domain IS NOT NULL AND custom_domain != ''`)
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS notes TEXT NOT NULL DEFAULT ''`)
-	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS analytics_frequency TEXT NOT NULL DEFAULT 'weekly'`)
+	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS analytics_frequency TEXT NOT NULL DEFAULT 'off'`)
 	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS analytics_last_sent TIMESTAMPTZ`)
 	s.db.Exec(`CREATE TABLE IF NOT EXISTS page_views (
 		id         SERIAL PRIMARY KEY,
@@ -132,7 +132,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "info@mclaughlinplumbing.co.uk",
 			Address:        "14 Donegall Road, Belfast, BT12 5JN",
 			Hours:          "Mon–Fri: 7am – 7pm\nSaturday: 8am – 4pm\nEmergency: 24/7",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-fresh", BusinessName: "O'Neill Accountancy", Template: "fresh",
@@ -146,7 +146,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "hello@oneillaccountancy.co.uk",
 			Address:        "Unit 3, Ebrington Square, Derry, BT47 6FA",
 			Hours:          "Mon–Fri: 9am – 5:30pm\nSaturday: By appointment",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-warm", BusinessName: "The Wee Bakehouse", Template: "warm",
@@ -160,7 +160,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "hello@theweebakehouse.co.uk",
 			Address:        "22 Market Square, Lisburn, BT28 1AG",
 			Hours:          "Mon–Sat: 7:30am – 4pm\nSunday: 9am – 2pm",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-glow", BusinessName: "Aoife's Beauty Studio", Template: "glow",
@@ -174,7 +174,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "book@aoifesbeauty.co.uk",
 			Address:        "8 Hill Street, Newry, BT34 1AR",
 			Hours:          "Tue–Fri: 9am – 7pm\nSaturday: 9am – 5pm\nSun & Mon: Closed",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-classic", BusinessName: "Quinn Electrical Services", Template: "classic",
@@ -188,7 +188,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "info@quinnelectrical.co.uk",
 			Address:        "17 Railway Street, Antrim, BT41 4AE",
 			Hours:          "Mon–Fri: 7:30am – 6pm\nSaturday: 8am – 1pm",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-pulse", BusinessName: "Titan Fitness Belfast", Template: "pulse",
@@ -202,7 +202,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "hello@titanfitnessbelfast.co.uk",
 			Address:        "Unit 5, Boucher Road Industrial Estate, Belfast, BT12 6HR",
 			Hours:          "Mon–Fri: 6am – 10pm\nSaturday: 7am – 8pm\nSunday: 8am – 6pm",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-grove", BusinessName: "O'Hara Landscaping", Template: "grove",
@@ -216,7 +216,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "info@oharalandscaping.co.uk",
 			Address:        "The Yard, Strangford Road, Downpatrick, BT30 6JT",
 			Hours:          "Mon–Fri: 8am – 5:30pm\nSaturday: 9am – 1pm",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-fleet", BusinessName: "Brady's Auto Centre", Template: "fleet",
@@ -230,7 +230,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "bookings@bradysauto.co.uk",
 			Address:        "45 Lonsdale Road, Armagh, BT61 7HZ",
 			Hours:          "Mon–Fri: 8am – 6pm\nSaturday: 8:30am – 1pm",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-haven", BusinessName: "The Harbour House", Template: "haven",
@@ -244,7 +244,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "stay@theharbourhouse.co.uk",
 			Address:        "2 The Quay, Strangford, BT30 7NF",
 			Hours:          "Check-in: 3pm – 9pm\nCheck-out: by 11am\nBreakfast: 7:30am – 9:30am",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-arch", BusinessName: "Laura Vance Interiors", Template: "arch",
@@ -258,7 +258,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "studio@lauravanceinteriors.co.uk",
 			Address:        "Studio 12, Cathedral Quarter, Belfast, BT1 1FB",
 			Hours:          "Mon–Fri: 9am – 6pm\nSaturday: By appointment",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-dine", BusinessName: "The Ember Room", Template: "dine",
@@ -273,7 +273,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "hello@theemberroom.co.uk",
 			Address:        "14 Hill Street, Cathedral Quarter, Belfast, BT1 2LB",
 			Hours:          "Wed–Thu: 5pm – 10pm\nFri–Sat: 12pm – 11pm\nSunday: 1pm – 8pm\nMon & Tue: Closed",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-heal", BusinessName: "Greenfield Dental", Template: "heal",
@@ -288,7 +288,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "reception@greenfielddental.co.uk",
 			Address:        "7 Governors Road, Lisburn, BT28 1EL",
 			Hours:          "Mon–Thu: 8:30am – 5:30pm\nFriday: 8:30am – 4pm\nSaturday: 9am – 1pm (Private)\nSunday: Closed",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-shop", BusinessName: "The Corner Collective", Template: "shop",
@@ -303,7 +303,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "hello@cornercollective.co.uk",
 			Address:        "142 Lisburn Road, Belfast, BT9 6AJ",
 			Hours:          "Mon–Sat: 9:30am – 5:30pm\nSunday: 12pm – 4pm",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-vow", BusinessName: "Clover & White Events", Template: "vow",
@@ -318,7 +318,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "hello@cloverandwhite.co.uk",
 			Address:        "Downpatrick, Co. Down, BT30",
 			Hours:          "Consultations by appointment\nMon–Fri: 9am – 6pm\nWeekends: Available for events",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 		{
 			Slug: "example-craft", BusinessName: "Willow & Thread", Template: "craft",
@@ -333,7 +333,7 @@ func (s *Store) SeedExamples() error {
 			Email:          "hello@willowandthread.co.uk",
 			Address:        "The Studio, Tullygarley Road, Ballymena, BT42 2QP",
 			Hours:          "Studio visits by appointment\nOnline shop: open 24/7\nWorkshops: Fri & Sat evenings",
-			LeadEmail:      "example@locallaunch.co",
+			LeadEmail:      "example@launchly.ltd",
 		},
 	}
 

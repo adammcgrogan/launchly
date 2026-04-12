@@ -20,7 +20,7 @@ func (h *Handler) adminAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_, pass, ok := r.BasicAuth()
 		if !ok || pass != h.adminPass {
-			w.Header().Set("WWW-Authenticate", `Basic realm="LocalLaunch Admin"`)
+			w.Header().Set("WWW-Authenticate", `Basic realm="Launchly Admin"`)
 			http.Error(w, "unauthorised", http.StatusUnauthorized)
 			return
 		}
