@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/csv"
 	"fmt"
-	"html/template"
 	"io"
 	"log"
 	"net"
@@ -34,11 +33,7 @@ func (h *Handler) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
 	}
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/admin/base.html",
-		"web/templates/admin/dashboard.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", map[string]any{
+	h.render(w, "admin:dashboard", map[string]any{
 		"Sites":   sites,
 		"Domain":  h.domain,
 		"BaseURL": h.baseURL(r.Host),
@@ -67,20 +62,16 @@ func (h *Handler) AdminSite(w http.ResponseWriter, r *http.Request) {
 	since7 := time.Now().UTC().Add(-7 * 24 * time.Hour)
 	stats, _ := h.store.GetSiteStats(site.ID, since7)
 
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/admin/base.html",
-		"web/templates/admin/site.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", map[string]any{
-		"Site":           site,
-		"Leads":          leads,
-		"Domain":         h.domain,
-		"SiteURL":        h.siteURL(site.Slug),
-		"PaymentSent":    r.URL.Query().Get("payment") == "sent",
-		"DNSResult":      r.URL.Query().Get("dns"),
-		"DNSTarget":      r.URL.Query().Get("cname"),
-		"Stats":          stats,
-		"AnalyticsSent":  r.URL.Query().Get("analytics") == "sent",
+	h.render(w, "admin:site", map[string]any{
+		"Site":          site,
+		"Leads":         leads,
+		"Domain":        h.domain,
+		"SiteURL":       h.siteURL(site.Slug),
+		"PaymentSent":   r.URL.Query().Get("payment") == "sent",
+		"DNSResult":     r.URL.Query().Get("dns"),
+		"DNSTarget":     r.URL.Query().Get("cname"),
+		"Stats":         stats,
+		"AnalyticsSent": r.URL.Query().Get("analytics") == "sent",
 	})
 }
 
@@ -155,11 +146,7 @@ func (h *Handler) AdminEditSite(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/admin/base.html",
-		"web/templates/admin/edit.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", map[string]any{
+	h.render(w, "admin:edit", map[string]any{
 		"Site":         site,
 		"Testimonials": parseTestimonials(site.Testimonials),
 	})
@@ -281,11 +268,7 @@ func (h *Handler) AdminSwitchTemplate(w http.ResponseWriter, r *http.Request) {
 			Current:     t.ID == site.Template,
 		}
 	}
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/admin/base.html",
-		"web/templates/admin/switch_template.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", map[string]any{
+	h.render(w, "admin:switch_template", map[string]any{
 		"Site":      site,
 		"Templates": entries,
 	})
@@ -640,14 +623,13 @@ func (h *Handler) StartAnalyticsCron() {
 }
 
 func (h *Handler) PaymentSuccess(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/public/home_base.html",
-		"web/templates/public/payment_success.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", nil)
+	h.render(w, "payment_success", nil)
 }
 
 func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
+	// Health check (no auth — used by Railway)
+	mux.HandleFunc("GET /healthz", h.HealthCheck)
+
 	// Public
 	mux.HandleFunc("GET /", h.Home)
 	mux.HandleFunc("GET /robots.txt", h.RobotsTxt)

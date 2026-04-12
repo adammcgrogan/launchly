@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"regexp"
@@ -19,15 +18,6 @@ func toSlug(s string) string {
 	return strings.Trim(s, "-")
 }
 
-type templateEntry struct {
-	ID          string
-	Name        string
-	Description string
-	ExampleURL  string
-	Industry    string
-	Tags        []string
-}
-
 func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
 	var all []templateEntry
 
@@ -42,16 +32,22 @@ func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/public/home_base.html",
-		"web/templates/public/onboarding.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", map[string]any{
+	h.render(w, "onboarding", map[string]any{
 		"AllTemplates": all,
 	})
 }
 
 func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
+	// Rate limit: 3 submissions per IP per 5 minutes
+	ip := clientIP(r)
+	if !h.onboardingLimiter.allow(ip) {
+		http.Error(w, "Too many requests — please wait a moment and try again.", http.StatusTooManyRequests)
+		return
+	}
+
+	// Limit request body to prevent abuse
+	r.Body = http.MaxBytesReader(w, r.Body, 256*1024)
+
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "bad request", http.StatusBadRequest)
 		return
@@ -125,11 +121,7 @@ func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/public/home_base.html",
-		"web/templates/public/thankyou.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", map[string]any{
+	h.render(w, "thankyou", map[string]any{
 		"BusinessName": site.BusinessName,
 	})
 }

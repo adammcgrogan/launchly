@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"html/template"
 	"log"
 	"net/http"
 	"net/url"
@@ -75,10 +74,10 @@ func isBot(ua string) bool {
 
 // renderSite renders a site template for the given site.
 func (h *Handler) renderSite(w http.ResponseWriter, r *http.Request, site *models.Site, formAction string) {
-	tmplFile := "web/templates/sites/" + site.Template + ".html"
-	tmpl, err := template.ParseFiles("web/templates/sites/base.html", tmplFile)
-	if err != nil {
+	tmpl, ok := h.tmpl["site:"+site.Template]
+	if !ok {
 		http.Error(w, "template error", http.StatusInternalServerError)
+		log.Printf("renderSite: unknown template %q for site %s", site.Template, site.Slug)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -111,6 +110,14 @@ func (h *Handler) SubmitLeadPath(w http.ResponseWriter, r *http.Request) {
 
 // saveLead saves a contact form submission for the given site.
 func (h *Handler) saveLead(w http.ResponseWriter, r *http.Request, site *models.Site, redirectURL string) {
+	// Rate limit: 5 submissions per IP per minute
+	if !h.contactLimiter.allow(clientIP(r)) {
+		http.Error(w, "Too many requests — please wait a moment and try again.", http.StatusTooManyRequests)
+		return
+	}
+
+	r.Body = http.MaxBytesReader(w, r.Body, 64*1024)
+
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "bad request", http.StatusBadRequest)
 		return

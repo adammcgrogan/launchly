@@ -18,10 +18,19 @@ func New(dsn string) (*Store, error) {
 	if err != nil {
 		return nil, err
 	}
+	// Conservative pool limits — Railway free/hobby Postgres caps connections.
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(3)
+	db.SetConnMaxLifetime(5 * time.Minute)
 	if err := db.Ping(); err != nil {
 		return nil, fmt.Errorf("cannot connect to database: %w", err)
 	}
 	return &Store{db: db}, nil
+}
+
+// Ping checks that the database is reachable. Used by the health check endpoint.
+func (s *Store) Ping() error {
+	return s.db.Ping()
 }
 
 func (s *Store) Migrate() error {

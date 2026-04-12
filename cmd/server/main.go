@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/adammcgrogan/launchly/internal/db"
@@ -38,12 +41,15 @@ func main() {
 		log.Fatalf("migrate: %v", err)
 	}
 	if err := store.SeedExamples(); err != nil {
-		log.Fatalf("seed examples: %v", err)
+		log.Printf("seed examples (non-fatal): %v", err)
 	}
 
 	mailer := email.New(resendKey, emailFrom)
 	pay := payment.New(stripeSecretKey, stripeWebhookSecret, stripeStarterProduct, stripeProProduct)
-	h := handlers.New(store, mailer, pay, domain, adminPass, umamiScriptURL)
+	h, err := handlers.New(store, mailer, pay, domain, adminPass, umamiScriptURL)
+	if err != nil {
+		log.Fatalf("handlers: %v", err)
+	}
 
 	mux := http.NewServeMux()
 
@@ -59,8 +65,31 @@ func main() {
 
 	h.StartAnalyticsCron()
 
+	srv := &http.Server{
+		Addr:         addr,
+		Handler:      finalHandler,
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 30 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}
+
+	// Graceful shutdown on SIGTERM/SIGINT (Railway sends SIGTERM on deploy)
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	go func() {
+		<-quit
+		log.Println("shutting down...")
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err := srv.Shutdown(ctx); err != nil {
+			log.Printf("shutdown error: %v", err)
+		}
+	}()
+
 	log.Printf("Launchly listening on %s (domain: %s)", addr, domain)
-	log.Fatal(http.ListenAndServe(addr, finalHandler))
+	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Fatalf("listen: %v", err)
+	}
 }
 
 // loggingMiddleware logs each request with method, path, status code, and duration.

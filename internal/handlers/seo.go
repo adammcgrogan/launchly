@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 )
 
@@ -12,19 +11,11 @@ func (h *Handler) RobotsTxt(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Privacy(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/public/home_base.html",
-		"web/templates/public/privacy.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", nil)
+	h.render(w, "privacy", nil)
 }
 
 func (h *Handler) Terms(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/public/home_base.html",
-		"web/templates/public/terms.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", nil)
+	h.render(w, "terms", nil)
 }
 
 func (h *Handler) Sitemap(w http.ResponseWriter, r *http.Request) {

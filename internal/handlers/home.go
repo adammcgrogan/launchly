@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"html/template"
 	"net/http"
 )
 
@@ -28,11 +27,7 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 		featured = featured[:8]
 	}
 
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/public/home_base.html",
-		"web/templates/public/home.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", map[string]any{
+	h.render(w, "home", map[string]any{
 		"FeaturedTemplates": featured,
 		"TotalTemplates":    len(all),
 	})
@@ -51,11 +46,7 @@ func (h *Handler) TemplatesPage(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/public/home_base.html",
-		"web/templates/public/templates.html",
-	))
-	tmpl.ExecuteTemplate(w, "base", map[string]any{
+	h.render(w, "templates", map[string]any{
 		"AllTemplates":   all,
 		"TotalTemplates": len(all),
 	})

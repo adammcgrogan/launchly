@@ -6,17 +6,23 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/adammcgrogan/launchly/internal/models"
 )
 
 type Client struct {
-	apiKey string
-	from   string
+	apiKey     string
+	from       string
+	httpClient *http.Client
 }
 
 func New(apiKey, from string) *Client {
-	return &Client{apiKey: apiKey, from: from}
+	return &Client{
+		apiKey: apiKey,
+		from:   from,
+		httpClient: &http.Client{Timeout: 10 * time.Second},
+	}
 }
 
 type sendRequest struct {
@@ -53,7 +59,7 @@ func (c *Client) sendWithReplyTo(to, subject, html, replyTo string) error {
 	req.Header.Set("Authorization", "Bearer "+c.apiKey)
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return err
 	}
