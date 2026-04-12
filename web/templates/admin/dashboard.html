@@ -29,7 +29,7 @@
         {{if eq .PaymentStatus "paid"}}<span class="badge badge-live">Paid</span>{{if .Plan}} <span style="font-size:0.78rem;color:#555;text-transform:capitalize;">{{.Plan}}</span>{{end}}
         {{else if eq .PaymentStatus "pending"}}<span class="badge badge-draft">Pending</span>
         {{else if eq .PaymentStatus "cancelled"}}<span class="badge" style="background:#fee2e2;color:#991b1b;">Cancelled</span>
-        {{else}}<span style="color:#bbb;font-size:0.85rem;">—</span>{{end}}
+        {{else}}<span style="color:#bbb;font-size:0.85rem;">-</span>{{end}}
       </td>
       <td>{{.CreatedAt.Format "02 Jan 2006"}}</td>
       <td><a href="/admin/sites/{{.ID}}">View →</a></td>

@@ -144,7 +144,7 @@ func divider() string {
 
 func (c *Client) SendSitePublished(to, businessName, siteURL string) error {
 	content := h1("Your site is live!") +
-		p(fmt.Sprintf("Great news — <strong>%s</strong> is now published and visible to the public.", businessName)) +
+		p(fmt.Sprintf("Great news - <strong>%s</strong> is now published and visible to the public.", businessName)) +
 		p("Click the button below to see your site:") +
 		button(siteURL, "View Your Site", "#4f46e5") +
 		divider() +
@@ -199,7 +199,7 @@ func (c *Client) SendWelcomeEmail(to, businessName string) error {
 		p("If you have any questions in the meantime, just reply to this email.") +
 		divider() +
 		p(`<span style="color:#6b7280;font-size:13px;">Questions? Contact us at <a href="mailto:hello@launchly.ltd" style="color:#4f46e5;">hello@launchly.ltd</a></span>`)
-	return c.Send(to, fmt.Sprintf("We've received your details — %s", businessName), wrap(content))
+	return c.Send(to, fmt.Sprintf("We've received your details - %s", businessName), wrap(content))
 }
 
 func (c *Client) SendPaymentConfirmation(to, businessName, plan string) error {
@@ -207,7 +207,7 @@ func (c *Client) SendPaymentConfirmation(to, businessName, plan string) error {
 	if plan == "pro" {
 		planLabel = "Pro"
 	}
-	content := h1("Payment confirmed — you're all set!") +
+	content := h1("Payment confirmed - you're all set!") +
 		p(fmt.Sprintf("Thanks for subscribing to the <strong>%s plan</strong> for <strong>%s</strong>.", planLabel, businessName)) +
 		p("Your site is now live and active. Enquiries from your site will be forwarded straight to your inbox.") +
 		divider() +
@@ -221,7 +221,7 @@ func (c *Client) SendCancellationConfirmation(to, businessName string) error {
 		p("If this was a mistake or you'd like to reactivate your site in future, just get in touch.") +
 		divider() +
 		p(`<span style="color:#6b7280;font-size:13px;">We're sorry to see you go. Contact us at <a href="mailto:hello@launchly.ltd" style="color:#4f46e5;">hello@launchly.ltd</a></span>`)
-	return c.Send(to, fmt.Sprintf("Subscription cancelled — %s", businessName), wrap(content))
+	return c.Send(to, fmt.Sprintf("Subscription cancelled - %s", businessName), wrap(content))
 }
 
 func (c *Client) SendAnalyticsDigest(to, businessName, frequency string, stats *models.SiteStats, siteURL string) error {
@@ -295,9 +295,9 @@ func (c *Client) SendAnalyticsDigest(to, businessName, frequency string, stats *
 		divider() +
 		p(`<span style="color:#6b7280;font-size:13px;">You're receiving this report because analytics is enabled for your site. To change your report frequency, contact us at <a href="mailto:hello@launchly.ltd" style="color:#4f46e5;">hello@launchly.ltd</a>.</span>`)
 
-	subject := fmt.Sprintf("Your weekly website report — %s", businessName)
+	subject := fmt.Sprintf("Your weekly website report - %s", businessName)
 	if frequency == "monthly" {
-		subject = fmt.Sprintf("Your monthly website report — %s", businessName)
+		subject = fmt.Sprintf("Your monthly website report - %s", businessName)
 	}
 	return c.Send(to, subject, wrap(content))
 }

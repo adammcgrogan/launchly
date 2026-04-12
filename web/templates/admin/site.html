@@ -113,8 +113,8 @@
     {{else}}
       <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" style="display:flex;flex-direction:column;gap:0.6rem;">
         <select name="plan" class="plan-select" style="width:100%;">
-          <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter — £14/mo</option>
-          <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro — £34/mo</option>
+          <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter - £14/mo</option>
+          <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro - £34/mo</option>
         </select>
         <button type="submit" class="btn-publish" style="width:100%;font-size:0.875rem;padding:0.55rem 1rem;">
           {{if eq .Site.PaymentStatus "pending"}}Resend Payment Link{{else}}Send Payment Link{{end}}
@@ -180,7 +180,7 @@
 <div class="admin-card" style="margin-bottom:1.5rem;">
   <h2>Notes</h2>
   <form method="POST" action="/admin/sites/{{.Site.ID}}/notes">
-    <textarea name="notes" rows="4" placeholder="Internal notes — domain renewal dates, change requests, customer preferences…" style="width:100%;padding:0.6rem 0.75rem;border:1px solid #d1d5db;border-radius:8px;font-size:0.875rem;resize:vertical;font-family:inherit;box-sizing:border-box;">{{.Site.Notes}}</textarea>
+    <textarea name="notes" rows="4" placeholder="Internal notes - domain renewal dates, change requests, customer preferences…" style="width:100%;padding:0.6rem 0.75rem;border:1px solid #d1d5db;border-radius:8px;font-size:0.875rem;resize:vertical;font-family:inherit;box-sizing:border-box;">{{.Site.Notes}}</textarea>
     <button type="submit" class="btn-edit" style="margin-top:0.6rem;">Save Notes</button>
   </form>
 </div>
@@ -253,8 +253,8 @@
       {{range .Leads}}
       <tr>
         <td style="font-weight:600;">{{.Name}}</td>
-        <td>{{or .Email "—"}}</td>
-        <td>{{or .Phone "—"}}</td>
+        <td>{{or .Email "-"}}</td>
+        <td>{{or .Phone "-"}}</td>
         <td style="color:#555;">{{.Message}}</td>
         <td style="white-space:nowrap;color:#888;font-size:0.85rem;">{{.CreatedAt.Format "02 Jan 2006 15:04"}}</td>
       </tr>

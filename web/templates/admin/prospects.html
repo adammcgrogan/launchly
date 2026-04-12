@@ -77,9 +77,9 @@
     {{range .Prospects}}
     <tr>
       <td><strong>{{.BusinessName}}</strong></td>
-      <td>{{or .Trade "—"}}</td>
-      <td>{{or .Location "—"}}</td>
-      <td>{{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}</td>
+      <td>{{or .Trade "-"}}</td>
+      <td>{{or .Location "-"}}</td>
+      <td>{{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}-{{end}}</td>
       <td>
         {{if .Website}}
           <a href="{{.Website}}" target="_blank" rel="noopener" style="font-size:0.8rem;">{{.Website}}</a>
@@ -87,7 +87,7 @@
           <span style="color:#dc2626;font-size:0.8rem;font-weight:600;">No website</span>
         {{end}}
       </td>
-      <td>{{or .Source "—"}}</td>
+      <td>{{or .Source "-"}}</td>
       <td>
         {{if eq .Status "new"}}<span class="badge badge-draft">new</span>
         {{else if eq .Status "contacted"}}<span class="badge" style="background:#dbeafe;color:#1e40af;">contacted</span>
