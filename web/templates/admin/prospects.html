@@ -89,13 +89,12 @@
       </td>
       <td>{{or .Source "—"}}</td>
       <td>
-        <span class="badge
-          {{if eq .Status "new"}}badge-draft
-          {{else if eq .Status "contacted"}}" style="background:#dbeafe;color:#1e40af;"
-          {{else if eq .Status "interested"}}" style="background:#fef9c3;color:#854d0e;"
-          {{else if eq .Status "won"}}badge-live
-          {{else if eq .Status "lost"}}badge-draft" style="background:#fee2e2;color:#991b1b;"
-          {{end}}">{{.Status}}</span>
+        {{if eq .Status "new"}}<span class="badge badge-draft">new</span>
+        {{else if eq .Status "contacted"}}<span class="badge" style="background:#dbeafe;color:#1e40af;">contacted</span>
+        {{else if eq .Status "interested"}}<span class="badge" style="background:#fef9c3;color:#854d0e;">interested</span>
+        {{else if eq .Status "won"}}<span class="badge badge-live">won</span>
+        {{else if eq .Status "lost"}}<span class="badge" style="background:#fee2e2;color:#991b1b;">lost</span>
+        {{else}}<span class="badge badge-draft">{{.Status}}</span>{{end}}
       </td>
       <td style="white-space:nowrap;">{{.CreatedAt.Format "02 Jan 06"}}</td>
       <td><a href="/admin/prospects/{{.ID}}">Edit →</a></td>
