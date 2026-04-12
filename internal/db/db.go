@@ -122,19 +122,5 @@ func (s *Store) Migrate() error {
 		country    TEXT NOT NULL DEFAULT ''
 	)`)
 	s.db.Exec(`CREATE INDEX IF NOT EXISTS idx_page_views_site_time ON page_views (site_id, viewed_at)`)
-	s.db.Exec(`CREATE TABLE IF NOT EXISTS prospects (
-		id            SERIAL PRIMARY KEY,
-		business_name TEXT NOT NULL,
-		trade         TEXT NOT NULL DEFAULT '',
-		location      TEXT NOT NULL DEFAULT '',
-		phone         TEXT NOT NULL DEFAULT '',
-		email         TEXT NOT NULL DEFAULT '',
-		website       TEXT NOT NULL DEFAULT '',
-		source        TEXT NOT NULL DEFAULT '',
-		status        TEXT NOT NULL DEFAULT 'new',
-		notes         TEXT NOT NULL DEFAULT '',
-		created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-		contacted_at  TIMESTAMPTZ
-	)`)
 	return nil
 }

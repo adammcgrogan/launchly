@@ -74,22 +74,6 @@ type SiteStats struct {
 	PeriodDays     int
 }
 
-// Prospect represents a potential customer Adam wants to reach out to.
-type Prospect struct {
-	ID           int        `db:"id"`
-	BusinessName string     `db:"business_name"`
-	Trade        string     `db:"trade"`
-	Location     string     `db:"location"`
-	Phone        string     `db:"phone"`
-	Email        string     `db:"email"`
-	Website      string     `db:"website"`  // blank = no website
-	Source       string     `db:"source"`   // e.g. "Yell", "Google Maps"
-	Status       string     `db:"status"`   // new, contacted, interested, won, lost
-	Notes        string     `db:"notes"`
-	CreatedAt    time.Time  `db:"created_at"`
-	ContactedAt  *time.Time `db:"contacted_at"`
-}
-
 // Lead represents a contact form submission from a site visitor.
 type Lead struct {
 	ID        int       `db:"id"`
