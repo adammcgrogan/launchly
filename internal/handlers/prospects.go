@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -11,6 +12,46 @@ import (
 )
 
 var prospectStatuses = []string{"new", "contacted", "interested", "won", "lost"}
+
+// AdminAPICreateProspect accepts JSON from external tools (e.g. the /outreach skill).
+func (h *Handler) AdminAPICreateProspect(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		BusinessName string `json:"business_name"`
+		Trade        string `json:"trade"`
+		Location     string `json:"location"`
+		Phone        string `json:"phone"`
+		Email        string `json:"email"`
+		Website      string `json:"website"`
+		Source       string `json:"source"`
+		Notes        string `json:"notes"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, "invalid JSON", http.StatusBadRequest)
+		return
+	}
+	if strings.TrimSpace(body.BusinessName) == "" {
+		http.Error(w, "business_name required", http.StatusBadRequest)
+		return
+	}
+	p := &models.Prospect{
+		BusinessName: strings.TrimSpace(body.BusinessName),
+		Trade:        strings.TrimSpace(body.Trade),
+		Location:     strings.TrimSpace(body.Location),
+		Phone:        strings.TrimSpace(body.Phone),
+		Email:        strings.TrimSpace(body.Email),
+		Website:      strings.TrimSpace(body.Website),
+		Source:       strings.TrimSpace(body.Source),
+		Status:       "new",
+		Notes:        strings.TrimSpace(body.Notes),
+	}
+	if err := h.store.CreateProspect(p); err != nil {
+		http.Error(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprintf(w, `{"id":%d}`, p.ID)
+}
 
 func (h *Handler) AdminProspects(w http.ResponseWriter, r *http.Request) {
 	filter := r.URL.Query().Get("status")

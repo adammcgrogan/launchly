@@ -42,6 +42,7 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /admin/sites/{id}/send-analytics", h.adminAuth(h.AdminSendAnalytics))
 
 	// Prospects (CRM)
+	mux.HandleFunc("POST /admin/api/prospects", h.adminAuth(h.AdminAPICreateProspect))
 	mux.HandleFunc("GET /admin/prospects", h.adminAuth(h.AdminProspects))
 	mux.HandleFunc("POST /admin/prospects", h.adminAuth(h.AdminCreateProspect))
 	mux.HandleFunc("GET /admin/prospects/{id}", h.adminAuth(h.AdminProspect))
