@@ -521,6 +521,32 @@ func (s *Store) ListSites() ([]*models.Site, error) {
 	return sites, rows.Err()
 }
 
+// LiveSiteEntry holds the minimal fields needed for sitemap generation.
+type LiveSiteEntry struct {
+	Slug         string
+	CustomDomain string
+	PublishedAt  *time.Time
+}
+
+func (s *Store) ListLiveSites() ([]LiveSiteEntry, error) {
+	rows, err := s.db.Query(`
+		SELECT slug, COALESCE(custom_domain, ''), published_at
+		FROM sites WHERE status = 'live' ORDER BY published_at DESC`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var sites []LiveSiteEntry
+	for rows.Next() {
+		var e LiveSiteEntry
+		if err := rows.Scan(&e.Slug, &e.CustomDomain, &e.PublishedAt); err != nil {
+			return nil, err
+		}
+		sites = append(sites, e)
+	}
+	return sites, rows.Err()
+}
+
 func (s *Store) PublishSite(id int) error {
 	now := time.Now().UTC()
 	_, err := s.db.Exec(`UPDATE sites SET status='live', published_at=$1 WHERE id=$2`, now, id)

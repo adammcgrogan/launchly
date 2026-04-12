@@ -42,6 +42,21 @@ func (h *Handler) Sitemap(w http.ResponseWriter, r *http.Request) {
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
-</urlset>
 `, h.domain, h.domain, h.domain, h.domain)
+
+	if sites, err := h.store.ListLiveSites(); err == nil {
+		for _, s := range sites {
+			loc := "https://" + s.Slug + "." + h.domain
+			if s.CustomDomain != "" {
+				loc = "https://" + s.CustomDomain
+			}
+			lastmod := ""
+			if s.PublishedAt != nil {
+				lastmod = fmt.Sprintf("\n    <lastmod>%s</lastmod>", s.PublishedAt.Format("2006-01-02"))
+			}
+			fmt.Fprintf(w, "  <url>\n    <loc>%s</loc>%s\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>\n", loc, lastmod)
+		}
+	}
+
+	fmt.Fprint(w, "</urlset>\n")
 }

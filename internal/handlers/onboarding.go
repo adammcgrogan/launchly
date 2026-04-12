@@ -121,6 +121,10 @@ func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	if err := h.email.SendNewSubmissionNotification("hello@launchly.ltd", site.BusinessName, site.Template, site.Location, site.LeadEmail); err != nil {
+		log.Printf("send submission notification error: %v", err)
+	}
+
 	h.render(w, "thankyou", map[string]any{
 		"BusinessName": site.BusinessName,
 	})

@@ -302,6 +302,36 @@ func (c *Client) SendAnalyticsDigest(to, businessName, frequency string, stats *
 	return c.Send(to, subject, wrap(content))
 }
 
+func (c *Client) SendNewSubmissionNotification(to, businessName, template, location, leadEmail string) error {
+	rows := ""
+	fields := [][2]string{
+		{"Business", businessName},
+		{"Template", template},
+		{"Location", location},
+		{"Email", leadEmail},
+	}
+	for _, f := range fields {
+		if strings.TrimSpace(f[1]) == "" {
+			continue
+		}
+		rows += fmt.Sprintf(`
+<tr>
+  <td style="padding:10px 14px;font-size:13px;font-weight:600;color:#6b7280;white-space:nowrap;width:80px;">%s</td>
+  <td style="padding:10px 14px;font-size:14px;color:#111827;">%s</td>
+</tr>`, f[0], f[1])
+	}
+	table := fmt.Sprintf(`
+<table width="100%%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;border-collapse:separate;border-spacing:0;overflow:hidden;margin:0 0 24px;">
+  %s
+</table>`, rows)
+
+	content := h1("New site request") +
+		p("Someone just submitted the onboarding form:") +
+		table +
+		button("https://launchly.ltd/admin", "Open Admin Panel", "#4f46e5")
+	return c.Send(to, fmt.Sprintf("New request: %s", businessName), wrap(content))
+}
+
 func (c *Client) SendLeadNotification(to, businessName, visitorName, visitorEmail, phone, message string) error {
 	rows := ""
 	fields := [][2]string{
