@@ -16,11 +16,11 @@ var siteTemplates = []struct {
 	Industry    string
 	Tags        []string
 }{
-	{"bold", "Bold", "Brutalist, industrial layout with safety-yellow accents and stamped labels", "example-bold", "", []string{"Builders", "Trades", "Construction", "Scaffolding", "Roofing"}},
+	{"classic", "Classic", "Formal corporate layout with navy, gold accents and numbered sections", "example-classic", "", []string{"Solicitors", "Accountants", "Financial Advisors", "Estate Agents", "Consulting"}},
 	{"fresh", "Fresh", "Polished, modern layout with floating cards and soft gradients", "example-fresh", "", []string{"Accountants", "Consultants", "Solicitors", "Professional Services", "Agencies"}},
 	{"warm", "Warm", "Rustic, handcrafted feel with serif display and letter-style storytelling", "example-warm", "", []string{"Cafés", "Bakeries", "Florists", "Small Shops", "Artisans"}},
 	{"glow", "Glow", "Luxe, ornamental design with blush tones and flowing serif headlines", "example-glow", "", []string{"Salons", "Spas", "Beauty", "Nails", "Aesthetics"}},
-	{"classic", "Classic", "Formal corporate layout with navy, gold accents and numbered sections", "example-classic", "", []string{"Solicitors", "Accountants", "Financial Advisors", "Estate Agents", "Consulting"}},
+	{"bold", "Bold", "Brutalist, industrial layout with safety-yellow accents and stamped labels", "example-bold", "", []string{"Builders", "Trades", "Construction", "Scaffolding", "Roofing"}},
 	{"pulse", "Pulse", "Aggressive, all-caps layout with electric-lime accents and oversized numbers", "example-pulse", "", []string{"Gyms", "Personal Trainers", "CrossFit", "Martial Arts", "Fitness Studios"}},
 	{"grove", "Grove", "Organic split layout with forest green, warm cream and nature accents", "example-grove", "", []string{"Landscapers", "Gardeners", "Tree Surgeons", "Garden Design", "Grounds Maintenance"}},
 	{"fleet", "Fleet", "Urgent, phone-first layout with hazard orange for call-out trades", "example-fleet", "", []string{"Mechanics", "MOT Centres", "Breakdown", "Taxi", "Removals"}},
