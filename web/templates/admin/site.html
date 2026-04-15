@@ -85,44 +85,91 @@
   <div class="admin-card" style="margin-bottom:0;">
     <h2>Payment</h2>
 
-    <div style="margin-bottom:1.25rem;">
-      {{if eq .Site.PaymentStatus "paid"}}
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;">
-          <span class="badge badge-live">Paid</span>
-          <span style="font-size:0.9rem;color:#555;text-transform:capitalize;">{{.Site.Plan}}</span>
-        </div>
-        {{if .Site.PaidAt}}<div style="font-size:0.82rem;color:#888;">Since {{.Site.PaidAt.Format "02 Jan 2006"}}</div>{{end}}
-      {{else if eq .Site.PaymentStatus "pending"}}
-        <span class="badge badge-draft">Awaiting payment</span>
-        {{if .Site.Plan}}<span style="font-size:0.85rem;color:#555;margin-left:0.4rem;text-transform:capitalize;">{{.Site.Plan}}</span>{{end}}
-      {{else if eq .Site.PaymentStatus "cancelled"}}
-        <span class="badge badge-cancelled">Cancelled</span>
-      {{else}}
-        <span style="color:#999;font-size:0.9rem;">No link sent yet</span>
-      {{end}}
-    </div>
-
     {{if .PaymentSent}}
     <div class="payment-sent-notice" style="margin-bottom:1rem;">✓ Payment link sent to {{.Site.LeadEmail}}</div>
     {{end}}
 
     {{if eq .Site.PaymentStatus "paid"}}
-      <form method="POST" action="/admin/sites/{{.Site.ID}}/cancel-subscription" onsubmit="return confirm('Cancel the subscription for {{.Site.BusinessName}}?')">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+        <span class="badge badge-live">Active</span>
+        <span style="font-size:0.9rem;font-weight:600;color:#111;text-transform:capitalize;">{{.Site.Plan}}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.55rem;margin-bottom:1.25rem;">
+        {{if .Site.PaidAt}}
+        <div class="detail-item" style="padding:0.4rem 0;">
+          <div class="detail-label">Paying since</div>
+          <div class="detail-value">{{.Site.PaidAt.Format "02 Jan 2006"}}</div>
+        </div>
+        {{end}}
+        {{if .Site.StripeSubscriptionID}}
+        <div class="detail-item" style="padding:0.4rem 0;">
+          <div class="detail-label">Subscription ID</div>
+          <div class="detail-value" style="font-size:0.82rem;">
+            <a href="https://dashboard.stripe.com/subscriptions/{{.Site.StripeSubscriptionID}}" target="_blank" style="color:#6366f1;text-decoration:none;font-family:monospace;">{{.Site.StripeSubscriptionID}} ↗</a>
+          </div>
+        </div>
+        {{end}}
+        {{if .Site.StripeSessionID}}
+        <div class="detail-item" style="padding:0.4rem 0;">
+          <div class="detail-label">Session ID</div>
+          <div class="detail-value" style="font-size:0.82rem;font-family:monospace;color:#6b7280;">{{.Site.StripeSessionID}}</div>
+        </div>
+        {{end}}
+      </div>
+      <form method="POST" action="/admin/sites/{{.Site.ID}}/cancel-subscription" onsubmit="return confirm('Cancel the subscription for {{.Site.BusinessName}}? This will cancel immediately in Stripe.')">
         <button type="submit" class="btn-unpublish" style="width:100%;font-size:0.875rem;padding:0.5rem 1rem;">Cancel Subscription</button>
       </form>
-    {{else}}
+
+    {{else if eq .Site.PaymentStatus "pending"}}
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+        <span class="badge badge-draft">Awaiting payment</span>
+        {{if .Site.Plan}}<span style="font-size:0.85rem;color:#555;text-transform:capitalize;">{{.Site.Plan}}</span>{{end}}
+      </div>
+      {{if .Site.StripeSessionID}}
+      <div class="detail-item" style="padding:0.4rem 0;margin-bottom:1rem;">
+        <div class="detail-label">Session ID</div>
+        <div class="detail-value" style="font-size:0.82rem;font-family:monospace;color:#6b7280;">{{.Site.StripeSessionID}}</div>
+      </div>
+      {{end}}
       <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" style="display:flex;flex-direction:column;gap:0.6rem;">
         <select name="plan" class="plan-select" style="width:100%;">
           <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter - £14/mo</option>
           <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro - £34/mo</option>
         </select>
-        <button type="submit" class="btn-publish" style="width:100%;font-size:0.875rem;padding:0.55rem 1rem;">
-          {{if eq .Site.PaymentStatus "pending"}}Resend Payment Link{{else}}Send Payment Link{{end}}
-        </button>
+        <button type="submit" class="btn-publish" style="width:100%;font-size:0.875rem;padding:0.55rem 1rem;">Resend Payment Link</button>
       </form>
-      {{if eq .Site.PaymentStatus "cancelled"}}
-      <p style="font-size:0.8rem;color:#888;margin-top:0.6rem;">Subscription was previously cancelled.</p>
+
+    {{else if eq .Site.PaymentStatus "cancelled"}}
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+        <span class="badge badge-cancelled">Cancelled</span>
+        {{if .Site.Plan}}<span style="font-size:0.85rem;color:#555;text-transform:capitalize;">was {{.Site.Plan}}</span>{{end}}
+      </div>
+      {{if .Site.StripeSubscriptionID}}
+      <div class="detail-item" style="padding:0.4rem 0;margin-bottom:1rem;">
+        <div class="detail-label">Subscription ID</div>
+        <div class="detail-value" style="font-size:0.82rem;">
+          <a href="https://dashboard.stripe.com/subscriptions/{{.Site.StripeSubscriptionID}}" target="_blank" style="color:#6366f1;text-decoration:none;font-family:monospace;">{{.Site.StripeSubscriptionID}} ↗</a>
+        </div>
+      </div>
       {{end}}
+      <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" style="display:flex;flex-direction:column;gap:0.6rem;">
+        <select name="plan" class="plan-select" style="width:100%;">
+          <option value="starter"{{if eq .Site.Plan "starter"}} selected{{end}}>Starter - £14/mo</option>
+          <option value="pro"{{if eq .Site.Plan "pro"}} selected{{end}}>Pro - £34/mo</option>
+        </select>
+        <button type="submit" class="btn-publish" style="width:100%;font-size:0.875rem;padding:0.55rem 1rem;">Send New Payment Link</button>
+      </form>
+      <p style="font-size:0.8rem;color:#888;margin-top:0.6rem;">Sending a new link will create a fresh Stripe session.</p>
+
+    {{else}}
+      <p style="color:#999;font-size:0.9rem;margin-bottom:1rem;">No payment link sent yet.</p>
+      <form method="POST" action="/admin/sites/{{.Site.ID}}/send-payment" style="display:flex;flex-direction:column;gap:0.6rem;">
+        <select name="plan" class="plan-select" style="width:100%;">
+          <option value="starter">Starter - £14/mo</option>
+          <option value="pro">Pro - £34/mo</option>
+        </select>
+        <button type="submit" class="btn-publish" style="width:100%;font-size:0.875rem;padding:0.55rem 1rem;">Send Payment Link</button>
+      </form>
     {{end}}
   </div>
 
@@ -175,6 +222,70 @@
     See <code>docs/custom-domains.md</code> for the full Worker code.
   </div>
 </div>
+
+<!-- Appearance -->
+<div class="admin-card" style="margin-bottom:1.5rem;">
+  <h2>Appearance</h2>
+  <form method="POST" action="/admin/sites/{{.Site.ID}}/appearance">
+
+    {{if .Palettes}}
+    <div style="margin-bottom:1.25rem;">
+      <div style="font-size:0.875rem;font-weight:600;color:#374151;margin-bottom:0.6rem;">Colour Palette</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+        {{range .Palettes}}
+        <label class="palette-opt{{if .Current}} palette-opt--on{{end}}" data-css="{{.CSS}}" style="cursor:pointer;display:flex;align-items:center;gap:0.4rem;padding:0.3rem 0.65rem;border:2px solid {{if .Current}}#6366f1{{else}}#e5e7eb{{end}};border-radius:8px;font-size:0.8rem;font-weight:600;color:{{if .Current}}#6366f1{{else}}#374151{{end}};">
+          <input type="radio" name="palette" value="{{.ID}}" {{if .Current}}checked{{end}} style="position:absolute;opacity:0;width:0;height:0;">
+          <span class="pal-dot" style="width:12px;height:12px;border-radius:50%;background:#d1d5db;display:inline-block;flex-shrink:0;"></span>
+          {{.Name}}
+        </label>
+        {{end}}
+      </div>
+    </div>
+    {{end}}
+
+    <div style="margin-bottom:1.25rem;">
+      <div style="font-size:0.875rem;font-weight:600;color:#374151;margin-bottom:0.6rem;">Heading Font</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        {{range .HeadingFonts}}
+        <label class="font-opt{{if eq $.Site.HeadingFont .ID}} font-opt--on{{end}}" style="cursor:pointer;display:flex;align-items:center;padding:0.3rem 0.75rem;border:2px solid {{if eq $.Site.HeadingFont .ID}}#6366f1{{else}}#e5e7eb{{end}};border-radius:8px;font-size:0.85rem;font-weight:600;color:{{if eq $.Site.HeadingFont .ID}}#6366f1{{else}}#374151{{end}};font-family:{{.CSS}};">
+          <input type="radio" name="heading_font" value="{{.ID}}" {{if eq $.Site.HeadingFont .ID}}checked{{end}} style="position:absolute;opacity:0;width:0;height:0;">
+          {{.Name}}
+        </label>
+        {{end}}
+      </div>
+    </div>
+
+    <button type="submit" class="btn-edit">Save Appearance</button>
+  </form>
+</div>
+
+<script>
+(function(){
+  // Colour swatches: extract --c-primary from CSS string
+  document.querySelectorAll('.palette-opt').forEach(function(lbl){
+    var css = lbl.dataset.css || '';
+    var m = css.match(/--c-primary:([^;]+)/);
+    var dot = lbl.querySelector('.pal-dot');
+    if(dot) dot.style.background = m ? m[1].trim() : '#6366f1';
+    lbl.querySelector('input').addEventListener('change', function(){
+      document.querySelectorAll('.palette-opt').forEach(function(l){
+        var on = l.querySelector('input').checked;
+        l.style.borderColor = on ? '#6366f1' : '#e5e7eb';
+        l.style.color = on ? '#6366f1' : '#374151';
+      });
+    });
+  });
+  document.querySelectorAll('.font-opt').forEach(function(lbl){
+    lbl.querySelector('input').addEventListener('change', function(){
+      document.querySelectorAll('.font-opt').forEach(function(l){
+        var on = l.querySelector('input').checked;
+        l.style.borderColor = on ? '#6366f1' : '#e5e7eb';
+        l.style.color = on ? '#6366f1' : '#374151';
+      });
+    });
+  });
+})();
+</script>
 
 <!-- Notes -->
 <div class="admin-card" style="margin-bottom:1.5rem;">

@@ -1,0 +1,151 @@
+{{define "theme"}}
+<style>
+:root{--c-primary:#e11d48;--c-primary-fg:#fff;--c-accent:#fff1f2;--c-accent-fg:#9f1239;}
+body{background:#fff5f7;}
+</style>
+{{end}}
+
+{{define "site-content"}}
+<!-- Nav -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-rose-100">
+  <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+    {{if .Site.LogoURL}}<img src="{{.Site.LogoURL}}" alt="{{.Site.BusinessName}}" class="h-8 w-auto">{{else}}<span class="font-black text-rose-950 text-lg tracking-tight italic">{{.Site.BusinessName}}</span>{{end}}
+    <a href="#contact" class="font-bold text-sm px-5 py-2 rounded-full transition" style="background:var(--c-primary);color:var(--c-primary-fg);">{{.CTAText}}</a>
+  </div>
+</header>
+
+<!-- Hero - split layout, text left -->
+<section class="bg-white py-0 overflow-hidden">
+  <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 min-h-[70vh] items-center gap-0">
+    <div class="py-20 pr-8">
+      {{if .Site.Location}}<div class="inline-block bg-rose-100 text-rose-600 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-widest">{{.Site.Location}}</div>{{end}}
+      <h1 class="text-5xl font-black tracking-tight text-rose-950 leading-tight mb-5">{{.Site.BusinessName}}</h1>
+      {{if .Site.Tagline}}<p class="text-rose-600 text-lg mb-8">{{.Site.Tagline}}</p>{{end}}
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="#contact" class="bg-rose-600 text-white font-black text-base px-7 py-3.5 rounded-full hover:bg-rose-500 transition text-center">{{.CTAText}}</a>
+        {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="border-2 border-rose-200 text-rose-700 font-bold text-base px-7 py-3.5 rounded-full hover:border-rose-400 transition text-center">{{.Site.Phone}}</a>{{end}}
+      </div>
+    </div>
+    <!-- Decorative panel -->
+    <div class="hidden md:flex bg-gradient-to-br from-rose-100 via-pink-100 to-fuchsia-100 self-stretch items-center justify-center">
+      <div class="text-center p-12">
+        {{if .Certifications}}
+        <ul class="space-y-3">
+          {{range .Certifications}}<li class="text-rose-700 font-semibold">{{.}}</li>{{end}}
+        </ul>
+        {{else if .Site.About}}
+        <p class="text-rose-700 font-medium text-lg italic max-w-xs">{{.Site.About}}</p>
+        {{end}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services - card grid -->
+{{if .Services}}
+<section class="bg-pink-50 py-20 border-y border-pink-100" id="services">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-rose-500 font-bold text-sm uppercase tracking-widest mb-2 text-center">Treatments</p>
+    <h2 class="text-3xl font-black text-rose-950 mb-10 text-center">Our Services</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {{range .Services}}
+      <div class="bg-white border border-pink-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition text-center">
+        <div class="text-2xl mb-3">✦</div>
+        <div class="text-rose-900 font-semibold text-sm">{{.}}</div>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- About - centred text block -->
+{{if .Site.About}}
+<section class="bg-white py-20 border-b border-pink-100" id="about">
+  <div class="max-w-2xl mx-auto px-6 text-center">
+    <p class="text-rose-400 font-bold text-sm uppercase tracking-widest mb-3">About Us</p>
+    <p class="text-gray-600 text-lg leading-relaxed">{{.Site.About}}</p>
+  </div>
+</section>
+{{end}}
+
+<!-- Hours strip -->
+{{if .Hours}}
+<section class="bg-rose-600 py-10">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="flex flex-wrap justify-center gap-6">
+      {{range .Hours}}<span class="text-rose-100 text-sm font-medium">{{.}}</span>{{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Contact -->
+<section class="bg-pink-50 py-20" id="contact">
+  <div class="max-w-lg mx-auto px-6">
+    <p class="text-rose-500 font-bold text-sm uppercase tracking-widest mb-2 text-center">Book In</p>
+    <h2 class="text-3xl font-black text-rose-950 mb-8 text-center">Get in Touch</h2>
+    {{if .LeadSent}}<div class="bg-green-50 border border-green-200 text-green-700 rounded-2xl p-4 mb-6 text-center">Thanks! We'll be in touch to confirm your booking.</div>{{end}}
+    <form method="POST" action="{{.FormAction}}" class="space-y-4">
+      <input type="text" name="name" required placeholder="Your Name" class="w-full border border-pink-200 bg-white rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+      <input type="tel" name="phone" placeholder="Your Phone Number" class="w-full border border-pink-200 bg-white rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+      <input type="email" name="email" placeholder="Your Email Address" class="w-full border border-pink-200 bg-white rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+      <textarea name="message" rows="4" placeholder="What treatment are you interested in?" class="w-full border border-pink-200 bg-white rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 resize-none"></textarea>
+      <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+      <button type="submit" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-4 rounded-full transition">Send Message</button>
+    </form>
+    {{if .Site.Address}}<p class="text-center text-rose-500 text-sm mt-6">📍 {{.Site.Address}}</p>{{end}}
+    {{if .Site.MapURL}}<p class="text-center mt-2"><a href="{{.Site.MapURL}}" target="_blank" class="text-rose-600 text-sm font-semibold hover:underline">View on Google Maps →</a></p>{{end}}
+    {{if .Site.MapEmbedURL}}<div class="mt-3 rounded-2xl overflow-hidden"><iframe src="{{.Site.MapEmbedURL}}" width="100%" height="180" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>{{end}}
+    {{if or .Site.FacebookURL .Site.InstagramURL .Site.WhatsAppURL .Site.TwitterURL .Site.TikTokURL .Site.LinkedInURL .Site.YouTubeURL}}
+    <div class="flex flex-wrap gap-6 justify-center mt-6">
+      {{if .Site.FacebookURL}}<a href="{{.Site.FacebookURL}}" target="_blank" class="text-rose-600 hover:underline text-sm font-bold">Facebook</a>{{end}}
+      {{if .Site.InstagramURL}}<a href="{{.Site.InstagramURL}}" target="_blank" class="text-rose-600 hover:underline text-sm font-bold">Instagram</a>{{end}}
+      {{if .Site.WhatsAppURL}}<a href="{{.Site.WhatsAppURL}}" target="_blank" class="text-rose-600 hover:underline text-sm font-bold">WhatsApp</a>{{end}}
+      {{if .Site.TwitterURL}}<a href="{{.Site.TwitterURL}}" target="_blank" class="text-rose-600 hover:underline text-sm font-bold">X / Twitter</a>{{end}}
+      {{if .Site.TikTokURL}}<a href="{{.Site.TikTokURL}}" target="_blank" class="text-rose-600 hover:underline text-sm font-bold">TikTok</a>{{end}}
+      {{if .Site.LinkedInURL}}<a href="{{.Site.LinkedInURL}}" target="_blank" class="text-rose-600 hover:underline text-sm font-bold">LinkedIn</a>{{end}}
+      {{if .Site.YouTubeURL}}<a href="{{.Site.YouTubeURL}}" target="_blank" class="text-rose-600 hover:underline text-sm font-bold">YouTube</a>{{end}}
+    </div>
+    {{end}}
+  </div>
+</section>
+
+<!-- Testimonials -->
+{{if .Testimonials}}
+<section class="bg-white py-20 border-t border-pink-100">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-rose-500 font-bold text-sm uppercase tracking-widest mb-2 text-center">Client Love</p>
+    <h2 class="text-3xl font-black text-rose-950 mb-10 text-center">What Our Clients Say</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{range .Testimonials}}
+      <div class="bg-pink-50 border border-pink-200 rounded-2xl p-6 text-center">
+        <p class="text-gray-600 text-sm leading-relaxed mb-5 italic">"{{.Quote}}"</p>
+        <div>
+          <div class="text-rose-900 font-bold text-sm">{{.Name}}</div>
+          {{if .Role}}<div class="text-rose-400 text-xs mt-0.5">{{.Role}}</div>{{end}}
+        </div>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Gallery -->
+{{if .Gallery}}
+<section class="bg-pink-50 py-20 border-t border-pink-100">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-rose-500 font-bold text-sm uppercase tracking-widest mb-2 text-center">Our Studio</p>
+    <h2 class="text-3xl font-black text-rose-950 mb-10 text-center">Gallery</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      {{range .Gallery}}
+      <div class="aspect-square overflow-hidden rounded-2xl">
+        <img src="{{.}}" alt="Gallery photo" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+{{end}}

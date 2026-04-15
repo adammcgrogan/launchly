@@ -62,6 +62,28 @@ func (h *Handler) AdminSite(w http.ResponseWriter, r *http.Request) {
 	since7 := time.Now().UTC().Add(-7 * 24 * time.Hour)
 	stats, _ := h.store.GetSiteStats(site.ID, since7)
 
+	// Build palette options for the current template
+	type paletteOption struct {
+		ID      string
+		Name    string
+		CSS     string
+		Current bool
+	}
+	var palettes []paletteOption
+	for _, t := range siteTemplates {
+		if t.ID == site.Template {
+			for _, p := range t.Palettes {
+				palettes = append(palettes, paletteOption{
+					ID:      p.ID,
+					Name:    p.Name,
+					CSS:     p.CSS,
+					Current: p.ID == site.Palette || (site.Palette == "" && p.ID == t.Palettes[0].ID),
+				})
+			}
+			break
+		}
+	}
+
 	h.render(w, "admin:site", map[string]any{
 		"Site":          site,
 		"Leads":         leads,
@@ -72,6 +94,8 @@ func (h *Handler) AdminSite(w http.ResponseWriter, r *http.Request) {
 		"DNSTarget":     r.URL.Query().Get("cname"),
 		"Stats":         stats,
 		"AnalyticsSent": r.URL.Query().Get("analytics") == "sent",
+		"Palettes":      palettes,
+		"HeadingFonts":  HeadingFonts,
 	})
 }
 
@@ -236,6 +260,59 @@ func (h *Handler) AdminUpdateSite(w http.ResponseWriter, r *http.Request) {
 		if err := h.email.SendSiteUpdated(updated.LeadEmail, updated.BusinessName, changes); err != nil {
 			log.Printf("send site updated email error: %v", err)
 		}
+	}
+	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
+}
+
+func (h *Handler) AdminUpdateAppearance(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+	site, err := h.store.GetSiteByID(id)
+	if err != nil || site == nil {
+		http.NotFound(w, r)
+		return
+	}
+	palette := r.FormValue("palette")
+	headingFont := r.FormValue("heading_font")
+
+	// Validate palette against template's palette list
+	paletteValid := palette == ""
+	for _, t := range siteTemplates {
+		if t.ID == site.Template {
+			for _, p := range t.Palettes {
+				if p.ID == palette {
+					paletteValid = true
+					break
+				}
+			}
+		}
+	}
+	if !paletteValid {
+		palette = ""
+	}
+
+	// Validate font
+	fontValid := headingFont == ""
+	for _, f := range HeadingFonts {
+		if f.ID == headingFont {
+			fontValid = true
+			break
+		}
+	}
+	if !fontValid {
+		headingFont = ""
+	}
+
+	if err := h.store.UpdateSiteAppearance(id, palette, headingFont); err != nil {
+		http.Error(w, "database error", http.StatusInternalServerError)
+		return
 	}
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }

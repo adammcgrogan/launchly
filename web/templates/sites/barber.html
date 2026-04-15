@@ -1,0 +1,178 @@
+{{define "theme"}}
+<style>
+:root{
+  --c-bg:#0d0d0d;--c-surface:#161616;--c-primary:#c9a84c;--c-primary-fg:#0d0d0d;
+  --c-accent:#c9a84c;--c-accent-fg:#0d0d0d;--c-text:#aaaaaa;--c-heading:#f5f5f0;
+  --c-muted:#555555;--c-border:#222222;
+}
+body{background:var(--c-bg);color:var(--c-text);}
+input,textarea{background:var(--c-surface);border:1px solid var(--c-border);color:var(--c-heading);padding:0.75rem 1rem;width:100%;border-radius:0;}
+input::placeholder,textarea::placeholder{color:var(--c-muted);text-transform:uppercase;font-size:0.8rem;letter-spacing:0.05em;}
+input:focus,textarea:focus{outline:none;border-color:var(--c-primary);}
+textarea{resize:none;}
+</style>
+{{end}}
+
+{{define "site-content"}}
+<!-- Nav -->
+<header class="sticky top-0 z-50 border-b" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+    {{if .Site.LogoURL}}<img src="{{.Site.LogoURL}}" alt="{{.Site.BusinessName}}" class="h-7 w-auto">{{else}}<span class="font-black text-base tracking-widest uppercase" style="color:var(--c-heading);">{{.Site.BusinessName}}</span>{{end}}
+    <div class="flex items-center gap-0">
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="text-xs font-bold uppercase tracking-wider hidden md:flex items-center px-5 h-14 border-r" style="color:var(--c-accent);border-color:var(--c-border);">{{.Site.Phone}}</a>{{end}}
+      <a href="#contact" class="text-xs font-black uppercase tracking-wider px-5 h-14 flex items-center transition" style="background:var(--c-primary);color:var(--c-primary-fg);">{{.CTAText}}</a>
+    </div>
+  </div>
+</header>
+
+<!-- Accent bar -->
+<div class="h-0.5" style="background:var(--c-primary);"></div>
+
+<!-- Hero -->
+<section class="py-24 border-b" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6">
+    {{if .Site.Location}}<p class="text-xs font-bold uppercase tracking-[0.25em] mb-4" style="color:var(--c-muted);">{{.Site.Location}}</p>{{end}}
+    <h1 class="text-6xl md:text-8xl font-black tracking-tight leading-none mb-6" style="color:var(--c-heading);">{{.Site.BusinessName}}</h1>
+    {{if .Site.Tagline}}<p class="text-lg max-w-lg mb-10" style="color:var(--c-muted);">{{.Site.Tagline}}</p>{{end}}
+    <div class="flex flex-wrap gap-4">
+      <a href="#contact" class="font-black text-sm uppercase tracking-widest px-8 py-4 transition" style="background:var(--c-primary);color:var(--c-primary-fg);">{{.CTAText}}</a>
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="font-bold text-sm uppercase tracking-widest px-8 py-4 border transition" style="border-color:var(--c-border);color:var(--c-heading);">{{.Site.Phone}}</a>{{end}}
+    </div>
+  </div>
+</section>
+
+<!-- Certifications -->
+{{if .Certifications}}
+<div class="border-b py-5" style="background:var(--c-surface);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6 flex flex-wrap gap-8">
+    {{range .Certifications}}<span class="text-xs font-bold uppercase tracking-widest" style="color:var(--c-accent);">✓ {{.}}</span>{{end}}
+  </div>
+</div>
+{{end}}
+
+<!-- About -->
+{{if .Site.About}}
+<section class="py-20 border-b" id="about" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
+    <div>
+      <div class="w-8 h-0.5 mb-3" style="background:var(--c-primary);"></div>
+      <p class="text-xs font-bold uppercase tracking-[0.2em]" style="color:var(--c-accent);">About</p>
+    </div>
+    <div class="md:col-span-2">
+      <p class="text-lg leading-relaxed" style="color:var(--c-text);">{{.Site.About}}</p>
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Services -->
+{{if .Services}}
+<section class="py-20 border-b" id="services" style="background:var(--c-surface);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-4 mb-10">
+      <div class="w-6 h-0.5" style="background:var(--c-primary);"></div>
+      <p class="text-xs font-bold uppercase tracking-[0.2em]" style="color:var(--c-accent);">Services &amp; Prices</p>
+    </div>
+    <div class="divide-y" style="--tw-divide-opacity:1;border-color:var(--c-border);">
+      {{range .Services}}
+      <div class="py-5 flex items-center justify-between">
+        <span class="font-semibold text-base" style="color:var(--c-heading);">{{.}}</span>
+        <span style="color:var(--c-muted);">—</span>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Gallery -->
+{{if .Gallery}}
+<section class="py-20 border-b" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-4 mb-8">
+      <div class="w-6 h-0.5" style="background:var(--c-primary);"></div>
+      <p class="text-xs font-bold uppercase tracking-[0.2em]" style="color:var(--c-accent);">The Work</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+      {{range .Gallery}}<div class="aspect-square overflow-hidden"><img src="{{.}}" alt="Gallery" class="w-full h-full object-cover hover:scale-105 transition duration-300"></div>{{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Contact -->
+<section class="py-20" id="contact" style="background:var(--c-surface);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-16">
+      <div>
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-6 h-0.5" style="background:var(--c-primary);"></div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em]" style="color:var(--c-accent);">Book In</p>
+        </div>
+        <h2 class="text-4xl font-black mb-8" style="color:var(--c-heading);">{{.CTAText}}</h2>
+        {{if .LeadSent}}<div class="p-4 mb-5 text-sm border" style="border-color:var(--c-primary);color:var(--c-primary);">Message received. We'll be in touch.</div>{{end}}
+        <form method="POST" action="{{.FormAction}}" class="space-y-4">
+          <input type="text" name="name" required placeholder="Name">
+          <input type="tel" name="phone" placeholder="Phone">
+          <input type="email" name="email" placeholder="Email">
+          <textarea name="message" rows="4" placeholder="Message"></textarea>
+          <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+          <button type="submit" class="w-full font-black text-sm uppercase tracking-widest py-4 transition" style="background:var(--c-primary);color:var(--c-primary-fg);">Send Message</button>
+        </form>
+      </div>
+      <div class="space-y-8 pt-12">
+        {{if .Hours}}
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] mb-4" style="color:var(--c-accent);">Hours</p>
+          <ul class="space-y-2">{{range .Hours}}<li class="text-sm" style="color:var(--c-text);">{{.}}</li>{{end}}</ul>
+        </div>
+        {{end}}
+        {{if .Site.Address}}
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] mb-2" style="color:var(--c-accent);">Find Us</p>
+          <p class="text-sm mb-3" style="color:var(--c-text);">{{.Site.Address}}</p>
+          {{if .Site.MapURL}}<a href="{{.Site.MapURL}}" target="_blank" class="text-sm font-bold uppercase tracking-wider hover:underline" style="color:var(--c-primary);">Directions →</a>{{end}}
+          {{if .Site.MapEmbedURL}}<div class="mt-3 overflow-hidden"><iframe src="{{.Site.MapEmbedURL}}" width="100%" height="180" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>{{end}}
+        </div>
+        {{end}}
+        {{if .Site.Phone}}
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] mb-2" style="color:var(--c-accent);">Call</p>
+          <a href="tel:{{.Site.Phone}}" class="font-black text-2xl" style="color:var(--c-heading);">{{.Site.Phone}}</a>
+        </div>
+        {{end}}
+        {{if or .Site.FacebookURL .Site.InstagramURL .Site.WhatsAppURL .Site.TwitterURL .Site.TikTokURL}}
+        <div class="flex flex-wrap gap-4">
+          {{if .Site.FacebookURL}}<a href="{{.Site.FacebookURL}}" target="_blank" class="text-xs font-bold uppercase tracking-wider hover:underline" style="color:var(--c-muted);">Facebook</a>{{end}}
+          {{if .Site.InstagramURL}}<a href="{{.Site.InstagramURL}}" target="_blank" class="text-xs font-bold uppercase tracking-wider hover:underline" style="color:var(--c-muted);">Instagram</a>{{end}}
+          {{if .Site.WhatsAppURL}}<a href="{{.Site.WhatsAppURL}}" target="_blank" class="text-xs font-bold uppercase tracking-wider hover:underline" style="color:var(--c-muted);">WhatsApp</a>{{end}}
+          {{if .Site.TwitterURL}}<a href="{{.Site.TwitterURL}}" target="_blank" class="text-xs font-bold uppercase tracking-wider hover:underline" style="color:var(--c-muted);">X</a>{{end}}
+          {{if .Site.TikTokURL}}<a href="{{.Site.TikTokURL}}" target="_blank" class="text-xs font-bold uppercase tracking-wider hover:underline" style="color:var(--c-muted);">TikTok</a>{{end}}
+        </div>
+        {{end}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+{{if .Testimonials}}
+<section class="py-20 border-t" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-4 mb-10">
+      <div class="w-6 h-0.5" style="background:var(--c-primary);"></div>
+      <p class="text-xs font-bold uppercase tracking-[0.2em]" style="color:var(--c-accent);">Reviews</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {{range .Testimonials}}
+      <div class="p-5 border" style="background:var(--c-surface);border-color:var(--c-border);">
+        <p class="text-sm leading-relaxed mb-4" style="color:var(--c-text);">"{{.Quote}}"</p>
+        <div class="font-bold text-sm" style="color:var(--c-heading);">{{.Name}}</div>
+        {{if .Role}}<div class="text-xs mt-0.5" style="color:var(--c-muted);">{{.Role}}</div>{{end}}
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+{{end}}

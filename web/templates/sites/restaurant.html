@@ -1,0 +1,156 @@
+{{define "theme"}}
+<style>
+:root{--c-primary:#d4a574;--c-primary-fg:#1a1110;--c-accent:#2a2220;--c-accent-fg:#d4a574;}
+body{background:#1a1110;color:#f5efe6;}
+</style>
+{{end}}
+
+{{define "site-content"}}
+<!-- Nav -->
+<header class="sticky top-0 z-50 bg-[#1a1110]/95 backdrop-blur border-b border-[#2a2220]">
+  <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+    {{if .Site.LogoURL}}<img src="{{.Site.LogoURL}}" alt="{{.Site.BusinessName}}" class="h-8 w-auto">{{else}}<span class="font-black text-[#d4a574] text-lg tracking-wide">{{.Site.BusinessName}}</span>{{end}}
+    <div class="flex items-center gap-4">
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="text-[#d4a574] text-sm font-semibold hidden md:block">{{.Site.Phone}}</a>{{end}}
+      <a href="#contact" class="bg-[#d4a574] text-[#1a1110] font-bold text-sm px-5 py-2 rounded-lg hover:bg-[#c4955a] transition">{{.CTAText}}</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="bg-[#1a1110] py-24 border-b border-[#2a2220]">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    {{if .Site.Location}}<div class="inline-block text-[#d4a574] text-xs font-bold uppercase tracking-[0.25em] mb-6">{{.Site.Location}}</div>{{end}}
+    <h1 class="text-5xl md:text-7xl font-black text-[#f5efe6] leading-tight mb-5 tracking-tight">{{.Site.BusinessName}}</h1>
+    {{if .Site.Tagline}}<p class="text-[#a89080] text-xl mb-10 max-w-lg mx-auto italic">{{.Site.Tagline}}</p>{{end}}
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="#contact" class="bg-[#d4a574] text-[#1a1110] font-black text-lg px-8 py-4 rounded-xl hover:bg-[#c4955a] transition">{{.CTAText}}</a>
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="border-2 border-[#3a3230] text-[#d4a574] font-bold text-lg px-8 py-4 rounded-xl hover:border-[#d4a574] transition">{{.Site.Phone}}</a>{{end}}
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+{{if .Site.About}}
+<section class="bg-[#211a18] py-16 border-b border-[#2a2220]" id="about">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+    <div class="w-12 h-0.5 bg-[#d4a574] mx-auto mb-6"></div>
+    <p class="text-[#c4b0a0] text-lg leading-relaxed italic">{{.Site.About}}</p>
+    <div class="w-12 h-0.5 bg-[#d4a574] mx-auto mt-6"></div>
+  </div>
+</section>
+{{end}}
+
+<!-- Menu / Services - displayed as a menu-style list -->
+{{if .Services}}
+<section class="bg-[#1a1110] py-20 border-b border-[#2a2220]" id="services">
+  <div class="max-w-3xl mx-auto px-6">
+    <p class="text-[#d4a574] font-bold text-sm uppercase tracking-[0.2em] mb-2 text-center">Our Menu</p>
+    <h2 class="text-4xl font-black text-[#f5efe6] mb-12 text-center">What We Serve</h2>
+    <div class="space-y-0">
+      {{range .Services}}
+      <div class="flex items-center gap-4 py-4 border-b border-[#2a2220] group">
+        <span class="text-[#f5efe6] font-semibold text-lg group-hover:text-[#d4a574] transition">{{.}}</span>
+        <span class="flex-1 border-b border-dotted border-[#3a3230]"></span>
+        <span class="text-[#d4a574] text-sm font-bold opacity-0 group-hover:opacity-100 transition">View</span>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Gallery - large landscape photos for food -->
+{{if .Gallery}}
+<section class="bg-[#211a18] py-20 border-b border-[#2a2220]">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-[#d4a574] font-bold text-sm uppercase tracking-[0.2em] mb-2 text-center">Gallery</p>
+    <h2 class="text-4xl font-black text-[#f5efe6] mb-12 text-center">From Our Kitchen</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      {{range .Gallery}}
+      <div class="aspect-[4/3] overflow-hidden rounded-2xl">
+        <img src="{{.}}" alt="Gallery photo" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Testimonials -->
+{{if .Testimonials}}
+<section class="bg-[#1a1110] py-20 border-b border-[#2a2220]">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-[#d4a574] font-bold text-sm uppercase tracking-[0.2em] mb-2 text-center">Reviews</p>
+    <h2 class="text-4xl font-black text-[#f5efe6] mb-12 text-center">What Our Guests Say</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{range .Testimonials}}
+      <div class="bg-[#211a18] border border-[#2a2220] rounded-2xl p-6">
+        <p class="text-[#c4b0a0] text-sm leading-relaxed mb-5 italic">"{{.Quote}}"</p>
+        <div>
+          <div class="text-[#f5efe6] font-bold text-sm">{{.Name}}</div>
+          {{if .Role}}<div class="text-[#d4a574] text-xs mt-0.5">{{.Role}}</div>{{end}}
+        </div>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Contact + Hours -->
+<section class="bg-[#211a18] py-20" id="contact">
+  <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+    <div>
+      <p class="text-[#d4a574] font-bold text-sm uppercase tracking-[0.2em] mb-2">Reservations</p>
+      <h2 class="text-4xl font-black text-[#f5efe6] mb-8">Book a Table</h2>
+      {{if .LeadSent}}<div class="bg-green-900/30 border border-green-500/30 text-green-300 rounded-xl p-4 mb-6">Thanks! We'll confirm your booking shortly.</div>{{end}}
+      <form method="POST" action="{{.FormAction}}" class="space-y-4">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <input type="text" name="name" required placeholder="Your Name" class="w-full bg-[#1a1110] border border-[#3a3230] text-[#f5efe6] rounded-xl px-4 py-3 text-sm placeholder-[#6a5a50] focus:outline-none focus:border-[#d4a574]">
+          <input type="tel" name="phone" placeholder="Phone Number" class="w-full bg-[#1a1110] border border-[#3a3230] text-[#f5efe6] rounded-xl px-4 py-3 text-sm placeholder-[#6a5a50] focus:outline-none focus:border-[#d4a574]">
+        </div>
+        <input type="email" name="email" placeholder="Email Address" class="w-full bg-[#1a1110] border border-[#3a3230] text-[#f5efe6] rounded-xl px-4 py-3 text-sm placeholder-[#6a5a50] focus:outline-none focus:border-[#d4a574]">
+        <textarea name="message" rows="3" placeholder="Party size, date, time, or any requests..." class="w-full bg-[#1a1110] border border-[#3a3230] text-[#f5efe6] rounded-xl px-4 py-3 text-sm placeholder-[#6a5a50] focus:outline-none focus:border-[#d4a574] resize-none"></textarea>
+        <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+        <button type="submit" class="w-full bg-[#d4a574] text-[#1a1110] font-black py-4 rounded-xl hover:bg-[#c4955a] transition text-base">Send Enquiry</button>
+      </form>
+    </div>
+    <div class="space-y-8 pt-2">
+      {{if .Hours}}
+      <div>
+        <p class="text-[#d4a574] font-bold text-sm uppercase tracking-[0.2em] mb-4">Opening Hours</p>
+        <ul class="space-y-3">{{range .Hours}}<li class="text-[#c4b0a0] text-sm border-b border-[#2a2220] pb-3">{{.}}</li>{{end}}</ul>
+      </div>
+      {{end}}
+      {{if .Site.Address}}
+      <div>
+        <p class="text-[#d4a574] font-bold text-sm uppercase tracking-[0.2em] mb-2">Find Us</p>
+        <p class="text-[#c4b0a0] text-sm mb-3">{{.Site.Address}}</p>
+        {{if .Site.MapURL}}<a href="{{.Site.MapURL}}" target="_blank" class="text-[#d4a574] text-sm font-semibold hover:underline">Get Directions →</a>{{end}}
+        {{if .Site.MapEmbedURL}}<div class="mt-3 rounded-xl overflow-hidden"><iframe src="{{.Site.MapEmbedURL}}" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>{{end}}
+      </div>
+      {{end}}
+      {{if .Certifications}}
+      <div>
+        <p class="text-[#d4a574] font-bold text-sm uppercase tracking-[0.2em] mb-3">Awards & Accolades</p>
+        <div class="flex flex-wrap gap-2">
+          {{range .Certifications}}<span class="bg-[#1a1110] border border-[#3a3230] text-[#c4b0a0] text-xs font-semibold px-3 py-1.5 rounded-full">{{.}}</span>{{end}}
+        </div>
+      </div>
+      {{end}}
+      {{if or .Site.FacebookURL .Site.InstagramURL .Site.WhatsAppURL .Site.TwitterURL .Site.TikTokURL .Site.LinkedInURL .Site.YouTubeURL}}
+      <div class="flex flex-wrap gap-4">
+        {{if .Site.FacebookURL}}<a href="{{.Site.FacebookURL}}" target="_blank" class="text-[#d4a574] hover:underline text-sm font-bold">Facebook</a>{{end}}
+        {{if .Site.InstagramURL}}<a href="{{.Site.InstagramURL}}" target="_blank" class="text-[#d4a574] hover:underline text-sm font-bold">Instagram</a>{{end}}
+        {{if .Site.WhatsAppURL}}<a href="{{.Site.WhatsAppURL}}" target="_blank" class="text-[#d4a574] hover:underline text-sm font-bold">WhatsApp</a>{{end}}
+        {{if .Site.TwitterURL}}<a href="{{.Site.TwitterURL}}" target="_blank" class="text-[#d4a574] hover:underline text-sm font-bold">X / Twitter</a>{{end}}
+        {{if .Site.TikTokURL}}<a href="{{.Site.TikTokURL}}" target="_blank" class="text-[#d4a574] hover:underline text-sm font-bold">TikTok</a>{{end}}
+        {{if .Site.LinkedInURL}}<a href="{{.Site.LinkedInURL}}" target="_blank" class="text-[#d4a574] hover:underline text-sm font-bold">LinkedIn</a>{{end}}
+        {{if .Site.YouTubeURL}}<a href="{{.Site.YouTubeURL}}" target="_blank" class="text-[#d4a574] hover:underline text-sm font-bold">YouTube</a>{{end}}
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}

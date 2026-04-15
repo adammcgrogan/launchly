@@ -196,16 +196,18 @@ type Testimonial struct {
 }
 
 type templateData struct {
-	Site           *models.Site
-	Services       []string
-	Hours          []string
-	Certifications []string
-	Testimonials   []Testimonial
-	Gallery        []string
-	CTAText        string
-	LeadSent       bool
-	FormAction     string
-	UmamiScriptURL string
+	Site            *models.Site
+	Services        []string
+	Hours           []string
+	Certifications  []string
+	Testimonials    []Testimonial
+	Gallery         []string
+	CTAText         string
+	LeadSent        bool
+	FormAction      string
+	UmamiScriptURL  string
+	PaletteCSS      string // CSS variable overrides for the selected palette
+	HeadingFontCSS  string // font-family value for headings, empty = template default
 }
 
 func (h *Handler) siteData(site *models.Site, leadSent bool, formAction string) templateData {
@@ -224,6 +226,8 @@ func (h *Handler) siteData(site *models.Site, leadSent bool, formAction string) 
 		LeadSent:       leadSent,
 		FormAction:     formAction,
 		UmamiScriptURL: h.umamiScriptURL,
+		PaletteCSS:     getPaletteCSS(site.Template, site.Palette),
+		HeadingFontCSS: getHeadingFontCSS(site.HeadingFont),
 	}
 }
 

@@ -1,0 +1,171 @@
+{{define "theme"}}
+<style>
+:root{
+  --c-bg:#0a0a0a;--c-surface:#141414;--c-primary:#ffffff;--c-primary-fg:#0a0a0a;
+  --c-accent:#ffffff;--c-accent-fg:#0a0a0a;--c-text:#a3a3a3;--c-heading:#ffffff;
+  --c-muted:#525252;--c-border:#1f1f1f;
+}
+body{background:var(--c-bg);color:var(--c-text);}
+input,textarea{background:var(--c-surface);border:1px solid var(--c-border);color:var(--c-heading);padding:0.75rem 1rem;width:100%;border-radius:0.5rem;}
+input::placeholder,textarea::placeholder{color:var(--c-muted);}
+input:focus,textarea:focus{outline:none;border-color:var(--c-primary);}
+textarea{resize:none;}
+</style>
+{{end}}
+
+{{define "site-content"}}
+<!-- Nav -->
+<header class="sticky top-0 z-50 border-b" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    {{if .Site.LogoURL}}<img src="{{.Site.LogoURL}}" alt="{{.Site.BusinessName}}" class="h-7 w-auto">{{else}}<span class="font-black text-lg tracking-tight" style="color:var(--c-heading);">{{.Site.BusinessName}}</span>{{end}}
+    <div class="flex items-center gap-3">
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="text-sm font-semibold hidden md:block" style="color:var(--c-muted);">{{.Site.Phone}}</a>{{end}}
+      <a href="#contact" class="font-bold text-sm px-5 py-2 rounded-lg transition" style="background:var(--c-primary);color:var(--c-primary-fg);">{{.CTAText}}</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="py-28 border-b" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6">
+    {{if .Site.Location}}<p class="text-xs font-bold uppercase tracking-[0.2em] mb-6" style="color:var(--c-muted);">{{.Site.Location}}</p>{{end}}
+    <h1 class="text-6xl md:text-8xl font-black tracking-tight leading-none mb-8" style="color:var(--c-heading);">{{.Site.BusinessName}}</h1>
+    {{if .Site.Tagline}}<p class="text-xl max-w-xl mb-10" style="color:var(--c-muted);">{{.Site.Tagline}}</p>{{end}}
+    <div class="flex flex-wrap gap-4">
+      <a href="#contact" class="font-black text-base px-8 py-4 rounded-lg transition" style="background:var(--c-primary);color:var(--c-primary-fg);">{{.CTAText}}</a>
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="font-bold text-base px-8 py-4 rounded-lg border transition" style="border-color:var(--c-border);color:var(--c-heading);">{{.Site.Phone}}</a>{{end}}
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+{{if .Site.About}}
+<section class="py-20 border-b" id="about" style="background:var(--c-surface);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="max-w-3xl">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] mb-4" style="color:var(--c-muted);">About</p>
+      <p class="text-xl leading-relaxed" style="color:var(--c-text);">{{.Site.About}}</p>
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Services -->
+{{if .Services}}
+<section class="py-20 border-b" id="services" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] mb-2" style="color:var(--c-muted);">Services</p>
+    <h2 class="text-3xl font-black mb-10" style="color:var(--c-heading);">What We Do</h2>
+    <div class="grid sm:grid-cols-2 gap-0">
+      {{range .Services}}
+      <div class="py-4 border-b flex items-center justify-between" style="border-color:var(--c-border);">
+        <span class="font-medium" style="color:var(--c-text);">{{.}}</span>
+        <span style="color:var(--c-muted);">→</span>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Certifications -->
+{{if .Certifications}}
+<section class="py-16 border-b" style="background:var(--c-surface);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-wrap gap-3">
+      {{range .Certifications}}
+      <span class="text-sm font-semibold px-4 py-2 rounded-full border" style="border-color:var(--c-border);color:var(--c-text);">✓ {{.}}</span>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Gallery -->
+{{if .Gallery}}
+<section class="py-20 border-b" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] mb-8" style="color:var(--c-muted);">Gallery</p>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+      {{range .Gallery}}
+      <div class="aspect-square overflow-hidden">
+        <img src="{{.}}" alt="Gallery" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Contact -->
+<section class="py-20" id="contact" style="background:var(--c-surface);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-16">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] mb-3" style="color:var(--c-muted);">Contact</p>
+        <h2 class="text-4xl font-black mb-8" style="color:var(--c-heading);">{{.CTAText}}</h2>
+        {{if .LeadSent}}<div class="border rounded-xl p-4 mb-5 text-sm" style="border-color:var(--c-border);color:var(--c-text);">Thanks! We'll be in touch shortly.</div>{{end}}
+        <form method="POST" action="{{.FormAction}}" class="space-y-4">
+          <input type="text" name="name" required placeholder="Your Name">
+          <input type="tel" name="phone" placeholder="Phone Number">
+          <input type="email" name="email" placeholder="Email Address">
+          <textarea name="message" rows="4" placeholder="How can we help?"></textarea>
+          <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+          <button type="submit" class="w-full font-bold py-4 rounded-lg transition" style="background:var(--c-primary);color:var(--c-primary-fg);">Send Message</button>
+        </form>
+      </div>
+      <div class="space-y-8 pt-2">
+        {{if .Hours}}
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] mb-4" style="color:var(--c-muted);">Hours</p>
+          <ul class="space-y-2">{{range .Hours}}<li class="text-sm" style="color:var(--c-text);">{{.}}</li>{{end}}</ul>
+        </div>
+        {{end}}
+        {{if .Site.Address}}
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] mb-2" style="color:var(--c-muted);">Location</p>
+          <p class="text-sm mb-3" style="color:var(--c-text);">{{.Site.Address}}</p>
+          {{if .Site.MapURL}}<a href="{{.Site.MapURL}}" target="_blank" class="text-sm font-semibold hover:underline" style="color:var(--c-heading);">Directions →</a>{{end}}
+          {{if .Site.MapEmbedURL}}<div class="mt-3 overflow-hidden rounded-lg"><iframe src="{{.Site.MapEmbedURL}}" width="100%" height="180" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>{{end}}
+        </div>
+        {{end}}
+        {{if .Site.Phone}}
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] mb-2" style="color:var(--c-muted);">Phone</p>
+          <a href="tel:{{.Site.Phone}}" class="font-black text-2xl" style="color:var(--c-heading);">{{.Site.Phone}}</a>
+        </div>
+        {{end}}
+        {{if or .Site.FacebookURL .Site.InstagramURL .Site.WhatsAppURL .Site.TwitterURL .Site.TikTokURL .Site.LinkedInURL .Site.YouTubeURL}}
+        <div class="flex flex-wrap gap-4">
+          {{if .Site.FacebookURL}}<a href="{{.Site.FacebookURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-muted);">Facebook</a>{{end}}
+          {{if .Site.InstagramURL}}<a href="{{.Site.InstagramURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-muted);">Instagram</a>{{end}}
+          {{if .Site.WhatsAppURL}}<a href="{{.Site.WhatsAppURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-muted);">WhatsApp</a>{{end}}
+          {{if .Site.TwitterURL}}<a href="{{.Site.TwitterURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-muted);">X / Twitter</a>{{end}}
+          {{if .Site.TikTokURL}}<a href="{{.Site.TikTokURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-muted);">TikTok</a>{{end}}
+          {{if .Site.LinkedInURL}}<a href="{{.Site.LinkedInURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-muted);">LinkedIn</a>{{end}}
+          {{if .Site.YouTubeURL}}<a href="{{.Site.YouTubeURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-muted);">YouTube</a>{{end}}
+        </div>
+        {{end}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+{{if .Testimonials}}
+<section class="py-20 border-t" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] mb-8" style="color:var(--c-muted);">Reviews</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{range .Testimonials}}
+      <div class="p-6 border rounded-xl" style="background:var(--c-surface);border-color:var(--c-border);">
+        <p class="text-sm leading-relaxed mb-5" style="color:var(--c-text);">"{{.Quote}}"</p>
+        <div class="font-bold text-sm" style="color:var(--c-heading);">{{.Name}}</div>
+        {{if .Role}}<div class="text-xs mt-0.5" style="color:var(--c-muted);">{{.Role}}</div>{{end}}
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+{{end}}

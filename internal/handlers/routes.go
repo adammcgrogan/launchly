@@ -32,6 +32,7 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /admin/sites/{id}/delete", h.adminAuth(h.AdminDeleteSite))
 	mux.HandleFunc("GET /admin/sites/{id}/switch-template", h.adminAuth(h.AdminSwitchTemplate))
 	mux.HandleFunc("POST /admin/sites/{id}/switch-template", h.adminAuth(h.AdminDoSwitchTemplate))
+	mux.HandleFunc("POST /admin/sites/{id}/appearance", h.adminAuth(h.AdminUpdateAppearance))
 	mux.HandleFunc("POST /admin/sites/{id}/send-payment", h.adminAuth(h.AdminSendPayment))
 	mux.HandleFunc("POST /admin/sites/{id}/cancel-subscription", h.adminAuth(h.AdminCancelSubscription))
 	mux.HandleFunc("GET /admin/sites/{id}/leads.csv", h.adminAuth(h.AdminExportLeads))

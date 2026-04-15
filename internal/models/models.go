@@ -51,6 +51,8 @@ type Site struct {
 	Notes                  string     `db:"notes"`                   // internal admin notes, never shown to customer
 	AnalyticsFrequency     string     `db:"analytics_frequency"`     // "off", "weekly", "monthly"
 	AnalyticsLastSent      *time.Time `db:"analytics_last_sent"`
+	Palette                string     `db:"palette"`                 // selected colour palette ID, empty = template default
+	HeadingFont            string     `db:"heading_font"`            // "sans", "serif", "mono" — empty = sans
 }
 
 // ReferrerCount is a referrer hostname with its visit count.

@@ -14,7 +14,74 @@
       <label style="cursor:pointer;">
         <input type="radio" name="template" value="{{.ID}}" {{if .Current}}checked{{end}} style="position:absolute;opacity:0;width:0;height:0;">
         <div class="template-card {{if .Current}}template-card--active{{end}}" onclick="selectTemplate(this, '{{.ID}}')">
-          {{if eq .ID "bold"}}
+          {{if eq .ID "default"}}
+          <div style="background:#fff;padding:1rem;text-align:center;">
+            <div style="color:#4338ca;font-weight:900;font-size:0.8rem;">O'Brien Consulting</div>
+            <div style="color:#6b7280;font-size:0.65rem;margin-top:2px;">Expert advice, clear results</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#6366f1;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:6px;">Get in Touch</span>
+            </div>
+          </div>
+          {{else if eq .ID "canvas"}}
+          <div style="background:#f8fafc;padding:1rem;text-align:center;">
+            <div style="color:#1e3a5f;font-weight:900;font-size:0.8rem;">O'Neill Accountancy</div>
+            <div style="color:#94a3b8;font-size:0.65rem;margin-top:2px;">Clear, honest accounting</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#2563eb;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book a Call</span>
+            </div>
+          </div>
+          {{else if eq .ID "slate"}}
+          <div style="background:#111827;padding:1rem;text-align:center;">
+            <div style="color:#fff;font-weight:900;font-size:0.8rem;">Quinn Electrical</div>
+            <div style="color:#6b7280;font-size:0.65rem;margin-top:2px;">NICEIC approved</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#f59e0b;color:#111827;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Get a Quote</span>
+            </div>
+          </div>
+          {{else if eq .ID "hearth"}}
+          <div style="background:#78350f;padding:1rem;text-align:center;">
+            <div style="color:#fde68a;font-weight:900;font-size:0.8rem;font-style:italic;">The Wee Bakehouse</div>
+            <div style="color:#d97706;font-size:0.65rem;margin-top:2px;">Freshly baked daily</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#fbbf24;color:#78350f;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Find Us</span>
+            </div>
+          </div>
+          {{else if eq .ID "linen"}}
+          <div style="background:#fff;padding:1rem;">
+            <div style="color:#aaa;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Belfast, NI</div>
+            <div style="color:#0a0a0a;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Laura Vance Interiors</div>
+            <div style="color:#888;font-size:0.6rem;font-style:italic;margin-bottom:10px;">Considered interior design</div>
+            <div style="border-top:1px solid #f0f0f0;padding-top:8px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:0.6rem;color:#444;">Full Interior Design</span><span style="font-size:0.6rem;color:#ccc;">→</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="font-size:0.6rem;color:#444;">Colour Consultancy</span><span style="font-size:0.6rem;color:#ccc;">→</span></div>
+            </div>
+          </div>
+          {{else if eq .ID "onyx"}}
+          <div style="background:#0a0a0a;padding:1rem;text-align:center;">
+            <div style="color:#f5f5f0;font-weight:900;font-size:0.8rem;letter-spacing:0.05em;">Ryan Legal</div>
+            <div style="color:#555;font-size:0.65rem;margin-top:2px;">Solicitors &amp; Notaries</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#fff;color:#0a0a0a;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Consult</span>
+              <span style="border:1px solid #222;color:#aaa;font-size:0.6rem;padding:2px 8px;border-radius:4px;">About</span>
+            </div>
+          </div>
+          {{else if eq .ID "ink"}}
+          <div style="background:#0c1a2e;padding:1rem;text-align:center;">
+            <div style="color:#e0f2fe;font-weight:900;font-size:0.8rem;">Mackenzie Finance</div>
+            <div style="color:#475569;font-size:0.65rem;margin-top:2px;">Independent advisors</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#38bdf8;color:#0c1a2e;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book Advice</span>
+            </div>
+          </div>
+          {{else if eq .ID "copper"}}
+          <div style="background:#fdf6f0;padding:1rem;text-align:center;">
+            <div style="color:#2c1a0e;font-weight:900;font-size:0.8rem;">Aoife's Kitchen</div>
+            <div style="color:#9a8070;font-size:0.65rem;margin-top:2px;">Fresh seasonal food</div>
+            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+              <span style="background:#c2622d;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:6px;">Get in Touch</span>
+            </div>
+          </div>
+          {{else if eq .ID "builder"}}
           <div style="background:#09090b;padding:1rem;text-align:center;">
             <div style="color:#fbbf24;font-weight:900;font-size:0.8rem;">McLaughlin Plumbing</div>
             <div style="color:#52525b;font-size:0.65rem;margin-top:2px;">Fast, reliable plumbing</div>
@@ -23,23 +90,7 @@
               <span style="border:1px solid #3f3f46;color:#a1a1aa;font-size:0.6rem;padding:2px 8px;border-radius:4px;">Quote</span>
             </div>
           </div>
-          {{else if eq .ID "fresh"}}
-          <div style="background:#f8fafc;padding:1rem;text-align:center;">
-            <div style="color:#1e3a5f;font-weight:900;font-size:0.8rem;">O'Neill Accountancy</div>
-            <div style="color:#94a3b8;font-size:0.65rem;margin-top:2px;">Clear, honest accounting</div>
-            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
-              <span style="background:#2563eb;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book a Call</span>
-            </div>
-          </div>
-          {{else if eq .ID "warm"}}
-          <div style="background:#78350f;padding:1rem;text-align:center;">
-            <div style="color:#fde68a;font-weight:900;font-size:0.8rem;font-style:italic;">The Wee Bakehouse</div>
-            <div style="color:#d97706;font-size:0.65rem;margin-top:2px;">Freshly baked daily</div>
-            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
-              <span style="background:#fbbf24;color:#78350f;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Find Us</span>
-            </div>
-          </div>
-          {{else if eq .ID "glow"}}
+          {{else if eq .ID "salon"}}
           <div style="background:#fff;padding:1rem;text-align:center;">
             <div style="color:#4c0519;font-weight:900;font-size:0.8rem;font-style:italic;">Aoife's Beauty</div>
             <div style="color:#f43f5e;font-size:0.65rem;margin-top:2px;">Award-winning studio</div>
@@ -47,110 +98,93 @@
               <span style="background:#e11d48;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:20px;">Book Now</span>
             </div>
           </div>
-          {{else if eq .ID "classic"}}
-          <div style="background:#111827;padding:1rem;text-align:center;">
-            <div style="color:#fff;font-weight:900;font-size:0.8rem;">Quinn Electrical</div>
-            <div style="color:#6b7280;font-size:0.65rem;margin-top:2px;">NICEIC approved</div>
-            <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
-              <span style="background:#fff;color:#111827;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Get a Quote</span>
-            </div>
-          </div>
-          {{else if eq .ID "pulse"}}
+          {{else if eq .ID "gym"}}
           <div style="background:#0a0a0a;padding:1rem;text-align:center;">
             <div style="display:inline-block;border:1px solid rgba(200,255,0,0.3);color:#c8ff00;font-size:0.6rem;padding:1px 6px;border-radius:20px;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;">Belfast, NI</div>
             <div style="color:#fff;font-weight:900;font-size:0.8rem;text-transform:uppercase;margin-bottom:2px;">Titan Fitness</div>
-            <div style="color:#888;font-size:0.6rem;margin-bottom:8px;">Belfast's hardest-working gym</div>
+            <div style="color:#888;font-size:0.6rem;margin-bottom:8px;">No excuses gym</div>
             <div style="display:flex;justify-content:center;gap:6px;">
               <span style="background:#c8ff00;color:#000;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Join Now</span>
-              <span style="border:1px solid #333;color:#ccc;font-size:0.6rem;padding:2px 8px;border-radius:4px;">028 9031 4488</span>
             </div>
           </div>
-          {{else if eq .ID "grove"}}
+          {{else if eq .ID "landscaping"}}
           <div style="display:grid;grid-template-columns:1fr 1fr;">
             <div style="background:#1a3a28;padding:1rem;">
-              <div style="display:inline-block;background:rgba(200,184,154,0.2);color:#c8b89a;font-size:0.55rem;padding:1px 6px;border-radius:20px;margin-bottom:6px;text-transform:uppercase;">Co. Down</div>
               <div style="color:#f5f0e8;font-weight:900;font-size:0.75rem;margin-bottom:2px;">O'Hara Landscaping</div>
-              <div style="color:#a8c4b0;font-size:0.6rem;margin-bottom:8px;">Transforming gardens since 2007</div>
+              <div style="color:#a8c4b0;font-size:0.6rem;margin-bottom:8px;">Gardens transformed</div>
               <span style="background:#c8b89a;color:#1a3a28;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Free Quote</span>
             </div>
             <div style="background:#f5f0e8;padding:0.75rem;display:flex;flex-direction:column;gap:4px;justify-content:center;">
               <div style="background:#fff;border:1px solid #e8ddd0;border-radius:6px;padding:4px 6px;font-size:0.6rem;color:#1a3a28;">✓ Fully Insured</div>
               <div style="background:#fff;border:1px solid #e8ddd0;border-radius:6px;padding:4px 6px;font-size:0.6rem;color:#1a3a28;">✓ 15+ Years Exp.</div>
-              <div style="background:#fff;border:1px solid #e8ddd0;border-radius:6px;padding:4px 6px;font-size:0.6rem;color:#1a3a28;">✓ Free Site Visit</div>
             </div>
           </div>
-          {{else if eq .ID "fleet"}}
+          {{else if eq .ID "garage"}}
           <div style="background:#111;padding:1rem;">
             <div style="display:inline-block;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);color:#fb923c;font-size:0.55rem;padding:1px 6px;border-radius:20px;margin-bottom:6px;text-transform:uppercase;">Armagh, NI</div>
             <div style="color:#fff;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Brady's Auto Centre</div>
             <div style="color:#888;font-size:0.6rem;margin-bottom:8px;">MOT, servicing &amp; repairs</div>
             <div style="display:flex;gap:6px;">
-              <span style="background:#f97316;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">028 3752 1199</span>
-              <span style="border:1px solid #2a2a2a;color:#ccc;font-size:0.6rem;padding:2px 8px;border-radius:4px;">Book In</span>
+              <span style="background:#f97316;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book In</span>
+              <span style="border:1px solid #2a2a2a;color:#ccc;font-size:0.6rem;padding:2px 8px;border-radius:4px;">Services</span>
             </div>
           </div>
-          {{else if eq .ID "haven"}}
+          {{else if eq .ID "bnb"}}
           <div style="background:#faf8f5;padding:1rem;text-align:center;">
             <div style="display:inline-block;background:rgba(45,122,106,0.1);color:#2d7a6a;font-size:0.55rem;padding:1px 6px;border-radius:20px;margin-bottom:6px;text-transform:uppercase;">Strangford, Co. Down</div>
             <div style="color:#2c2c2c;font-weight:900;font-size:0.8rem;margin-bottom:2px;">The Harbour House</div>
             <div style="color:#888;font-size:0.6rem;font-style:italic;margin-bottom:8px;">A peaceful waterfront retreat</div>
-            <div style="display:flex;justify-content:center;gap:6px;">
-              <span style="background:#2d7a6a;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Check Availability</span>
-            </div>
+            <span style="background:#2d7a6a;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Check Availability</span>
           </div>
-          {{else if eq .ID "arch"}}
-          <div style="background:#fff;padding:1rem;">
-            <div style="color:#aaa;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Belfast, NI</div>
-            <div style="color:#0a0a0a;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Laura Vance Interiors</div>
-            <div style="color:#888;font-size:0.6rem;font-style:italic;margin-bottom:10px;">Considered interior design</div>
-            <div style="border-top:1px solid #f0f0f0;padding-top:8px;">
-              <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:0.6rem;color:#444;">Full Interior Design</span><span style="font-size:0.6rem;color:#ccc;">→</span></div>
-              <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:0.6rem;color:#444;">Colour Consultancy</span><span style="font-size:0.6rem;color:#ccc;">→</span></div>
-              <div style="display:flex;justify-content:space-between;"><span style="font-size:0.6rem;color:#444;">Space Planning</span><span style="font-size:0.6rem;color:#ccc;">→</span></div>
-            </div>
-          </div>
-          {{else if eq .ID "dine"}}
+          {{else if eq .ID "restaurant"}}
           <div style="background:#1a1208;padding:1rem;text-align:center;">
             <div style="color:#c8a96e;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;">Cathedral Quarter, Belfast</div>
             <div style="color:#f5f0e8;font-weight:900;font-size:0.8rem;margin-bottom:2px;">The Ember Room</div>
             <div style="color:#8a7a62;font-size:0.6rem;font-style:italic;margin-bottom:8px;">Wood-fired food &amp; natural wine</div>
             <span style="border:1px solid #c8a96e;color:#c8a96e;font-size:0.6rem;padding:2px 10px;border-radius:20px;">Book a Table</span>
           </div>
-          {{else if eq .ID "heal"}}
+          {{else if eq .ID "clinic"}}
           <div style="background:#fff;padding:1rem;">
             <div style="display:inline-block;background:#e0f2fe;color:#0369a1;font-size:0.55rem;padding:1px 6px;border-radius:20px;margin-bottom:6px;">GDC Registered</div>
             <div style="color:#0f172a;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Greenfield Dental</div>
             <div style="color:#64748b;font-size:0.6rem;margin-bottom:8px;">Gentle, modern dentistry</div>
-            <div style="display:flex;gap:6px;">
-              <span style="background:#0284c7;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book Appointment</span>
-            </div>
+            <span style="background:#0284c7;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book Appointment</span>
           </div>
-          {{else if eq .ID "craft"}}
+          {{else if eq .ID "maker"}}
           <div style="background:#f7f3ee;padding:1rem;">
             <div style="color:#92704e;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Ballymena, Co. Antrim</div>
             <div style="color:#2c1f14;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Willow &amp; Thread</div>
             <div style="color:#a08060;font-size:0.6rem;font-style:italic;margin-bottom:8px;">Handthrown ceramics</div>
-            <div style="display:flex;gap:4px;">
-              <span style="background:#2c1f14;color:#f7f3ee;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">View Collection</span>
-            </div>
+            <span style="background:#2c1f14;color:#f7f3ee;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">View Collection</span>
           </div>
-          {{else if eq .ID "shop"}}
+          {{else if eq .ID "retail"}}
           <div style="background:#fff;padding:1rem;">
-            <div style="display:inline-flex;align-items:center;gap:4px;background:#fff7ed;border:1px solid #fed7aa;color:#c2410c;font-size:0.55rem;font-weight:700;padding:1px 6px;border-radius:20px;margin-bottom:6px;text-transform:uppercase;">📍 Lisburn Road, Belfast</div>
+            <div style="display:inline-flex;align-items:center;gap:4px;background:#fff7ed;border:1px solid #fed7aa;color:#c2410c;font-size:0.55rem;font-weight:700;padding:1px 6px;border-radius:20px;margin-bottom:6px;text-transform:uppercase;">Lisburn Road, Belfast</div>
             <div style="color:#1c1917;font-weight:900;font-size:0.8rem;margin-bottom:2px;">The Corner Collective</div>
             <div style="color:#78716c;font-size:0.6rem;margin-bottom:8px;">Gifts, homewares &amp; local finds</div>
-            <div style="display:flex;gap:6px;">
-              <span style="background:#c2410c;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:6px;">Visit Us</span>
-              <span style="border:1px solid #e7e5e4;color:#78716c;font-size:0.6rem;padding:2px 8px;border-radius:6px;">Open 7 Days</span>
-            </div>
+            <span style="background:#c2410c;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:6px;">Visit Us</span>
           </div>
-          {{else if eq .ID "vow"}}
+          {{else if eq .ID "wedding"}}
           <div style="background:#fdf9f6;padding:1rem;text-align:center;">
             <div style="color:#a8a29e;font-size:0.5rem;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:6px;">Co. Down, Ireland</div>
             <div style="color:#1c1917;font-size:0.85rem;font-weight:700;font-style:italic;margin-bottom:3px;">Clover &amp; White Events</div>
             <div style="color:#78716c;font-size:0.6rem;font-style:italic;margin-bottom:10px;">Beautifully planned weddings</div>
             <div style="width:24px;height:1px;background:#d6d3d1;margin:0 auto 8px;"></div>
             <span style="border:1px solid #1c1917;color:#1c1917;font-size:0.6rem;font-weight:600;padding:2px 10px;border-radius:20px;">Get in Touch</span>
+          </div>
+          {{else if eq .ID "barber"}}
+          <div style="background:#0d0d0d;padding:1rem;text-align:center;">
+            <div style="color:#c9a84c;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:6px;">Belfast, NI</div>
+            <div style="color:#f5f5f0;font-weight:900;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Sharp Cuts</div>
+            <div style="color:#555;font-size:0.6rem;margin-bottom:8px;">Traditional barbershop</div>
+            <span style="background:#c9a84c;color:#0d0d0d;font-size:0.6rem;font-weight:700;padding:2px 10px;text-transform:uppercase;letter-spacing:0.05em;">Book In</span>
+          </div>
+          {{else if eq .ID "takeaway"}}
+          <div style="background:#1c1917;padding:1rem;text-align:center;">
+            <div style="display:inline-block;background:#ea580c;color:#fff;font-size:0.55rem;font-weight:700;padding:1px 6px;border-radius:20px;margin-bottom:6px;text-transform:uppercase;">Belfast, NI</div>
+            <div style="color:#fff;font-weight:900;font-size:0.8rem;margin-bottom:2px;">King's Chicken</div>
+            <div style="color:#a8a29e;font-size:0.6rem;margin-bottom:8px;">Hot wings &amp; burgers</div>
+            <span style="background:#ea580c;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 10px;border-radius:6px;">Order Now</span>
           </div>
           {{end}}
           <div style="padding:0.75rem;border-top:1px solid #e5e7eb;background:#fff;">

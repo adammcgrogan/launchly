@@ -128,7 +128,8 @@ func subdomainRouter(domain string, h *handlers.Handler, fallback http.Handler) 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		host := strings.ToLower(strings.Split(effectiveHost(r), ":")[0])
 		isSubdomain := strings.HasSuffix(host, "."+domain)
-		isMainDomain := host == domain || host == "www."+domain
+		isLocalhost := host == "localhost" || host == "127.0.0.1"
+		isMainDomain := host == domain || host == "www."+domain || isLocalhost
 		isSiteDomain := isSubdomain || (!isMainDomain && host != "")
 
 		if isSiteDomain {

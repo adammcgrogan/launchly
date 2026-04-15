@@ -224,31 +224,54 @@
           <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-200 z-10 flex items-end justify-center pb-3">
             <span class="opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-200 bg-white/90 backdrop-blur text-gray-900 text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm">View live example →</span>
           </div>
-          {{if eq .ID "bold"}}
-          <div class="bg-zinc-950 h-full p-4">
-            <div class="inline-block border border-zinc-700 text-zinc-500 text-[7px] px-1.5 py-0.5 rounded-full mb-2">Belfast, NI</div>
-            <div class="text-amber-400 font-black text-sm mb-0.5 leading-tight">McLaughlin Plumbing</div>
-            <div class="text-zinc-500 text-[8px] mb-2">Belfast's most trusted plumbers</div>
-            <div class="flex gap-1 mb-3"><span class="bg-amber-400 text-zinc-900 text-[8px] font-bold px-2 py-0.5 rounded">Get a Quote</span><span class="border border-zinc-700 text-zinc-400 text-[8px] px-2 py-0.5 rounded">Call</span></div>
-            <div class="grid grid-cols-2 gap-1">
-              <div class="bg-zinc-800/80 border border-zinc-700 rounded-lg p-1 text-[7px] text-zinc-400">24/7 Callout</div>
-              <div class="bg-zinc-800/80 border border-zinc-700 rounded-lg p-1 text-[7px] text-zinc-400">Gas Safe</div>
+          {{if eq .ID "default"}}
+          <div class="bg-white h-full p-4">
+            <div class="flex items-center gap-1.5 mb-3">
+              <div class="w-5 h-5 rounded bg-indigo-600 flex items-center justify-center flex-shrink-0">
+                <div class="w-2 h-2 bg-white rounded-sm"></div>
+              </div>
+              <span class="text-slate-900 font-black text-[10px] tracking-tight">Kelly &amp; Associates</span>
+            </div>
+            <div class="text-[8px] text-indigo-600 font-semibold mb-0.5 uppercase tracking-widest">Solicitors · Belfast</div>
+            <div class="text-slate-800 font-black text-sm leading-tight mb-2">Expert legal advice<br>you can trust</div>
+            <div class="flex gap-1 mb-3">
+              <span class="bg-indigo-600 text-white text-[8px] font-bold px-2 py-0.5 rounded">Free Consultation</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-1"><span class="text-indigo-500 text-[7px]">✓</span><span class="text-slate-500 text-[7px]">Conveyancing</span></div>
+              <div class="flex items-center gap-1"><span class="text-indigo-500 text-[7px]">✓</span><span class="text-slate-500 text-[7px]">Wills &amp; Probate</span></div>
             </div>
           </div>
-          {{else if eq .ID "fresh"}}
-          <div class="bg-white h-full p-4">
-            <div class="text-center mb-2">
-              <div class="inline-block bg-blue-50 text-blue-600 text-[7px] px-1.5 py-0.5 rounded-full mb-1.5">Derry, NI</div>
-              <div class="text-slate-900 font-black text-sm">O'Neill Accountancy</div>
-              <div class="text-slate-400 text-[8px] mb-2">Plain-talking accountants</div>
+          {{else if eq .ID "canvas"}}
+          <div class="bg-[#f0f4ff] h-full p-4">
+            <div class="bg-white rounded-xl shadow-sm p-3 mb-2">
+              <div class="text-[8px] text-blue-500 font-semibold uppercase tracking-widest mb-0.5">Accountancy · Derry</div>
+              <div class="text-slate-900 font-black text-sm leading-tight">O'Neill Accountancy</div>
+              <div class="text-slate-400 text-[8px] mt-0.5 mb-2">Plain-talking accountants</div>
               <span class="bg-blue-600 text-white text-[8px] font-bold px-2 py-0.5 rounded-lg">Book Consultation</span>
             </div>
-            <div class="mt-3 space-y-1 border-t border-slate-100 pt-2">
-              <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0"><div class="w-1 h-1 bg-blue-500 rounded-full"></div></div><span class="text-[8px] text-slate-600">Self-Assessment Tax Returns</span></div>
-              <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0"><div class="w-1 h-1 bg-blue-500 rounded-full"></div></div><span class="text-[8px] text-slate-600">Payroll Management</span></div>
+            <div class="grid grid-cols-2 gap-1.5">
+              <div class="bg-white rounded-lg shadow-sm p-1.5 text-[7px] text-slate-600">Tax Returns</div>
+              <div class="bg-white rounded-lg shadow-sm p-1.5 text-[7px] text-slate-600">Payroll</div>
             </div>
           </div>
-          {{else if eq .ID "warm"}}
+          {{else if eq .ID "slate"}}
+          <div class="h-full overflow-hidden">
+            <div class="bg-gray-900 p-4">
+              <div class="inline-block border border-yellow-500/30 text-yellow-400 text-[7px] px-1.5 py-0.5 rounded-full mb-1.5 uppercase tracking-widest">Co. Antrim</div>
+              <div class="text-white font-black text-sm mb-0.5">Quinn Electrical</div>
+              <div class="text-gray-400 text-[8px] mb-2">NICEIC approved electricians</div>
+              <div class="flex gap-1">
+                <span class="bg-yellow-400 text-gray-900 text-[8px] font-bold px-2 py-0.5 rounded">Get a Quote</span>
+                <span class="border border-gray-700 text-gray-400 text-[8px] px-2 py-0.5 rounded">Call</span>
+              </div>
+            </div>
+            <div class="bg-white p-3 space-y-1.5">
+              <div class="flex items-center gap-1.5"><span class="w-1 h-1 bg-yellow-400 rounded-full flex-shrink-0"></span><span class="text-[8px] text-gray-700">Full House Rewiring</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-1 h-1 bg-yellow-400 rounded-full flex-shrink-0"></span><span class="text-[8px] text-gray-700">EV Charger Installation</span></div>
+            </div>
+          </div>
+          {{else if eq .ID "hearth"}}
           <div class="h-full overflow-hidden">
             <div class="bg-amber-900 p-4 pb-3">
               <div class="text-amber-100 font-black text-base italic leading-none mb-1">The Wee Bakehouse</div>
@@ -263,95 +286,7 @@
               </div>
             </div>
           </div>
-          {{else if eq .ID "glow"}}
-          <div class="bg-white h-full p-4">
-            <div class="grid grid-cols-2 gap-2 h-full">
-              <div class="flex flex-col justify-center">
-                <div class="inline-block bg-rose-50 text-rose-500 text-[7px] px-1.5 py-0.5 rounded-full mb-1.5">Newry, NI</div>
-                <div class="text-rose-950 font-black text-sm italic leading-tight mb-1">Aoife's Beauty Studio</div>
-                <div class="text-rose-400 text-[7px] mb-2">Award-winning hair &amp; beauty</div>
-                <span class="bg-rose-600 text-white text-[7px] font-bold px-2 py-1 rounded-full text-center">Book Now</span>
-              </div>
-              <div class="bg-gradient-to-br from-rose-50 via-pink-50 to-fuchsia-50 rounded-xl p-2 flex flex-col justify-center gap-1.5 text-center">
-                <div class="text-rose-600 text-[7px] font-semibold">Award Winning</div>
-                <div class="text-rose-400 text-[7px]">Qualified Team</div>
-                <div class="text-rose-400 text-[7px]">Since 2015</div>
-              </div>
-            </div>
-          </div>
-          {{else if eq .ID "classic"}}
-          <div class="h-full overflow-hidden">
-            <div class="bg-gray-900 p-4">
-              <div class="inline-block border border-gray-700 text-gray-500 text-[7px] px-1.5 py-0.5 rounded-full mb-1.5">Co. Antrim</div>
-              <div class="text-white font-black text-sm mb-0.5">Quinn Electrical</div>
-              <div class="text-gray-400 text-[8px] mb-2">NICEIC approved electricians</div>
-              <div class="flex gap-2">
-                <span class="text-gray-400 text-[7px] flex items-center gap-0.5"><span class="text-green-400">✓</span> NICEIC</span>
-                <span class="text-gray-400 text-[7px] flex items-center gap-0.5"><span class="text-green-400">✓</span> Part P</span>
-              </div>
-            </div>
-            <div class="bg-white p-3 space-y-1.5">
-              <div class="flex items-center gap-1.5"><span class="w-1 h-1 bg-gray-900 rounded-full flex-shrink-0"></span><span class="text-[8px] text-gray-700">Full House Rewiring</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-1 h-1 bg-gray-900 rounded-full flex-shrink-0"></span><span class="text-[8px] text-gray-700">EV Charger Installation</span></div>
-            </div>
-          </div>
-          {{else if eq .ID "pulse"}}
-          <div class="bg-[#0a0a0a] h-full p-4">
-            <div class="inline-block border border-[#c8ff00]/30 text-[#c8ff00] text-[7px] px-1.5 py-0.5 rounded-full mb-2 uppercase tracking-widest">Belfast, NI</div>
-            <div class="text-white font-black text-sm uppercase tracking-tight mb-0.5">Titan Fitness</div>
-            <div class="text-[#666] text-[8px] mb-3">Belfast's hardest-working gym</div>
-            <div class="flex gap-1 mb-3">
-              <span class="bg-[#c8ff00] text-black text-[8px] font-black px-2 py-0.5 rounded">Join Now</span>
-              <span class="border border-[#333] text-[#888] text-[8px] px-2 py-0.5 rounded">Free Trial</span>
-            </div>
-            <div class="flex gap-3">
-              <span class="text-[#c8ff00] text-[7px]">✓ No Contract</span>
-              <span class="text-[#c8ff00] text-[7px]">✓ 6am–10pm</span>
-            </div>
-          </div>
-          {{else if eq .ID "grove"}}
-          <div class="grid grid-cols-2 h-full">
-            <div class="bg-[#1a3a28] p-3 flex flex-col justify-center">
-              <div class="inline-block bg-[#c8b89a]/20 text-[#c8b89a] text-[7px] px-1.5 py-0.5 rounded-full mb-1.5 uppercase">Co. Down</div>
-              <div class="text-[#f5f0e8] font-black text-xs mb-1">O'Hara Landscaping</div>
-              <div class="text-[#a8c4b0] text-[7px] mb-2">Since 2007</div>
-              <span class="bg-[#c8b89a] text-[#1a3a28] text-[7px] font-black px-2 py-0.5 rounded inline-block w-fit">Free Quote</span>
-            </div>
-            <div class="bg-[#f5f0e8] p-2.5 flex flex-col justify-center gap-1.5">
-              <div class="bg-white border border-[#e8ddd0] rounded-lg p-1.5 flex items-center gap-1"><span class="text-green-600 text-[7px] font-bold">✓</span><span class="text-[#1a3a28] text-[7px]">Fully Insured</span></div>
-              <div class="bg-white border border-[#e8ddd0] rounded-lg p-1.5 flex items-center gap-1"><span class="text-green-600 text-[7px] font-bold">✓</span><span class="text-[#1a3a28] text-[7px]">15+ Years</span></div>
-              <div class="bg-white border border-[#e8ddd0] rounded-lg p-1.5 flex items-center gap-1"><span class="text-green-600 text-[7px] font-bold">✓</span><span class="text-[#1a3a28] text-[7px]">Free Visit</span></div>
-            </div>
-          </div>
-          {{else if eq .ID "fleet"}}
-          <div class="bg-[#111] h-full p-4">
-            <div class="inline-block bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[7px] px-1.5 py-0.5 rounded-full mb-2 uppercase tracking-widest">Armagh, NI</div>
-            <div class="text-white font-black text-sm mb-0.5">Brady's Auto Centre</div>
-            <div class="text-[#666] text-[8px] mb-2">MOT, servicing &amp; repairs</div>
-            <div class="flex gap-1 mb-3">
-              <span class="bg-orange-500 text-white text-[8px] font-bold px-2 py-0.5 rounded">Book In</span>
-              <span class="border border-[#2a2a2a] text-[#888] text-[8px] px-2 py-0.5 rounded">Call</span>
-            </div>
-            <div class="space-y-1">
-              <div class="flex items-center gap-1"><span class="text-orange-400 text-[7px]">✓</span><span class="text-[#888] text-[7px]">DVA Authorised MOT Centre</span></div>
-              <div class="flex items-center gap-1"><span class="text-orange-400 text-[7px]">✓</span><span class="text-[#888] text-[7px]">30 Years in Business</span></div>
-            </div>
-          </div>
-          {{else if eq .ID "haven"}}
-          <div class="bg-[#faf8f5] h-full p-4">
-            <div class="text-center">
-              <div class="inline-flex items-center gap-1 bg-[#2d7a6a]/10 text-[#2d7a6a] text-[7px] px-2 py-0.5 rounded-full mb-2 uppercase tracking-widest">Strangford</div>
-              <div class="text-[#2c2c2c] font-black text-sm">The Harbour House</div>
-              <div class="text-[#888] text-[8px] mt-0.5 mb-3 italic">Waterfront B&amp;B retreat</div>
-              <span class="bg-[#2d7a6a] text-white text-[8px] font-bold px-3 py-1 rounded-lg">Check Availability</span>
-            </div>
-            <div class="mt-3 flex flex-wrap justify-center gap-x-2.5 gap-y-1">
-              <span class="text-[#2d7a6a] text-[7px]">✓ Tourism NI</span>
-              <span class="text-[#2d7a6a] text-[7px]">✓ Free Cancel</span>
-              <span class="text-[#2d7a6a] text-[7px]">✓ Pet Friendly</span>
-            </div>
-          </div>
-          {{else if eq .ID "arch"}}
+          {{else if eq .ID "linen"}}
           <div class="bg-white h-full p-4">
             <div class="text-[#bbb] text-[7px] uppercase tracking-[0.2em] mb-2">Belfast, NI</div>
             <div class="text-[#0a0a0a] font-black text-sm tracking-tight mb-0.5">Laura Vance Interiors</div>
@@ -360,6 +295,47 @@
               <div class="flex items-center justify-between border-b border-[#f5f5f5] pb-2"><span class="text-[8px] text-[#444]">Full Interior Design</span><span class="text-[8px] text-[#ccc]">→</span></div>
               <div class="flex items-center justify-between border-b border-[#f5f5f5] pb-2"><span class="text-[8px] text-[#444]">Colour Consultancy</span><span class="text-[8px] text-[#ccc]">→</span></div>
               <div class="flex items-center justify-between"><span class="text-[8px] text-[#444]">Space Planning</span><span class="text-[8px] text-[#ccc]">→</span></div>
+            </div>
+          </div>
+          {{else if eq .ID "onyx"}}
+          <div class="bg-[#0a0a0a] h-full p-4">
+            <div class="text-[#555] text-[7px] uppercase tracking-[0.2em] mb-2">Belfast, NI</div>
+            <div class="text-white font-black text-sm tracking-tight mb-0.5">Dawson Tax Advisers</div>
+            <div class="text-[#666] text-[8px] mb-3">Clear advice. No jargon.</div>
+            <div class="flex gap-1 mb-3">
+              <span class="bg-white text-[#0a0a0a] text-[8px] font-black px-2 py-0.5 rounded">Book a Call</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-1"><span class="text-white text-[7px]">✓</span><span class="text-[#666] text-[7px]">Corporation Tax</span></div>
+              <div class="flex items-center gap-1"><span class="text-white text-[7px]">✓</span><span class="text-[#666] text-[7px]">VAT &amp; Payroll</span></div>
+            </div>
+          </div>
+          {{else if eq .ID "ink"}}
+          <div class="bg-[#0c1a2e] h-full p-4">
+            <div class="inline-block bg-sky-500/20 border border-sky-500/30 text-sky-400 text-[7px] px-1.5 py-0.5 rounded-full mb-2 uppercase tracking-widest">Glasgow</div>
+            <div class="text-white font-black text-sm mb-0.5">Mackenzie Financial</div>
+            <div class="text-[#5a7a9a] text-[8px] mb-3">Independent financial planning</div>
+            <div class="flex gap-1 mb-3">
+              <span class="bg-sky-500 text-white text-[8px] font-bold px-2 py-0.5 rounded">Free Review</span>
+              <span class="border border-[#1e3a5a] text-[#5a7a9a] text-[8px] px-2 py-0.5 rounded">Learn More</span>
+            </div>
+            <div class="flex gap-2">
+              <span class="text-sky-400 text-[7px]">✓ FCA Regulated</span>
+              <span class="text-sky-400 text-[7px]">✓ 20+ yrs</span>
+            </div>
+          </div>
+          {{else if eq .ID "copper"}}
+          <div class="bg-[#faf7f4] h-full p-4">
+            <div class="text-[#b8734a] text-[7px] uppercase tracking-[0.2em] mb-2">Armagh, NI</div>
+            <div class="text-[#2c1a0e] font-black text-sm mb-0.5">The Copper Kettle</div>
+            <div class="text-[#8a6a55] text-[8px] italic mb-3">Artisan café &amp; bakery</div>
+            <div class="flex gap-1 mb-3">
+              <span class="bg-[#b8734a] text-white text-[8px] font-bold px-2 py-0.5 rounded">View Menu</span>
+              <span class="border border-[#e0c9b8] text-[#8a6a55] text-[8px] px-2 py-0.5 rounded">Find Us</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-1"><span class="text-[#b8734a] text-[7px]">✓</span><span class="text-[#8a6a55] text-[7px]">Fresh bakes daily</span></div>
+              <div class="flex items-center gap-1"><span class="text-[#b8734a] text-[7px]">✓</span><span class="text-[#8a6a55] text-[7px]">Locally sourced</span></div>
             </div>
           </div>
           {{end}}

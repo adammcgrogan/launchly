@@ -1,0 +1,167 @@
+{{define "theme"}}
+<style>
+:root{
+  --c-bg:#ffffff;--c-surface:#f8fafc;--c-primary:#4f46e5;--c-primary-fg:#ffffff;
+  --c-accent:#e0e7ff;--c-accent-fg:#4338ca;--c-text:#111827;--c-heading:#111827;
+  --c-muted:#6b7280;--c-border:#e5e7eb;
+}
+body{background:var(--c-bg);color:var(--c-text);}
+</style>
+{{end}}
+
+{{define "site-content"}}
+<!-- Nav -->
+<header class="sticky top-0 z-50 backdrop-blur border-b" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+    {{if .Site.LogoURL}}<img src="{{.Site.LogoURL}}" alt="{{.Site.BusinessName}}" class="h-8 w-auto">{{else}}<span class="font-black text-lg" style="color:var(--c-heading);">{{.Site.BusinessName}}</span>{{end}}
+    <div class="flex items-center gap-4">
+      {{if .Site.Phone}}<span class="font-semibold text-sm hidden md:block" style="color:var(--c-primary);">{{.Site.Phone}}</span>{{end}}
+      <a href="#contact" class="font-bold text-sm px-5 py-2 rounded-lg transition" style="background:var(--c-primary);color:var(--c-primary-fg);">{{.CTAText}}</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="py-24 border-b" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+    {{if .Site.Location}}<div class="inline-flex items-center gap-2 text-xs font-bold px-4 py-1.5 rounded-full mb-8 uppercase tracking-widest" style="background:var(--c-accent);color:var(--c-accent-fg);">{{.Site.Location}}</div>{{end}}
+    <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight mb-5" style="color:var(--c-heading);">{{.Site.BusinessName}}</h1>
+    {{if .Site.Tagline}}<p class="text-xl mb-10 max-w-xl mx-auto" style="color:var(--c-muted);">{{.Site.Tagline}}</p>{{end}}
+    <div class="flex flex-wrap gap-3 justify-center">
+      <a href="#contact" class="font-black text-lg px-8 py-4 rounded-xl transition" style="background:var(--c-primary);color:var(--c-primary-fg);">{{.CTAText}}</a>
+      {{if .Site.Phone}}<a href="tel:{{.Site.Phone}}" class="border-2 font-bold text-lg px-8 py-4 rounded-xl transition" style="border-color:var(--c-border);color:var(--c-text);">{{.Site.Phone}}</a>{{end}}
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+{{if .Site.About}}
+<section class="py-20 border-b" id="about" style="background:var(--c-surface);border-color:var(--c-border);">
+  <div class="max-w-5xl mx-auto px-6 flex gap-10 items-start">
+    <div class="w-1.5 rounded-full self-stretch hidden md:block flex-shrink-0" style="min-height:80px;background:var(--c-primary);"></div>
+    <div class="max-w-2xl">
+      <p class="font-bold text-sm uppercase tracking-widest mb-3" style="color:var(--c-primary);">About Us</p>
+      <p class="text-xl leading-relaxed" style="color:var(--c-muted);">{{.Site.About}}</p>
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Services -->
+{{if .Services}}
+<section class="py-20 border-b" id="services" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="font-bold text-sm uppercase tracking-widest mb-2" style="color:var(--c-primary);">Services</p>
+    <h2 class="text-3xl font-black mb-10" style="color:var(--c-heading);">What We Offer</h2>
+    <div class="grid sm:grid-cols-2 gap-x-12 gap-y-0">
+      {{range .Services}}
+      <div class="flex items-center gap-4 py-4 border-b" style="border-color:var(--c-border);">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--c-accent);">
+          <span class="w-2 h-2 rounded-full block" style="background:var(--c-primary);"></span>
+        </div>
+        <span class="font-medium" style="color:var(--c-text);">{{.}}</span>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Contact -->
+<section class="py-20" id="contact" style="background:var(--c-surface);">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="rounded-2xl p-8 shadow-sm border" style="background:var(--c-bg);border-color:var(--c-border);">
+        <p class="font-bold text-sm uppercase tracking-widest mb-2" style="color:var(--c-primary);">Get in Touch</p>
+        <h2 class="text-3xl font-black mb-6" style="color:var(--c-heading);">{{.CTAText}}</h2>
+        {{if .LeadSent}}<div class="bg-green-50 border border-green-200 text-green-700 rounded-xl p-4 mb-5">Thanks! We'll be in touch shortly.</div>{{end}}
+        <form method="POST" action="{{.FormAction}}" class="space-y-4">
+          <input type="text" name="name" required placeholder="Your Name" class="w-full rounded-xl px-4 py-3 text-sm focus:outline-none border" style="border-color:var(--c-border);">
+          <input type="tel" name="phone" placeholder="Phone Number" class="w-full rounded-xl px-4 py-3 text-sm focus:outline-none border" style="border-color:var(--c-border);">
+          <input type="email" name="email" placeholder="Email Address" class="w-full rounded-xl px-4 py-3 text-sm focus:outline-none border" style="border-color:var(--c-border);">
+          <textarea name="message" rows="4" placeholder="How can we help?" class="w-full rounded-xl px-4 py-3 text-sm focus:outline-none border resize-none" style="border-color:var(--c-border);"></textarea>
+          <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+          <button type="submit" class="w-full font-bold py-3.5 rounded-xl transition" style="background:var(--c-primary);color:var(--c-primary-fg);">Send Message</button>
+        </form>
+      </div>
+      <div class="space-y-8 pt-2">
+        {{if .Certifications}}
+        <div>
+          <p class="font-bold text-sm uppercase tracking-widest mb-4" style="color:var(--c-primary);">Qualifications</p>
+          <ul class="space-y-2">{{range .Certifications}}<li class="flex gap-3 text-sm" style="color:var(--c-muted);"><span style="color:var(--c-primary);">✓</span>{{.}}</li>{{end}}</ul>
+        </div>
+        {{end}}
+        {{if .Hours}}
+        <div>
+          <p class="font-bold text-sm uppercase tracking-widest mb-4" style="color:var(--c-primary);">Opening Hours</p>
+          <ul class="space-y-3">{{range .Hours}}<li class="flex gap-3 text-sm" style="color:var(--c-muted);"><span style="color:var(--c-primary);">–</span>{{.}}</li>{{end}}</ul>
+        </div>
+        {{end}}
+        {{if .Site.Address}}
+        <div>
+          <p class="font-bold text-sm uppercase tracking-widest mb-2" style="color:var(--c-primary);">Our Location</p>
+          <p class="text-sm mb-3" style="color:var(--c-muted);">{{.Site.Address}}</p>
+          {{if .Site.MapURL}}<a href="{{.Site.MapURL}}" target="_blank" class="text-sm font-semibold hover:underline" style="color:var(--c-primary);">Directions →</a>{{end}}
+          {{if .Site.MapEmbedURL}}<div class="mt-3 rounded-xl overflow-hidden"><iframe src="{{.Site.MapEmbedURL}}" width="100%" height="180" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>{{end}}
+        </div>
+        {{end}}
+        {{if .Site.Phone}}
+        <div>
+          <p class="font-bold text-sm uppercase tracking-widest mb-2" style="color:var(--c-primary);">Phone</p>
+          <a href="tel:{{.Site.Phone}}" class="font-black text-xl transition hover:opacity-75" style="color:var(--c-heading);">{{.Site.Phone}}</a>
+        </div>
+        {{end}}
+        {{if or .Site.FacebookURL .Site.InstagramURL .Site.WhatsAppURL .Site.TwitterURL .Site.TikTokURL .Site.LinkedInURL .Site.YouTubeURL}}
+        <div class="flex flex-wrap gap-4">
+          {{if .Site.FacebookURL}}<a href="{{.Site.FacebookURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-primary);">Facebook</a>{{end}}
+          {{if .Site.InstagramURL}}<a href="{{.Site.InstagramURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-primary);">Instagram</a>{{end}}
+          {{if .Site.WhatsAppURL}}<a href="{{.Site.WhatsAppURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-primary);">WhatsApp</a>{{end}}
+          {{if .Site.TwitterURL}}<a href="{{.Site.TwitterURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-primary);">X / Twitter</a>{{end}}
+          {{if .Site.TikTokURL}}<a href="{{.Site.TikTokURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-primary);">TikTok</a>{{end}}
+          {{if .Site.LinkedInURL}}<a href="{{.Site.LinkedInURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-primary);">LinkedIn</a>{{end}}
+          {{if .Site.YouTubeURL}}<a href="{{.Site.YouTubeURL}}" target="_blank" class="text-sm font-bold hover:underline" style="color:var(--c-primary);">YouTube</a>{{end}}
+        </div>
+        {{end}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+{{if .Testimonials}}
+<section class="py-20 border-t" style="background:var(--c-bg);border-color:var(--c-border);">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="font-bold text-sm uppercase tracking-widest mb-2" style="color:var(--c-primary);">Reviews</p>
+    <h2 class="text-3xl font-black mb-10" style="color:var(--c-heading);">What Our Clients Say</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{range .Testimonials}}
+      <div class="rounded-2xl p-6 border" style="background:var(--c-surface);border-color:var(--c-border);">
+        <p class="text-sm leading-relaxed mb-5" style="color:var(--c-muted);">"{{.Quote}}"</p>
+        <div>
+          <div class="font-bold text-sm" style="color:var(--c-heading);">{{.Name}}</div>
+          {{if .Role}}<div class="text-xs mt-0.5" style="color:var(--c-muted);">{{.Role}}</div>{{end}}
+        </div>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Gallery -->
+{{if .Gallery}}
+<section class="py-20 border-t" style="background:var(--c-surface);border-color:var(--c-border);">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="font-bold text-sm uppercase tracking-widest mb-2" style="color:var(--c-primary);">Gallery</p>
+    <h2 class="text-3xl font-black mb-10" style="color:var(--c-heading);">Our Work</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      {{range .Gallery}}
+      <div class="aspect-square overflow-hidden rounded-2xl">
+        <img src="{{.}}" alt="Gallery photo" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+{{end}}

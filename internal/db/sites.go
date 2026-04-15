@@ -14,7 +14,8 @@ const siteColumns = `id, slug, business_name, template, tagline, about, services
 	facebook_url, instagram_url, whatsapp_url, twitter_url, tiktok_url, linkedin_url, youtube_url,
 	umami_website_id, lead_email, status, created_at, published_at,
 	plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at,
-	COALESCE(custom_domain, ''), notes, analytics_frequency, analytics_last_sent`
+	COALESCE(custom_domain, ''), notes, analytics_frequency, analytics_last_sent,
+	COALESCE(palette, ''), COALESCE(heading_font, '')`
 
 type scanner interface {
 	Scan(dest ...any) error
@@ -34,6 +35,7 @@ func scanSite(s scanner) (*models.Site, error) {
 		&site.UmamiWebsiteID, &site.LeadEmail, &site.Status, &site.CreatedAt, &site.PublishedAt,
 		&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt,
 		&site.CustomDomain, &site.Notes, &site.AnalyticsFrequency, &site.AnalyticsLastSent,
+		&site.Palette, &site.HeadingFont,
 	)
 	if err == sql.ErrNoRows {
 		return nil, nil
@@ -145,6 +147,11 @@ func (s *Store) UpdateSite(site *models.Site) error {
 
 func (s *Store) UpdateSiteTemplate(id int, template string) error {
 	_, err := s.db.Exec(`UPDATE sites SET template=$1 WHERE id=$2`, template, id)
+	return err
+}
+
+func (s *Store) UpdateSiteAppearance(id int, palette, headingFont string) error {
+	_, err := s.db.Exec(`UPDATE sites SET palette=$1, heading_font=$2 WHERE id=$3`, palette, headingFont, id)
 	return err
 }
 

@@ -34,6 +34,8 @@
     }
   </script>
   {{template "theme" .}}
+  {{if .PaletteCSS}}<style>:root{ {{.PaletteCSS}} }</style>{{end}}
+  {{if .HeadingFontCSS}}<style>h1,h2,h3,h4,h5,h6,.font-heading{font-family:{{.HeadingFontCSS}} !important;}</style>{{end}}
   {{if and .UmamiScriptURL .Site.UmamiWebsiteID}}
   <script defer src="{{.UmamiScriptURL}}" data-website-id="{{.Site.UmamiWebsiteID}}"></script>
   {{end}}
