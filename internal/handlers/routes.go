@@ -15,6 +15,7 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /templates", h.TemplatesPage)
 	mux.HandleFunc("GET /get-started", h.OnboardingForm)
 	mux.HandleFunc("POST /get-started", h.OnboardingSubmit)
+	mux.HandleFunc("GET /check-slug", h.CheckSlug)
 	mux.HandleFunc("GET /payment/success", h.PaymentSuccess)
 	mux.HandleFunc("POST /webhooks/stripe", h.StripeWebhook)
 

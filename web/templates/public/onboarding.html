@@ -43,7 +43,11 @@
             <input id="ob_business_name" type="text" name="business_name" required
               placeholder="e.g. Adam's Barbershop"
               class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-            <p class="text-gray-400 text-xs mt-1">Your site will be at: <span id="slug-preview" class="font-semibold text-gray-500">yourname.launchly.ltd</span></p>
+            <p class="text-gray-400 text-xs mt-1 flex items-center gap-1.5">
+              Your site will be at:
+              <span id="slug-preview" class="font-semibold text-gray-500">yourname.launchly.ltd</span>
+              <span id="slug-status" class="hidden text-xs font-semibold"></span>
+            </p>
           </div>
           <div>
             <label for="ob_tagline" class="block text-sm font-semibold text-gray-700 mb-1.5">Tagline <span class="font-normal text-gray-400">(optional)</span></label>
@@ -422,14 +426,35 @@
   container.appendChild(makeTestimonial());
   syncTestimonials();
 
-  /* ── Slug preview ─────────────────────────────────────────── */
+  /* ── Slug preview + availability check ───────────────────── */
   var nameInput = document.getElementById('ob_business_name');
   var slugPreview = document.getElementById('slug-preview');
+  var slugStatus = document.getElementById('slug-status');
+  var slugTimer = null;
   function toSlug(s) {
     return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'yourname';
   }
   nameInput.addEventListener('input', function () {
-    slugPreview.textContent = toSlug(nameInput.value) + '.launchly.ltd';
+    var slug = toSlug(nameInput.value);
+    slugPreview.textContent = slug + '.launchly.ltd';
+    slugStatus.className = 'hidden text-xs font-semibold';
+    clearTimeout(slugTimer);
+    if (!nameInput.value.trim()) return;
+    slugTimer = setTimeout(function () {
+      fetch('/check-slug?name=' + encodeURIComponent(nameInput.value))
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          slugStatus.classList.remove('hidden');
+          if (d.available) {
+            slugStatus.textContent = '✓ available';
+            slugStatus.className = 'text-xs font-semibold text-green-600';
+          } else {
+            slugStatus.textContent = '✗ taken';
+            slugStatus.className = 'text-xs font-semibold text-red-500';
+          }
+        })
+        .catch(function(){});
+    }, 400);
   });
 
   /* ── Wizard ───────────────────────────────────────────────── */

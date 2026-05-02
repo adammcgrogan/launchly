@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -16,6 +17,23 @@ func toSlug(s string) string {
 	s = strings.ToLower(s)
 	s = slugRe.ReplaceAllString(s, "-")
 	return strings.Trim(s, "-")
+}
+
+// CheckSlug returns JSON indicating whether a slug derived from the given name is available.
+func (h *Handler) CheckSlug(w http.ResponseWriter, r *http.Request) {
+	name := strings.TrimSpace(r.URL.Query().Get("name"))
+	slug := toSlug(name)
+	if slug == "" {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]any{"available": false, "slug": ""})
+		return
+	}
+	existing, _ := h.store.GetSiteBySlug(slug)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]any{
+		"available": existing == nil,
+		"slug":      slug,
+	})
 }
 
 func (h *Handler) OnboardingForm(w http.ResponseWriter, r *http.Request) {
