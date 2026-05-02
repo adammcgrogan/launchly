@@ -4,7 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"net"
 	"net/http"
 	"net/url"
@@ -117,7 +117,7 @@ func (h *Handler) AdminPublish(w http.ResponseWriter, r *http.Request) {
 	if site.LeadEmail != "" {
 		siteURL := h.siteURL(site.Slug)
 		if err := h.email.SendSitePublished(site.LeadEmail, site.BusinessName, siteURL); err != nil {
-			log.Printf("send site published email error: %v", err)
+			slog.Error("send site published email", "error", err)
 		}
 	}
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
@@ -140,7 +140,7 @@ func (h *Handler) AdminUnpublish(w http.ResponseWriter, r *http.Request) {
 	}
 	if site.LeadEmail != "" {
 		if err := h.email.SendSiteUnpublished(site.LeadEmail, site.BusinessName); err != nil {
-			log.Printf("send site unpublished email error: %v", err)
+			slog.Error("send site unpublished email", "error", err)
 		}
 	}
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
@@ -258,7 +258,7 @@ func (h *Handler) AdminUpdateSite(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(changes) > 0 && updated.LeadEmail != "" {
 		if err := h.email.SendSiteUpdated(updated.LeadEmail, updated.BusinessName, changes); err != nil {
-			log.Printf("send site updated email error: %v", err)
+			slog.Error("send site updated email", "error", err)
 		}
 	}
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
@@ -413,7 +413,7 @@ func (h *Handler) AdminSendPayment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := h.email.SendPaymentLink(site.LeadEmail, site.BusinessName, checkoutURL); err != nil {
-		log.Printf("send payment link email error: %v", err)
+		slog.Error("send payment link email", "error", err)
 	}
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d?payment=sent", id), http.StatusSeeOther)
 }
@@ -478,7 +478,7 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 	}
 	event, err := h.pay.ParseWebhook(body, r.Header.Get("Stripe-Signature"))
 	if err != nil {
-		log.Printf("stripe webhook error: %v", err)
+		slog.Error("stripe webhook parse", "error", err)
 		http.Error(w, "invalid webhook", http.StatusBadRequest)
 		return
 	}
@@ -487,15 +487,15 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 		if event.SessionID != "" {
 			first, err := h.store.SetSitePaid(event.SessionID, event.SubscriptionID)
 			if err != nil {
-				log.Printf("set site paid error: %v", err)
+				slog.Error("set site paid", "error", err)
 				http.Error(w, "database error", http.StatusInternalServerError)
 				return
 			}
-			log.Printf("payment received for session %s (first=%v)", event.SessionID, first)
+			slog.Info("payment received", "session_id", event.SessionID, "first", first)
 			if first {
 				if site, err := h.store.GetSiteByStripeSessionID(event.SessionID); err == nil && site != nil && site.LeadEmail != "" {
 					if err := h.email.SendPaymentConfirmation(site.LeadEmail, site.BusinessName, site.Plan); err != nil {
-						log.Printf("send payment confirmation email error: %v", err)
+						slog.Error("send payment confirmation email", "error", err)
 					}
 				}
 			}
@@ -504,15 +504,15 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 		if event.SubscriptionID != "" {
 			site, _ := h.store.GetSiteByStripeSubscriptionID(event.SubscriptionID)
 			if err := h.store.SetSiteCancelled(event.SubscriptionID); err != nil {
-				log.Printf("set site cancelled error: %v", err)
+				slog.Error("set site cancelled", "error", err)
 				http.Error(w, "database error", http.StatusInternalServerError)
 				return
 			}
-			log.Printf("subscription cancelled: %s", event.SubscriptionID)
+			slog.Info("subscription cancelled", "subscription_id", event.SubscriptionID)
 			if site != nil {
 				if site.LeadEmail != "" {
 					if err := h.email.SendCancellationConfirmation(site.LeadEmail, site.BusinessName); err != nil {
-						log.Printf("send cancellation confirmation email error: %v", err)
+						slog.Error("send cancellation confirmation email", "error", err)
 					}
 				}
 				h.email.SendAdminAlert(
@@ -525,11 +525,11 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 	case "invoice.payment_failed":
 		if event.SubscriptionID != "" {
 			site, _ := h.store.GetSiteByStripeSubscriptionID(event.SubscriptionID)
-			log.Printf("payment failed for subscription %s", event.SubscriptionID)
+			slog.Warn("payment failed", "subscription_id", event.SubscriptionID)
 			if site != nil {
 				if site.LeadEmail != "" {
 					if err := h.email.SendPaymentFailed(site.LeadEmail, site.BusinessName); err != nil {
-						log.Printf("send payment failed email error: %v", err)
+						slog.Error("send payment failed email", "error", err)
 					}
 				}
 				h.email.SendAdminAlert(
@@ -674,7 +674,7 @@ func (h *Handler) AdminSendAnalytics(w http.ResponseWriter, r *http.Request) {
 		days = 30
 	}
 	if err := h.sendAnalyticsReport(site, days); err != nil {
-		log.Printf("admin send analytics for %s: %v", site.Slug, err)
+		slog.Error("admin send analytics", "slug", site.Slug, "error", err)
 	}
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d?analytics=sent", id), http.StatusSeeOther)
 }
@@ -708,7 +708,7 @@ func (h *Handler) StartAnalyticsCron() {
 		for range ticker.C {
 			sites, err := h.store.GetSitesDueForAnalytics()
 			if err != nil {
-				log.Printf("analytics cron: list sites: %v", err)
+				slog.Error("analytics cron: list sites", "error", err)
 				continue
 			}
 			for _, site := range sites {
@@ -717,7 +717,7 @@ func (h *Handler) StartAnalyticsCron() {
 					days = 30
 				}
 				if err := h.sendAnalyticsReport(site, days); err != nil {
-					log.Printf("analytics cron: send %s: %v", site.Slug, err)
+					slog.Error("analytics cron: send report", "slug", site.Slug, "error", err)
 				}
 			}
 		}

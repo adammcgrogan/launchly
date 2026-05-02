@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"strings"
@@ -58,7 +58,7 @@ func (h *Handler) recordPageView(r *http.Request, siteID int) {
 		path = "/"
 	}
 	if err := h.store.RecordPageView(siteID, path, ref, ip, ua, country); err != nil {
-		log.Printf("record page view: %v", err)
+		slog.Error("record page view", "error", err)
 	}
 }
 
@@ -77,13 +77,13 @@ func (h *Handler) renderSite(w http.ResponseWriter, r *http.Request, site *model
 	tmpl, ok := h.tmpl["site:"+site.Template]
 	if !ok {
 		http.Error(w, "template error", http.StatusInternalServerError)
-		log.Printf("renderSite: unknown template %q for site %s", site.Template, site.Slug)
+		slog.Error("renderSite: unknown template", "template", site.Template, "slug", site.Slug)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	data := h.siteData(site, r.URL.Query().Get("lead") == "1", formAction)
 	if err := tmpl.ExecuteTemplate(w, "base", data); err != nil {
-		log.Printf("template render error for site %s: %v", site.Slug, err)
+		slog.Error("template render error", "slug", site.Slug, "error", err)
 	}
 }
 

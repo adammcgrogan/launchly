@@ -3,7 +3,7 @@ package handlers
 import (
 	"fmt"
 	"html/template"
-	"log"
+	"log/slog"
 	"net/http"
 	"strings"
 	"time"
@@ -96,11 +96,11 @@ func (h *Handler) render(w http.ResponseWriter, key string, data any) {
 	tmpl, ok := h.tmpl[key]
 	if !ok {
 		http.Error(w, "template not found", http.StatusInternalServerError)
-		log.Printf("render: unknown template key %q", key)
+		slog.Error("render: unknown template key", "key", key)
 		return
 	}
 	if err := tmpl.ExecuteTemplate(w, "base", data); err != nil {
-		log.Printf("render %s: %v", key, err)
+		slog.Error("template render failed", "key", key, "error", err)
 	}
 }
 

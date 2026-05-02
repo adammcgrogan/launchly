@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 	"regexp"
 	"strings"
@@ -114,12 +114,12 @@ func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
 
 	if site.LeadEmail != "" {
 		if err := h.email.SendWelcomeEmail(site.LeadEmail, site.BusinessName); err != nil {
-			log.Printf("send welcome email error: %v", err)
+			slog.Error("send welcome email", "error", err)
 		}
 	}
 
 	if err := h.email.SendNewSubmissionNotification("hello@launchly.ltd", site.BusinessName, site.Template, site.Location, site.LeadEmail); err != nil {
-		log.Printf("send submission notification error: %v", err)
+		slog.Error("send submission notification", "error", err)
 	}
 
 	h.render(w, "thankyou", map[string]any{

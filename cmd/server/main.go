@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	log.SetOutput(os.Stdout)
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
 	_ = godotenv.Load()
 
 	dsn := mustEnv("DATABASE_URL")
@@ -35,20 +35,23 @@ func main() {
 
 	store, err := db.New(dsn)
 	if err != nil {
-		log.Fatalf("database: %v", err)
+		slog.Error("database init failed", "error", err)
+		os.Exit(1)
 	}
 	if err := store.Migrate(); err != nil {
-		log.Fatalf("migrate: %v", err)
+		slog.Error("migrate failed", "error", err)
+		os.Exit(1)
 	}
 	if err := store.SeedExamples(); err != nil {
-		log.Printf("seed examples (non-fatal): %v", err)
+		slog.Warn("seed examples failed (non-fatal)", "error", err)
 	}
 
 	mailer := email.New(resendKey, emailFrom)
 	pay := payment.New(stripeSecretKey, stripeWebhookSecret, stripeStarterProduct, stripeProProduct)
 	h, err := handlers.New(store, mailer, pay, domain, adminPass, umamiScriptURL)
 	if err != nil {
-		log.Fatalf("handlers: %v", err)
+		slog.Error("handlers init failed", "error", err)
+		os.Exit(1)
 	}
 
 	mux := http.NewServeMux()
@@ -78,17 +81,18 @@ func main() {
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	go func() {
 		<-quit
-		log.Println("shutting down...")
+		slog.Info("shutting down")
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 		if err := srv.Shutdown(ctx); err != nil {
-			log.Printf("shutdown error: %v", err)
+			slog.Error("shutdown error", "error", err)
 		}
 	}()
 
-	log.Printf("Launchly listening on %s (domain: %s)", addr, domain)
+	slog.Info("listening", "addr", addr, "domain", domain)
 	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Fatalf("listen: %v", err)
+		slog.Error("server error", "error", err)
+		os.Exit(1)
 	}
 }
 
@@ -98,7 +102,12 @@ func loggingMiddleware(next http.Handler) http.Handler {
 		start := time.Now()
 		rec := &statusRecorder{ResponseWriter: w, status: http.StatusOK}
 		next.ServeHTTP(rec, r)
-		log.Printf("%s %s %d %s", r.Method, r.URL.Path, rec.status, time.Since(start).Round(time.Millisecond))
+		slog.Info("request",
+			"method", r.Method,
+			"path", r.URL.Path,
+			"status", rec.status,
+			"duration", time.Since(start).Round(time.Millisecond),
+		)
 	})
 }
 
@@ -153,7 +162,8 @@ func subdomainRouter(domain string, h *handlers.Handler, fallback http.Handler) 
 func mustEnv(key string) string {
 	v := os.Getenv(key)
 	if v == "" {
-		log.Fatalf("required env var %s is not set", key)
+		slog.Error("required env var not set", "key", key)
+		os.Exit(1)
 	}
 	return v
 }
