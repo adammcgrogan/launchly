@@ -156,5 +156,9 @@ func (s *Store) Migrate() error {
 		country    TEXT NOT NULL DEFAULT ''
 	)`)
 	s.db.Exec(`CREATE INDEX IF NOT EXISTS idx_page_views_site_time ON page_views (site_id, viewed_at)`)
+	s.db.Exec(`CREATE TABLE IF NOT EXISTS stripe_events (
+		event_id     TEXT PRIMARY KEY,
+		processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+	)`)
 	return nil
 }

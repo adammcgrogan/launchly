@@ -99,6 +99,7 @@ func (c *Client) CancelSubscription(subscriptionID string) error {
 
 // WebhookEvent is a parsed Stripe webhook event.
 type WebhookEvent struct {
+	ID             string // Stripe event ID — used for idempotency
 	Type           string
 	SessionID      string // populated for checkout.session.completed
 	SubscriptionID string // populated for checkout.session.completed, customer.subscription.deleted, invoice.payment_failed
@@ -113,7 +114,7 @@ func (c *Client) ParseWebhook(payload []byte, sigHeader string) (*WebhookEvent, 
 	if err != nil {
 		return nil, fmt.Errorf("webhook signature: %w", err)
 	}
-	we := &WebhookEvent{Type: string(event.Type)}
+	we := &WebhookEvent{ID: event.ID, Type: string(event.Type)}
 	switch event.Type {
 	case "checkout.session.completed":
 		var sess stripe.CheckoutSession

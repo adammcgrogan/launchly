@@ -482,6 +482,17 @@ func (h *Handler) StripeWebhook(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid webhook", http.StatusBadRequest)
 		return
 	}
+	if event.ID != "" {
+		first, err := h.store.MarkStripeEventProcessed(event.ID)
+		if err != nil {
+			slog.Error("stripe event idempotency check", "error", err)
+		} else if !first {
+			slog.Info("stripe event already processed, skipping", "event_id", event.ID)
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+	}
+
 	switch event.Type {
 	case "checkout.session.completed":
 		if event.SessionID != "" {

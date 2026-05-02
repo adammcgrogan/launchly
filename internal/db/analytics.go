@@ -88,3 +88,17 @@ func (s *Store) UpdateAnalyticsLastSent(id int) error {
 	_, err := s.db.Exec(`UPDATE sites SET analytics_last_sent = NOW() WHERE id = $1`, id)
 	return err
 }
+
+// MarkStripeEventProcessed records a Stripe event ID. Returns true if newly inserted
+// (first delivery), false if the event was already processed (retry/duplicate).
+func (s *Store) MarkStripeEventProcessed(eventID string) (bool, error) {
+	res, err := s.db.Exec(
+		`INSERT INTO stripe_events (event_id) VALUES ($1) ON CONFLICT (event_id) DO NOTHING`,
+		eventID,
+	)
+	if err != nil {
+		return false, err
+	}
+	rows, _ := res.RowsAffected()
+	return rows > 0, nil
+}
