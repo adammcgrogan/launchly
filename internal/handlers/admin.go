@@ -711,6 +711,36 @@ func (h *Handler) sendAnalyticsReport(site *models.Site, days int) error {
 	return h.store.UpdateAnalyticsLastSent(site.ID)
 }
 
+// StartTrialCron starts a background goroutine that sends trial expiry reminder emails.
+func (h *Handler) StartTrialCron() {
+	go func() {
+		ticker := time.NewTicker(1 * time.Hour)
+		defer ticker.Stop()
+		for range ticker.C {
+			for _, kind := range []string{"first", "final"} {
+				sites, err := h.store.GetSitesDueForTrialReminder(kind)
+				if err != nil {
+					slog.Error("trial cron: list sites", "kind", kind, "error", err)
+					continue
+				}
+				for _, site := range sites {
+					daysLeft := 3
+					if kind == "final" {
+						daysLeft = 1
+					}
+					if err := h.email.SendTrialWarning(site.LeadEmail, site.BusinessName, daysLeft); err != nil {
+						slog.Error("trial cron: send reminder", "slug", site.Slug, "kind", kind, "error", err)
+						continue
+					}
+					if err := h.store.MarkTrialReminderSent(site.ID, kind); err != nil {
+						slog.Error("trial cron: mark sent", "slug", site.Slug, "kind", kind, "error", err)
+					}
+				}
+			}
+		}
+	}()
+}
+
 // StartAnalyticsCron starts a background goroutine that sends scheduled analytics emails.
 func (h *Handler) StartAnalyticsCron() {
 	go func() {

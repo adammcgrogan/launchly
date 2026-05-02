@@ -67,6 +67,7 @@ func main() {
 	finalHandler := loggingMiddleware(subdomainRouter(domain, h, mux))
 
 	h.StartAnalyticsCron()
+	h.StartTrialCron()
 
 	srv := &http.Server{
 		Addr:         addr,

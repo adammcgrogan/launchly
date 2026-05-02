@@ -15,7 +15,8 @@ const siteColumns = `id, slug, business_name, template, tagline, about, services
 	umami_website_id, lead_email, status, created_at, published_at,
 	plan, payment_status, stripe_session_id, stripe_subscription_id, paid_at,
 	COALESCE(custom_domain, ''), notes, analytics_frequency, analytics_last_sent,
-	COALESCE(palette, ''), COALESCE(heading_font, '')`
+	COALESCE(palette, ''), COALESCE(heading_font, ''),
+	trial_ends_at, trial_reminder_sent, trial_final_reminder_sent`
 
 type scanner interface {
 	Scan(dest ...any) error
@@ -36,6 +37,7 @@ func scanSite(s scanner) (*models.Site, error) {
 		&site.Plan, &site.PaymentStatus, &site.StripeSessionID, &site.StripeSubscriptionID, &site.PaidAt,
 		&site.CustomDomain, &site.Notes, &site.AnalyticsFrequency, &site.AnalyticsLastSent,
 		&site.Palette, &site.HeadingFont,
+		&site.TrialEndsAt, &site.TrialReminderSent, &site.TrialFinalReminderSent,
 	)
 	if err == sql.ErrNoRows {
 		return nil, nil
@@ -50,8 +52,8 @@ func (s *Store) CreateSite(site *models.Site) error {
 		                   phone, email, address, hours,
 		                   map_url, map_embed_url, facebook_url, instagram_url, whatsapp_url,
 		                   twitter_url, tiktok_url, linkedin_url, youtube_url,
-		                   umami_website_id, lead_email, plan)
-		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28)
+		                   umami_website_id, lead_email, plan, trial_ends_at)
+		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28, NOW() + INTERVAL '14 days')
 		RETURNING id, created_at`,
 		site.Slug, site.BusinessName, site.Template, site.Tagline, site.About,
 		site.Services, site.Certifications, site.Location, site.CTAText,

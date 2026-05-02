@@ -160,5 +160,8 @@ func (s *Store) Migrate() error {
 		event_id     TEXT PRIMARY KEY,
 		processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 	)`)
+	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS trial_ends_at TIMESTAMPTZ`)
+	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS trial_reminder_sent TIMESTAMPTZ`)
+	s.db.Exec(`ALTER TABLE sites ADD COLUMN IF NOT EXISTS trial_final_reminder_sent TIMESTAMPTZ`)
 	return nil
 }

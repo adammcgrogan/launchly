@@ -53,6 +53,9 @@ type Site struct {
 	AnalyticsLastSent      *time.Time `db:"analytics_last_sent"`
 	Palette                string     `db:"palette"`                 // selected colour palette ID, empty = template default
 	HeadingFont            string     `db:"heading_font"`            // "sans", "serif", "mono" — empty = sans
+	TrialEndsAt            *time.Time `db:"trial_ends_at"`           // set on creation for new sites; nil = exempt (legacy)
+	TrialReminderSent      *time.Time `db:"trial_reminder_sent"`     // when the day-11 warning was sent
+	TrialFinalReminderSent *time.Time `db:"trial_final_reminder_sent"` // when the day-13 final warning was sent
 }
 
 // ReferrerCount is a referrer hostname with its visit count.

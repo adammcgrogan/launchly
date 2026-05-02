@@ -347,6 +347,21 @@ func (c *Client) SendNewSubmissionNotification(to, businessName, template, locat
 	return c.Send(to, fmt.Sprintf("New request: %s", businessName), wrap(content))
 }
 
+func (c *Client) SendTrialWarning(to, businessName string, daysLeft int) error {
+	urgency := fmt.Sprintf("%d days", daysLeft)
+	if daysLeft == 1 {
+		urgency = "1 day"
+	}
+	content := h1(fmt.Sprintf("Your free trial ends in %s", urgency)) +
+		p(fmt.Sprintf("Your <strong>%s</strong> website has been built and is ready to go live. Your 14-day free trial ends in <strong>%s</strong>.", businessName, urgency)) +
+		p("To keep your site online and start receiving customer enquiries, activate your subscription below.") +
+		button("https://launchly.ltd", "Activate My Website", "#4f46e5") +
+		divider() +
+		p(`<span style="color:#6b7280;font-size:13px;">Questions? Reply to this email or message us at <a href="mailto:hello@launchly.ltd" style="color:#4f46e5;">hello@launchly.ltd</a></span>`)
+	subject := fmt.Sprintf("Your free trial ends in %s — %s", urgency, businessName)
+	return c.Send(to, subject, wrap(content))
+}
+
 func (c *Client) SendLeadNotification(to, businessName, visitorName, visitorEmail, phone, message string) error {
 	rows := ""
 	fields := [][2]string{
