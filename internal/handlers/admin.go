@@ -17,14 +17,47 @@ import (
 
 func (h *Handler) adminAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		_, pass, ok := r.BasicAuth()
-		if !ok || pass != h.adminPass {
-			w.Header().Set("WWW-Authenticate", `Basic realm="Launchly Admin"`)
-			http.Error(w, "unauthorised", http.StatusUnauthorized)
+		if !h.isAuthenticated(r) {
+			http.Redirect(w, r, "/admin/login?next="+url.QueryEscape(r.URL.RequestURI()), http.StatusSeeOther)
+			return
+		}
+		if r.Method == http.MethodPost && r.FormValue("csrf_token") != h.csrfToken() {
+			http.Error(w, "invalid CSRF token", http.StatusForbidden)
 			return
 		}
 		next(w, r)
 	}
+}
+
+func (h *Handler) AdminLogin(w http.ResponseWriter, r *http.Request) {
+	if h.isAuthenticated(r) {
+		http.Redirect(w, r, "/admin", http.StatusSeeOther)
+		return
+	}
+	h.render(w, "admin:login", map[string]any{
+		"Next": r.URL.Query().Get("next"),
+	})
+}
+
+func (h *Handler) AdminLoginPost(w http.ResponseWriter, r *http.Request) {
+	if r.FormValue("password") != h.adminPass {
+		h.render(w, "admin:login", map[string]any{
+			"Error": "Incorrect password.",
+			"Next":  r.FormValue("next"),
+		})
+		return
+	}
+	h.setSession(w)
+	next := r.FormValue("next")
+	if next == "" || !strings.HasPrefix(next, "/admin") {
+		next = "/admin"
+	}
+	http.Redirect(w, r, next, http.StatusSeeOther)
+}
+
+func (h *Handler) AdminLogout(w http.ResponseWriter, r *http.Request) {
+	h.clearSession(w)
+	http.Redirect(w, r, "/admin/login", http.StatusSeeOther)
 }
 
 func (h *Handler) AdminDashboard(w http.ResponseWriter, r *http.Request) {
@@ -34,10 +67,11 @@ func (h *Handler) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	h.render(w, "admin:dashboard", map[string]any{
-		"Sites":   sites,
-		"Domain":  h.domain,
-		"BaseURL": h.baseURL(r.Host),
-		"Flash":   getFlash(w, r),
+		"Sites":     sites,
+		"Domain":    h.domain,
+		"BaseURL":   h.baseURL(r.Host),
+		"Flash":     getFlash(w, r),
+		"CSRFToken": h.csrfToken(),
 	})
 }
 
@@ -98,6 +132,7 @@ func (h *Handler) AdminSite(w http.ResponseWriter, r *http.Request) {
 		"Palettes":      palettes,
 		"HeadingFonts":  HeadingFonts,
 		"Flash":         getFlash(w, r),
+		"CSRFToken":     h.csrfToken(),
 	})
 }
 
@@ -178,6 +213,7 @@ func (h *Handler) AdminEditSite(w http.ResponseWriter, r *http.Request) {
 	h.render(w, "admin:edit", map[string]any{
 		"Site":         site,
 		"Testimonials": parseTestimonials(site.Testimonials),
+		"CSRFToken":    h.csrfToken(),
 	})
 }
 
@@ -355,6 +391,7 @@ func (h *Handler) AdminSwitchTemplate(w http.ResponseWriter, r *http.Request) {
 	h.render(w, "admin:switch_template", map[string]any{
 		"Site":      site,
 		"Templates": entries,
+		"CSRFToken": h.csrfToken(),
 	})
 }
 

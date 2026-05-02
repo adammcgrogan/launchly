@@ -78,6 +78,12 @@ func (h *Handler) loadTemplates() error {
 			return err
 		}
 	}
+	lt, err := template.ParseFiles("web/templates/admin/login.html")
+	if err != nil {
+		return fmt.Errorf("admin/login: %w", err)
+	}
+	h.tmpl["admin:login"] = lt
+
 	for _, st := range siteTemplates {
 		t, err := template.ParseFiles(
 			"web/templates/sites/base.html",

@@ -9,6 +9,7 @@
   <p style="color:#6b7280;font-size:0.875rem;margin-bottom:1.5rem;">Select a new template. Your content stays the same, only the design changes.</p>
 
   <form method="POST" action="/admin/sites/{{.Site.ID}}/switch-template">
+    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem;">
       {{range .Templates}}
       <label style="cursor:pointer;">

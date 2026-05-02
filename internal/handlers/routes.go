@@ -23,7 +23,12 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /sites/{slug}", h.ServeSitePath)
 	mux.HandleFunc("POST /sites/{slug}/contact", h.SubmitLeadPath)
 
-	// Admin (basic auth protected)
+	// Admin login (no auth)
+	mux.HandleFunc("GET /admin/login", h.AdminLogin)
+	mux.HandleFunc("POST /admin/login", h.AdminLoginPost)
+	mux.HandleFunc("GET /admin/logout", h.AdminLogout)
+
+	// Admin (session auth protected)
 	mux.HandleFunc("GET /admin", h.adminAuth(h.AdminDashboard))
 	mux.HandleFunc("GET /admin/sites/{id}", h.adminAuth(h.AdminSite))
 	mux.HandleFunc("GET /admin/sites/{id}/edit", h.adminAuth(h.AdminEditSite))
