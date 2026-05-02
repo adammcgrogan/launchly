@@ -12,6 +12,12 @@
     <a href="/admin" class="admin-logo">Launchly Admin</a>
   </nav>
   <main class="admin-main">
+    {{if .Flash}}
+    <div id="flash-banner" style="background:#ecfdf5;border:1px solid #6ee7b7;color:#065f46;padding:0.65rem 1.25rem;border-radius:8px;font-size:0.875rem;font-weight:600;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+      <span>✓ {{.Flash}}</span>
+      <button onclick="document.getElementById('flash-banner').remove()" style="background:none;border:none;cursor:pointer;color:#065f46;font-size:1.1rem;line-height:1;padding:0 0 0 1rem;">×</button>
+    </div>
+    {{end}}
     {{template "content" .}}
   </main>
 </body>

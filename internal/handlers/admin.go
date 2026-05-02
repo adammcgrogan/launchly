@@ -37,6 +37,7 @@ func (h *Handler) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 		"Sites":   sites,
 		"Domain":  h.domain,
 		"BaseURL": h.baseURL(r.Host),
+		"Flash":   getFlash(w, r),
 	})
 }
 
@@ -96,6 +97,7 @@ func (h *Handler) AdminSite(w http.ResponseWriter, r *http.Request) {
 		"AnalyticsSent": r.URL.Query().Get("analytics") == "sent",
 		"Palettes":      palettes,
 		"HeadingFonts":  HeadingFonts,
+		"Flash":         getFlash(w, r),
 	})
 }
 
@@ -120,6 +122,7 @@ func (h *Handler) AdminPublish(w http.ResponseWriter, r *http.Request) {
 			slog.Error("send site published email", "error", err)
 		}
 	}
+	setFlash(w, "Site published — customer has been notified.")
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
 
@@ -143,6 +146,7 @@ func (h *Handler) AdminUnpublish(w http.ResponseWriter, r *http.Request) {
 			slog.Error("send site unpublished email", "error", err)
 		}
 	}
+	setFlash(w, "Site unpublished.")
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
 
@@ -156,6 +160,7 @@ func (h *Handler) AdminDeleteSite(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
 	}
+	setFlash(w, "Site deleted.")
 	http.Redirect(w, r, "/admin", http.StatusSeeOther)
 }
 
@@ -261,6 +266,7 @@ func (h *Handler) AdminUpdateSite(w http.ResponseWriter, r *http.Request) {
 			slog.Error("send site updated email", "error", err)
 		}
 	}
+	setFlash(w, "Changes saved.")
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
 
@@ -314,6 +320,7 @@ func (h *Handler) AdminUpdateAppearance(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
 	}
+	setFlash(w, "Appearance saved.")
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
 
@@ -415,7 +422,8 @@ func (h *Handler) AdminSendPayment(w http.ResponseWriter, r *http.Request) {
 	if err := h.email.SendPaymentLink(site.LeadEmail, site.BusinessName, checkoutURL); err != nil {
 		slog.Error("send payment link email", "error", err)
 	}
-	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d?payment=sent", id), http.StatusSeeOther)
+	setFlash(w, fmt.Sprintf("Payment link sent to %s.", site.LeadEmail))
+	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
 
 func (h *Handler) AdminCancelSubscription(w http.ResponseWriter, r *http.Request) {
@@ -569,6 +577,7 @@ func (h *Handler) AdminUpdateNotes(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
 	}
+	setFlash(w, "Notes saved.")
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
 
