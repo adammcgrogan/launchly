@@ -538,6 +538,23 @@
     showStep(current);
   });
 
+  // Pre-select template from ?template= URL param
+  var preselect = new URLSearchParams(window.location.search).get('template');
+  if (preselect) {
+    var radio = document.querySelector('input[name="template"][value="' + preselect + '"]');
+    if (radio) {
+      radio.checked = true;
+      // Reveal the business-specific section if needed
+      var card = radio.closest('[data-industry]');
+      if (card) {
+        var sec = document.getElementById('ob-specific-section');
+        var arrow = document.getElementById('ob-specific-arrow');
+        if (sec) { sec.classList.remove('hidden'); }
+        if (arrow) { arrow.textContent = '▼'; }
+      }
+    }
+  }
+
   // Initialise
   showStep(1);
 
