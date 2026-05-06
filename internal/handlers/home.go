@@ -28,7 +28,7 @@ func (h *Handler) buildEntry(t struct {
 
 func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.NotFound(w, r)
+		h.renderError(w, http.StatusNotFound)
 		return
 	}
 	var featured []templateEntry

@@ -13,7 +13,7 @@ import (
 func (h *Handler) ServeSite(w http.ResponseWriter, r *http.Request) {
 	site, err := h.resolveSite(r)
 	if err != nil || site == nil || site.Status != models.StatusLive {
-		http.NotFound(w, r)
+		h.renderError(w, http.StatusNotFound)
 		return
 	}
 	go h.recordPageView(r, site.ID)
@@ -25,7 +25,7 @@ func (h *Handler) ServeSitePath(w http.ResponseWriter, r *http.Request) {
 	slug := r.PathValue("slug")
 	site, err := h.store.GetSiteBySlug(slug)
 	if err != nil || site == nil || site.Status != models.StatusLive {
-		http.NotFound(w, r)
+		h.renderError(w, http.StatusNotFound)
 		return
 	}
 	go h.recordPageView(r, site.ID)

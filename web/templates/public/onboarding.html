@@ -357,7 +357,7 @@
 
         <!-- Submit -->
         <div class="text-center pb-4">
-          <button type="submit"
+          <button type="submit" id="ob-submit-btn"
             class="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-lg px-10 py-4 rounded-xl transition shadow-lg shadow-indigo-500/25 w-full sm:w-auto">
             Send My Request →
           </button>
@@ -566,7 +566,16 @@
   var submitted = false;
   var dirty = false;
   form.addEventListener('input', function () { dirty = true; }, { once: true });
-  form.addEventListener('submit', function () { submitted = true; });
+  form.addEventListener('submit', function () {
+    submitted = true;
+    var btn = document.getElementById('ob-submit-btn');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      btn.classList.add('opacity-75', 'cursor-not-allowed');
+      btn.classList.remove('hover:bg-indigo-500');
+    }
+  });
   window.addEventListener('beforeunload', function (e) {
     if (dirty && !submitted) { e.preventDefault(); e.returnValue = ''; }
   });

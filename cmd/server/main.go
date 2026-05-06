@@ -64,7 +64,7 @@ func main() {
 
 	// Subdomain router: anything on *.domain hits the site handler
 	// All other requests go to the main mux
-	finalHandler := loggingMiddleware(subdomainRouter(domain, h, mux))
+	finalHandler := loggingMiddleware(securityHeaders(subdomainRouter(domain, h, mux)))
 
 	h.StartAnalyticsCron()
 	h.StartTrialCron()
@@ -95,6 +95,21 @@ func main() {
 		slog.Error("server error", "error", err)
 		os.Exit(1)
 	}
+}
+
+// securityHeaders adds security-related HTTP response headers to every response.
+func securityHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("X-Frame-Options", "SAMEORIGIN")
+		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
+		// Only set HSTS on production (no port in host = not localhost dev)
+		host := strings.Split(r.Host, ":")[0]
+		if host != "localhost" && host != "127.0.0.1" {
+			w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 // loggingMiddleware logs each request with method, path, status code, and duration.

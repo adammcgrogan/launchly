@@ -40,6 +40,13 @@ func (h *Handler) AdminLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) AdminLoginPost(w http.ResponseWriter, r *http.Request) {
+	if !h.loginLimiter.allow(clientIP(r)) {
+		h.render(w, "admin:login", map[string]any{
+			"Error": "Too many login attempts. Please wait before trying again.",
+			"Next":  r.FormValue("next"),
+		})
+		return
+	}
 	if r.FormValue("password") != h.adminPass {
 		h.render(w, "admin:login", map[string]any{
 			"Error": "Incorrect password.",

@@ -23,6 +23,7 @@ type Handler struct {
 	tmpl              map[string]*template.Template
 	contactLimiter    *rateLimiter
 	onboardingLimiter *rateLimiter
+	loginLimiter      *rateLimiter
 }
 
 func New(store *db.Store, email *email.Client, pay *payment.Client, domain, adminPass, umamiScriptURL string) (*Handler, error) {
@@ -36,6 +37,7 @@ func New(store *db.Store, email *email.Client, pay *payment.Client, domain, admi
 		tmpl:              make(map[string]*template.Template),
 		contactLimiter:    newRateLimiter(1, 10*time.Minute),
 		onboardingLimiter: newRateLimiter(1, 10*time.Minute),
+		loginLimiter:      newRateLimiter(10, 15*time.Minute),
 	}
 	if err := h.loadTemplates(); err != nil {
 		return nil, fmt.Errorf("load templates: %w", err)
@@ -68,7 +70,7 @@ func (h *Handler) loadTemplates() error {
 		return nil
 	}
 
-	for _, p := range []string{"home", "templates", "onboarding", "thankyou", "payment_success", "privacy", "terms"} {
+	for _, p := range []string{"home", "templates", "onboarding", "thankyou", "payment_success", "privacy", "terms", "error"} {
 		if err := pub(p, p); err != nil {
 			return err
 		}
@@ -101,12 +103,25 @@ func (h *Handler) loadTemplates() error {
 func (h *Handler) render(w http.ResponseWriter, key string, data any) {
 	tmpl, ok := h.tmpl[key]
 	if !ok {
-		http.Error(w, "template not found", http.StatusInternalServerError)
 		slog.Error("render: unknown template key", "key", key)
+		h.renderError(w, http.StatusInternalServerError)
 		return
 	}
 	if err := tmpl.ExecuteTemplate(w, "base", data); err != nil {
 		slog.Error("template render failed", "key", key, "error", err)
+	}
+}
+
+// renderError renders the branded error page with the given HTTP status code.
+func (h *Handler) renderError(w http.ResponseWriter, status int) {
+	tmpl, ok := h.tmpl["error"]
+	if !ok {
+		http.Error(w, "something went wrong", status)
+		return
+	}
+	w.WriteHeader(status)
+	if err := tmpl.ExecuteTemplate(w, "base", map[string]any{"Status": status}); err != nil {
+		slog.Error("error template render failed", "error", err)
 	}
 }
 

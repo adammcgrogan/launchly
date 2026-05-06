@@ -130,7 +130,8 @@ func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.store.CreateSite(site); err != nil {
-		http.Error(w, "could not save your submission", http.StatusInternalServerError)
+		slog.Error("create site failed", "error", err)
+		h.renderError(w, http.StatusInternalServerError)
 		return
 	}
 
