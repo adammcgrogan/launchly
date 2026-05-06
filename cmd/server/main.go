@@ -112,7 +112,7 @@ func securityHeaders(next http.Handler) http.Handler {
 	})
 }
 
-// loggingMiddleware logs each request with method, path, status code, and duration.
+// loggingMiddleware logs each request with method, host, path, status, duration, and client IP.
 func loggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
@@ -120,11 +120,30 @@ func loggingMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(rec, r)
 		slog.Info("request",
 			"method", r.Method,
+			"host", effectiveHost(r),
 			"path", r.URL.Path,
 			"status", rec.status,
-			"duration", time.Since(start).Round(time.Millisecond),
+			"duration", time.Since(start).Round(time.Millisecond).String(),
+			"ip", clientIP(r),
 		)
 	})
+}
+
+// clientIP extracts the real client IP, respecting Cloudflare headers.
+func clientIP(r *http.Request) string {
+	if ip := r.Header.Get("CF-Connecting-IP"); ip != "" {
+		return ip
+	}
+	if fwd := r.Header.Get("X-Forwarded-For"); fwd != "" {
+		if i := strings.Index(fwd, ","); i != -1 {
+			return strings.TrimSpace(fwd[:i])
+		}
+		return strings.TrimSpace(fwd)
+	}
+	if i := strings.LastIndex(r.RemoteAddr, ":"); i != -1 {
+		return r.RemoteAddr[:i]
+	}
+	return r.RemoteAddr
 }
 
 // statusRecorder wraps ResponseWriter to capture the status code.

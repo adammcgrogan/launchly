@@ -158,6 +158,7 @@ func (h *Handler) AdminPublish(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
 	}
+	slog.Info("site published", "slug", site.Slug, "business", site.BusinessName)
 	if site.LeadEmail != "" {
 		siteURL := h.siteURL(site.Slug)
 		if err := h.email.SendSitePublished(site.LeadEmail, site.BusinessName, siteURL); err != nil {
@@ -183,6 +184,7 @@ func (h *Handler) AdminUnpublish(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
 	}
+	slog.Info("site unpublished", "slug", site.Slug, "business", site.BusinessName)
 	if site.LeadEmail != "" {
 		if err := h.email.SendSiteUnpublished(site.LeadEmail, site.BusinessName); err != nil {
 			slog.Error("send site unpublished email", "error", err)
@@ -198,9 +200,13 @@ func (h *Handler) AdminDeleteSite(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+	site, _ := h.store.GetSiteByID(id)
 	if err := h.store.DeleteSite(id); err != nil {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
+	}
+	if site != nil {
+		slog.Info("site deleted", "slug", site.Slug, "business", site.BusinessName)
 	}
 	setFlash(w, "Site deleted.")
 	http.Redirect(w, r, "/admin", http.StatusSeeOther)
@@ -303,6 +309,9 @@ func (h *Handler) AdminUpdateSite(w http.ResponseWriter, r *http.Request) {
 	if err := h.store.UpdateSite(&updated); err != nil {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
+	}
+	if len(changes) > 0 {
+		slog.Info("site updated", "slug", updated.Slug, "business", updated.BusinessName, "fields", changes)
 	}
 	if len(changes) > 0 && updated.LeadEmail != "" {
 		if err := h.email.SendSiteUpdated(updated.LeadEmail, updated.BusinessName, changes); err != nil {
@@ -428,6 +437,7 @@ func (h *Handler) AdminDoSwitchTemplate(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
 	}
+	slog.Info("template switched", "site_id", id, "template", newTemplate)
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
 
@@ -466,6 +476,7 @@ func (h *Handler) AdminSendPayment(w http.ResponseWriter, r *http.Request) {
 	if err := h.email.SendPaymentLink(site.LeadEmail, site.BusinessName, checkoutURL); err != nil {
 		slog.Error("send payment link email", "error", err)
 	}
+	slog.Info("payment link sent", "slug", site.Slug, "business", site.BusinessName, "plan", plan, "email", site.LeadEmail)
 	setFlash(w, fmt.Sprintf("Payment link sent to %s.", site.LeadEmail))
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
@@ -493,6 +504,7 @@ func (h *Handler) AdminCancelSubscription(w http.ResponseWriter, r *http.Request
 		http.Error(w, "database error", http.StatusInternalServerError)
 		return
 	}
+	slog.Info("subscription cancelled (admin)", "slug", site.Slug, "business", site.BusinessName)
 	http.Redirect(w, r, fmt.Sprintf("/admin/sites/%d", id), http.StatusSeeOther)
 }
 
@@ -787,6 +799,8 @@ func (h *Handler) StartTrialCron() {
 					}
 					if err := h.store.MarkTrialReminderSent(site.ID, kind); err != nil {
 						slog.Error("trial cron: mark sent", "slug", site.Slug, "kind", kind, "error", err)
+					} else {
+						slog.Info("trial reminder sent", "slug", site.Slug, "business", site.BusinessName, "kind", kind)
 					}
 				}
 			}
@@ -812,6 +826,8 @@ func (h *Handler) StartAnalyticsCron() {
 				}
 				if err := h.sendAnalyticsReport(site, days); err != nil {
 					slog.Error("analytics cron: send report", "slug", site.Slug, "error", err)
+				} else {
+					slog.Info("analytics report sent", "slug", site.Slug, "business", site.BusinessName, "days", days)
 				}
 			}
 		}

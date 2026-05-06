@@ -141,6 +141,8 @@ func (h *Handler) OnboardingSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	slog.Info("site created", "slug", site.Slug, "business", site.BusinessName, "template", site.Template, "plan", site.Plan, "ip", clientIP(r))
+
 	if site.LeadEmail != "" {
 		if err := h.email.SendWelcomeEmail(site.LeadEmail, site.BusinessName); err != nil {
 			slog.Error("send welcome email", "error", err)

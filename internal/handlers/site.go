@@ -152,6 +152,8 @@ func (h *Handler) saveLead(w http.ResponseWriter, r *http.Request, site *models.
 		return
 	}
 
+	slog.Info("lead received", "slug", site.Slug, "business", site.BusinessName, "name", lead.Name, "email", lead.Email)
+
 	if site.LeadEmail != "" {
 		h.email.SendLeadNotification(site.LeadEmail, site.BusinessName, lead.Name, lead.Email, lead.Phone, lead.Message)
 	}
