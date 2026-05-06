@@ -11,10 +11,14 @@ import (
 	"github.com/adammcgrogan/launchly/internal/models"
 )
 
-var slugRe = regexp.MustCompile(`[^a-z0-9]+`)
+var (
+	slugStripRe = regexp.MustCompile(`['\x60]`)
+	slugRe      = regexp.MustCompile(`[^a-z0-9]+`)
+)
 
 func toSlug(s string) string {
 	s = strings.ToLower(s)
+	s = slugStripRe.ReplaceAllString(s, "")
 	s = slugRe.ReplaceAllString(s, "-")
 	return strings.Trim(s, "-")
 }
