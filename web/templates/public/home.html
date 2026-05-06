@@ -226,152 +226,39 @@
 <!-- Templates -->
 <section id="templates" class="py-24 bg-white">
   <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center mb-14">
+    <div class="text-center mb-10">
       <p class="text-indigo-600 font-semibold text-sm uppercase tracking-widest mb-3">Templates</p>
       <h2 class="text-4xl md:text-5xl font-black tracking-tight">Pick a style.<br>We'll make it yours.</h2>
       <p class="text-gray-500 mt-4 text-lg">Every template is designed to turn visitors into enquiries.</p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 scroll-stagger">
-      {{range .FeaturedTemplates}}
-      <a href="{{.ExampleURL}}" target="_blank" rel="noopener" class="group block rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all duration-200">
-        <div class="h-44 overflow-hidden relative">
-          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-200 z-10 flex items-end justify-center pb-3">
+    <!-- Template grid -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      {{range .Templates}}
+      <a href="{{.ExampleURL}}" target="_blank" rel="noopener"
+         class="group block rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all duration-200">
+        <div class="h-32 overflow-hidden relative">
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors z-10 flex items-end justify-center pb-3">
             <span class="opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-200 bg-white/90 backdrop-blur text-gray-900 text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm">View live example →</span>
           </div>
-          {{if eq .ID "default"}}
-          <div class="bg-white h-full p-4">
-            <div class="flex items-center gap-1.5 mb-3">
-              <div class="w-5 h-5 rounded bg-indigo-600 flex items-center justify-center flex-shrink-0">
-                <div class="w-2 h-2 bg-white rounded-sm"></div>
-              </div>
-              <span class="text-slate-900 font-black text-[10px] tracking-tight">Kelly &amp; Associates</span>
-            </div>
-            <div class="text-[8px] text-indigo-600 font-semibold mb-0.5 uppercase tracking-widest">Solicitors · Belfast</div>
-            <div class="text-slate-800 font-black text-sm leading-tight mb-2">Expert legal advice<br>you can trust</div>
-            <div class="flex gap-1 mb-3">
-              <span class="bg-indigo-600 text-white text-[8px] font-bold px-2 py-0.5 rounded">Free Consultation</span>
-            </div>
-            <div class="space-y-1">
-              <div class="flex items-center gap-1"><span class="text-indigo-500 text-[7px]">✓</span><span class="text-slate-500 text-[7px]">Conveyancing</span></div>
-              <div class="flex items-center gap-1"><span class="text-indigo-500 text-[7px]">✓</span><span class="text-slate-500 text-[7px]">Wills &amp; Probate</span></div>
-            </div>
-          </div>
-          {{else if eq .ID "canvas"}}
-          <div class="bg-[#f0f4ff] h-full p-4">
-            <div class="bg-white rounded-xl shadow-sm p-3 mb-2">
-              <div class="text-[8px] text-blue-500 font-semibold uppercase tracking-widest mb-0.5">Accountancy · Derry</div>
-              <div class="text-slate-900 font-black text-sm leading-tight">O'Neill Accountancy</div>
-              <div class="text-slate-400 text-[8px] mt-0.5 mb-2">Plain-talking accountants</div>
-              <span class="bg-blue-600 text-white text-[8px] font-bold px-2 py-0.5 rounded-lg">Book Consultation</span>
-            </div>
-            <div class="grid grid-cols-2 gap-1.5">
-              <div class="bg-white rounded-lg shadow-sm p-1.5 text-[7px] text-slate-600">Tax Returns</div>
-              <div class="bg-white rounded-lg shadow-sm p-1.5 text-[7px] text-slate-600">Payroll</div>
-            </div>
-          </div>
-          {{else if eq .ID "slate"}}
-          <div class="h-full overflow-hidden">
-            <div class="bg-gray-900 p-4">
-              <div class="inline-block border border-yellow-500/30 text-yellow-400 text-[7px] px-1.5 py-0.5 rounded-full mb-1.5 uppercase tracking-widest">Co. Antrim</div>
-              <div class="text-white font-black text-sm mb-0.5">Quinn Electrical</div>
-              <div class="text-gray-400 text-[8px] mb-2">NICEIC approved electricians</div>
-              <div class="flex gap-1">
-                <span class="bg-yellow-400 text-gray-900 text-[8px] font-bold px-2 py-0.5 rounded">Get a Quote</span>
-                <span class="border border-gray-700 text-gray-400 text-[8px] px-2 py-0.5 rounded">Call</span>
-              </div>
-            </div>
-            <div class="bg-white p-3 space-y-1.5">
-              <div class="flex items-center gap-1.5"><span class="w-1 h-1 bg-yellow-400 rounded-full flex-shrink-0"></span><span class="text-[8px] text-gray-700">Full House Rewiring</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-1 h-1 bg-yellow-400 rounded-full flex-shrink-0"></span><span class="text-[8px] text-gray-700">EV Charger Installation</span></div>
-            </div>
-          </div>
-          {{else if eq .ID "hearth"}}
-          <div class="h-full overflow-hidden">
-            <div class="bg-amber-900 p-4 pb-3">
-              <div class="text-amber-100 font-black text-base italic leading-none mb-1">The Wee Bakehouse</div>
-              <div class="text-amber-300 text-[8px] mb-2">Freshly baked every morning</div>
-              <div class="flex gap-1"><span class="bg-amber-400 text-amber-900 text-[8px] font-black px-2 py-0.5 rounded-lg">Find Us</span><span class="border border-amber-700 text-amber-200 text-[8px] px-2 py-0.5 rounded-lg">Menu</span></div>
-            </div>
-            <div class="bg-amber-50 p-3">
-              <div class="grid grid-cols-3 gap-1">
-                <div class="bg-white border border-amber-100 rounded-lg p-1 text-[7px] text-amber-800 text-center">Ulster Fry</div>
-                <div class="bg-white border border-amber-100 rounded-lg p-1 text-[7px] text-amber-800 text-center">Soups</div>
-                <div class="bg-white border border-amber-100 rounded-lg p-1 text-[7px] text-amber-800 text-center">Cakes</div>
-              </div>
-            </div>
-          </div>
-          {{else if eq .ID "linen"}}
-          <div class="bg-white h-full p-4">
-            <div class="text-[#bbb] text-[7px] uppercase tracking-[0.2em] mb-2">Belfast, NI</div>
-            <div class="text-[#0a0a0a] font-black text-sm tracking-tight mb-0.5">Laura Vance Interiors</div>
-            <div class="text-[#999] text-[8px] italic mb-3">Considered interior design</div>
-            <div class="border-t border-[#f0f0f0] pt-3 space-y-2">
-              <div class="flex items-center justify-between border-b border-[#f5f5f5] pb-2"><span class="text-[8px] text-[#444]">Full Interior Design</span><span class="text-[8px] text-[#ccc]">→</span></div>
-              <div class="flex items-center justify-between border-b border-[#f5f5f5] pb-2"><span class="text-[8px] text-[#444]">Colour Consultancy</span><span class="text-[8px] text-[#ccc]">→</span></div>
-              <div class="flex items-center justify-between"><span class="text-[8px] text-[#444]">Space Planning</span><span class="text-[8px] text-[#ccc]">→</span></div>
-            </div>
-          </div>
-          {{else if eq .ID "onyx"}}
-          <div class="bg-[#0a0a0a] h-full p-4">
-            <div class="text-[#555] text-[7px] uppercase tracking-[0.2em] mb-2">Belfast, NI</div>
-            <div class="text-white font-black text-sm tracking-tight mb-0.5">Dawson Tax Advisers</div>
-            <div class="text-[#666] text-[8px] mb-3">Clear advice. No jargon.</div>
-            <div class="flex gap-1 mb-3">
-              <span class="bg-white text-[#0a0a0a] text-[8px] font-black px-2 py-0.5 rounded">Book a Call</span>
-            </div>
-            <div class="space-y-1">
-              <div class="flex items-center gap-1"><span class="text-white text-[7px]">✓</span><span class="text-[#666] text-[7px]">Corporation Tax</span></div>
-              <div class="flex items-center gap-1"><span class="text-white text-[7px]">✓</span><span class="text-[#666] text-[7px]">VAT &amp; Payroll</span></div>
-            </div>
-          </div>
-          {{else if eq .ID "ink"}}
-          <div class="bg-[#0c1a2e] h-full p-4">
-            <div class="inline-block bg-sky-500/20 border border-sky-500/30 text-sky-400 text-[7px] px-1.5 py-0.5 rounded-full mb-2 uppercase tracking-widest">Glasgow</div>
-            <div class="text-white font-black text-sm mb-0.5">Mackenzie Financial</div>
-            <div class="text-[#5a7a9a] text-[8px] mb-3">Independent financial planning</div>
-            <div class="flex gap-1 mb-3">
-              <span class="bg-sky-500 text-white text-[8px] font-bold px-2 py-0.5 rounded">Free Review</span>
-              <span class="border border-[#1e3a5a] text-[#5a7a9a] text-[8px] px-2 py-0.5 rounded">Learn More</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="text-sky-400 text-[7px]">✓ FCA Regulated</span>
-              <span class="text-sky-400 text-[7px]">✓ 20+ yrs</span>
-            </div>
-          </div>
-          {{else if eq .ID "copper"}}
-          <div class="bg-[#faf7f4] h-full p-4">
-            <div class="text-[#b8734a] text-[7px] uppercase tracking-[0.2em] mb-2">Armagh, NI</div>
-            <div class="text-[#2c1a0e] font-black text-sm mb-0.5">The Copper Kettle</div>
-            <div class="text-[#8a6a55] text-[8px] italic mb-3">Artisan café &amp; bakery</div>
-            <div class="flex gap-1 mb-3">
-              <span class="bg-[#b8734a] text-white text-[8px] font-bold px-2 py-0.5 rounded">View Menu</span>
-              <span class="border border-[#e0c9b8] text-[#8a6a55] text-[8px] px-2 py-0.5 rounded">Find Us</span>
-            </div>
-            <div class="space-y-1">
-              <div class="flex items-center gap-1"><span class="text-[#b8734a] text-[7px]">✓</span><span class="text-[#8a6a55] text-[7px]">Fresh bakes daily</span></div>
-              <div class="flex items-center gap-1"><span class="text-[#b8734a] text-[7px]">✓</span><span class="text-[#8a6a55] text-[7px]">Locally sourced</span></div>
-            </div>
-          </div>
-          {{end}}
+          {{template "tmplPreview" .}}
         </div>
-        <div class="bg-white px-4 py-3 border-t border-gray-100">
-          <div class="font-bold text-sm text-gray-900">{{.Name}}</div>
-          <div class="text-gray-400 text-xs mt-0.5">{{.Description}}</div>
-          {{if .Tags}}
-          <div class="flex flex-wrap gap-1 mt-2">
-            {{range .Tags}}<span class="text-[10px] font-semibold text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded-md">{{.}}</span>{{end}}
+        <div class="bg-white px-3 py-2.5 border-t border-gray-100">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex flex-wrap gap-1">
+              {{range $j, $tag := .Tags}}{{if lt $j 2}}<span class="text-[10px] font-semibold text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-md">{{$tag}}</span>{{end}}{{end}}
+            </div>
+            <span class="text-[10px] text-gray-400 font-semibold flex-shrink-0">{{.Name}}</span>
           </div>
-          {{end}}
         </div>
       </a>
       {{end}}
-
     </div>
 
+    <!-- See all -->
     <div class="text-center mt-10">
       <a href="/templates" class="inline-flex items-center gap-2 border border-gray-200 text-gray-700 font-semibold text-sm px-6 py-3 rounded-xl hover:border-gray-300 hover:shadow-sm transition-all duration-200">
-        View all {{.TotalTemplates}} templates
+        See all templates
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </a>
     </div>
@@ -549,8 +436,6 @@
     </div>
 
     <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto scroll-stagger">
-
-      <!-- Starter -->
       <div class="bg-white rounded-3xl border-2 border-gray-200 p-8 relative">
         <h3 class="text-xl font-bold mb-1">Starter</h3>
         <p class="text-gray-500 text-sm mb-6">Everything you need to get found online.</p>
@@ -570,8 +455,6 @@
         </ul>
         <a href="/get-started" class="block w-full bg-gray-900 hover:bg-gray-700 text-white font-bold text-center py-3.5 rounded-xl transition">Get Started</a>
       </div>
-
-      <!-- Pro -->
       <div class="bg-indigo-600 rounded-3xl border-2 border-indigo-600 p-8 relative shadow-xl shadow-indigo-200">
         <div class="absolute -top-4 left-8 bg-white text-indigo-600 text-xs font-bold px-4 py-1.5 rounded-full shadow">Best Value</div>
         <h3 class="text-xl font-bold mb-1 text-white">Pro</h3>
@@ -734,10 +617,7 @@
   transform: translateY(22px);
   transition: opacity 0.55s ease, transform 0.55s ease;
 }
-.scroll-fade.in-view {
-  opacity: 1;
-  transform: translateY(0);
-}
+.scroll-fade.in-view { opacity: 1; transform: translateY(0); }
 
 .scroll-stagger > * {
   opacity: 0;
@@ -759,19 +639,159 @@ details summary svg { transition: transform 0.2s ease; }
 
 <script>
 (function () {
+  /* ── Scroll animations ───────────────────────────────────── */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
-      if (e.isIntersecting) {
-        e.target.classList.add('in-view');
-        io.unobserve(e.target);
-      }
+      if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }
     });
   }, { threshold: 0.1 });
+  document.querySelectorAll('.scroll-fade, .scroll-stagger').forEach(function (el) { io.observe(el); });
 
-  document.querySelectorAll('.scroll-fade, .scroll-stagger').forEach(function (el) {
-    io.observe(el);
-  });
 })();
 </script>
 
+{{end}}
+
+{{define "tmplPreview"}}
+{{if eq .ID "default"}}
+<div style="background:#fff;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#4338ca;font-weight:900;font-size:0.8rem;">O'Brien Consulting</div>
+  <div style="color:#6b7280;font-size:0.65rem;margin-top:2px;">Expert advice, clear results</div>
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;"><span style="background:#6366f1;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:6px;">Get in Touch</span></div>
+</div>
+{{else if eq .ID "canvas"}}
+<div style="background:#f8fafc;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#1e3a5f;font-weight:900;font-size:0.8rem;">O'Neill Accountancy</div>
+  <div style="color:#94a3b8;font-size:0.65rem;margin-top:2px;">Clear, honest accounting</div>
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;"><span style="background:#2563eb;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book a Call</span></div>
+</div>
+{{else if eq .ID "slate"}}
+<div style="background:#111827;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#fff;font-weight:900;font-size:0.8rem;">Quinn Electrical</div>
+  <div style="color:#6b7280;font-size:0.65rem;margin-top:2px;">NICEIC approved</div>
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;"><span style="background:#f59e0b;color:#111827;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Get a Quote</span></div>
+</div>
+{{else if eq .ID "hearth"}}
+<div style="background:#78350f;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#fde68a;font-weight:900;font-size:0.8rem;font-style:italic;">The Wee Bakehouse</div>
+  <div style="color:#d97706;font-size:0.65rem;margin-top:2px;">Freshly baked daily</div>
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;"><span style="background:#fbbf24;color:#78350f;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Find Us</span></div>
+</div>
+{{else if eq .ID "linen"}}
+<div style="background:#fff;padding:1rem;height:100%;">
+  <div style="color:#aaa;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:5px;">Belfast, NI</div>
+  <div style="color:#0a0a0a;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Laura Vance Interiors</div>
+  <div style="color:#888;font-size:0.6rem;font-style:italic;margin-bottom:8px;">Considered interior design</div>
+  <div style="border-top:1px solid #f0f0f0;padding-top:7px;">
+    <div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span style="font-size:0.6rem;color:#444;">Full Interior Design</span><span style="font-size:0.6rem;color:#ccc;">→</span></div>
+    <div style="display:flex;justify-content:space-between;"><span style="font-size:0.6rem;color:#444;">Colour Consultancy</span><span style="font-size:0.6rem;color:#ccc;">→</span></div>
+  </div>
+</div>
+{{else if eq .ID "onyx"}}
+<div style="background:#0a0a0a;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#f5f5f0;font-weight:900;font-size:0.8rem;letter-spacing:0.05em;">Ryan Legal</div>
+  <div style="color:#555;font-size:0.65rem;margin-top:2px;">Solicitors &amp; Notaries</div>
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;"><span style="background:#fff;color:#0a0a0a;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Consult</span></div>
+</div>
+{{else if eq .ID "ink"}}
+<div style="background:#0c1a2e;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#e0f2fe;font-weight:900;font-size:0.8rem;">Mackenzie Finance</div>
+  <div style="color:#475569;font-size:0.65rem;margin-top:2px;">Independent advisors</div>
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;"><span style="background:#38bdf8;color:#0c1a2e;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book Advice</span></div>
+</div>
+{{else if eq .ID "copper"}}
+<div style="background:#fdf6f0;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#2c1a0e;font-weight:900;font-size:0.8rem;">Aoife's Kitchen</div>
+  <div style="color:#9a8070;font-size:0.65rem;margin-top:2px;">Fresh seasonal food</div>
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;"><span style="background:#c2622d;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:6px;">Get in Touch</span></div>
+</div>
+{{else if eq .ID "builder"}}
+<div style="background:#09090b;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#fbbf24;font-weight:900;font-size:0.8rem;">McLaughlin Plumbing</div>
+  <div style="color:#52525b;font-size:0.65rem;margin-top:2px;">Fast, reliable plumbing</div>
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;"><span style="background:#fbbf24;color:#09090b;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Call Now</span></div>
+</div>
+{{else if eq .ID "salon"}}
+<div style="background:#fff;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#4c0519;font-weight:900;font-size:0.8rem;font-style:italic;">Aoife's Beauty</div>
+  <div style="color:#f43f5e;font-size:0.65rem;margin-top:2px;">Award-winning studio</div>
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;"><span style="background:#e11d48;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:20px;">Book Now</span></div>
+</div>
+{{else if eq .ID "gym"}}
+<div style="background:#0a0a0a;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#c8ff00;font-weight:900;font-size:0.8rem;text-transform:uppercase;">Titan Fitness</div>
+  <div style="color:#888;font-size:0.6rem;margin-top:2px;">No excuses gym</div>
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;"><span style="background:#c8ff00;color:#000;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Join Now</span></div>
+</div>
+{{else if eq .ID "landscaping"}}
+<div style="display:grid;grid-template-columns:1fr 1fr;height:100%;">
+  <div style="background:#1a3a28;padding:0.85rem;">
+    <div style="color:#f5f0e8;font-weight:900;font-size:0.75rem;margin-bottom:2px;">O'Hara Landscaping</div>
+    <div style="color:#a8c4b0;font-size:0.6rem;margin-bottom:7px;">Gardens transformed</div>
+    <span style="background:#c8b89a;color:#1a3a28;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Free Quote</span>
+  </div>
+  <div style="background:#f5f0e8;padding:0.6rem;display:flex;flex-direction:column;gap:3px;justify-content:center;">
+    <div style="background:#fff;border:1px solid #e8ddd0;border-radius:5px;padding:3px 5px;font-size:0.55rem;color:#1a3a28;">✓ Fully Insured</div>
+    <div style="background:#fff;border:1px solid #e8ddd0;border-radius:5px;padding:3px 5px;font-size:0.55rem;color:#1a3a28;">✓ 15+ Years Exp.</div>
+  </div>
+</div>
+{{else if eq .ID "garage"}}
+<div style="background:#111;padding:1rem;height:100%;">
+  <div style="color:#fff;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Brady's Auto Centre</div>
+  <div style="color:#888;font-size:0.6rem;margin-bottom:7px;">MOT, servicing &amp; repairs</div>
+  <span style="background:#f97316;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book In</span>
+</div>
+{{else if eq .ID "bnb"}}
+<div style="background:#faf8f5;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#2c2c2c;font-weight:900;font-size:0.8rem;margin-bottom:2px;">The Harbour House</div>
+  <div style="color:#888;font-size:0.6rem;font-style:italic;margin-bottom:7px;">Waterfront B&amp;B</div>
+  <span style="background:#2d7a6a;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Check Availability</span>
+</div>
+{{else if eq .ID "restaurant"}}
+<div style="background:#1a1208;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#f5f0e8;font-weight:900;font-size:0.8rem;margin-bottom:2px;">The Ember Room</div>
+  <div style="color:#8a7a62;font-size:0.6rem;font-style:italic;margin-bottom:7px;">Wood-fired food</div>
+  <span style="border:1px solid #c8a96e;color:#c8a96e;font-size:0.6rem;padding:2px 10px;border-radius:20px;">Book a Table</span>
+</div>
+{{else if eq .ID "clinic"}}
+<div style="background:#fff;padding:1rem;height:100%;">
+  <div style="color:#0f172a;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Greenfield Dental</div>
+  <div style="color:#64748b;font-size:0.6rem;margin-bottom:7px;">Gentle, modern dentistry</div>
+  <span style="background:#0284c7;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">Book Appointment</span>
+</div>
+{{else if eq .ID "maker"}}
+<div style="background:#f7f3ee;padding:1rem;height:100%;">
+  <div style="color:#2c1f14;font-weight:900;font-size:0.8rem;margin-bottom:2px;">Willow &amp; Thread</div>
+  <div style="color:#a08060;font-size:0.6rem;font-style:italic;margin-bottom:7px;">Handthrown ceramics</div>
+  <span style="background:#2c1f14;color:#f7f3ee;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:4px;">View Collection</span>
+</div>
+{{else if eq .ID "retail"}}
+<div style="background:#fff;padding:1rem;height:100%;">
+  <div style="color:#1c1917;font-weight:900;font-size:0.8rem;margin-bottom:2px;">The Corner Collective</div>
+  <div style="color:#78716c;font-size:0.6rem;margin-bottom:7px;">Gifts &amp; homewares</div>
+  <span style="background:#c2410c;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:6px;">Visit Us</span>
+</div>
+{{else if eq .ID "wedding"}}
+<div style="background:#fdf9f6;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#1c1917;font-size:0.85rem;font-weight:700;font-style:italic;margin-bottom:3px;">Clover &amp; White Events</div>
+  <div style="color:#78716c;font-size:0.6rem;font-style:italic;margin-bottom:8px;">Beautifully planned weddings</div>
+  <span style="border:1px solid #1c1917;color:#1c1917;font-size:0.6rem;font-weight:600;padding:2px 10px;border-radius:20px;">Get in Touch</span>
+</div>
+{{else if eq .ID "barber"}}
+<div style="background:#0d0d0d;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#f5f5f0;font-weight:900;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Sharp Cuts</div>
+  <div style="color:#555;font-size:0.6rem;margin-bottom:7px;">Traditional barbershop</div>
+  <span style="background:#c9a84c;color:#0d0d0d;font-size:0.6rem;font-weight:700;padding:2px 10px;text-transform:uppercase;letter-spacing:0.05em;">Book In</span>
+</div>
+{{else if eq .ID "takeaway"}}
+<div style="background:#1c1917;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#fff;font-weight:900;font-size:0.8rem;margin-bottom:2px;">King's Chicken</div>
+  <div style="color:#a8a29e;font-size:0.6rem;margin-bottom:7px;">Hot wings &amp; burgers</div>
+  <span style="background:#ea580c;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 10px;border-radius:6px;">Order Now</span>
+</div>
+{{else}}
+<div style="background:#f9fafb;padding:1rem;text-align:center;height:100%;">
+  <div style="color:#9ca3af;font-weight:700;font-size:0.8rem;">{{.Name}}</div>
+</div>
+{{end}}
 {{end}}

@@ -31,22 +31,14 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-
-	var general, specific []templateEntry
+	var featured []templateEntry
 	for _, t := range siteTemplates {
-		e := h.buildEntry(t)
-		if t.Category == "general" {
-			general = append(general, e)
-		} else {
-			specific = append(specific, e)
+		if t.Category == "general" && len(featured) < 6 {
+			featured = append(featured, h.buildEntry(t))
 		}
 	}
-
-	featured := general
-
 	h.render(w, "home", map[string]any{
-		"FeaturedTemplates": featured,
-		"TotalTemplates":    len(general) + len(specific),
+		"Templates": featured,
 	})
 }
 

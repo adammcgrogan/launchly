@@ -121,7 +121,7 @@ var siteTemplates = []struct {
 		ID: "ink", Name: "Ink",
 		Description: "Deep navy layout with sky-blue accents, trustworthy and modern",
 		ExampleSlug: "example-ink", Category: "general",
-		Tags: []string{"navy", "trustworthy", "modern", "sharp"},
+		Tags: []string{"dark", "trustworthy", "modern", "sharp"},
 		Palettes: []Palette{
 			{"sky", "Sky", ""},
 			{"gold", "Gold", "--c-primary:#f59e0b;--c-primary-fg:#0c1a2e;--c-accent:#f59e0b;--c-accent-fg:#0c1a2e"},
@@ -133,7 +133,7 @@ var siteTemplates = []struct {
 		ID: "copper", Name: "Copper",
 		Description: "Warm white layout with terracotta primary, premium and grounded",
 		ExampleSlug: "example-copper", Category: "general",
-		Tags: []string{"warm", "terracotta", "premium", "grounded"},
+		Tags: []string{"warm", "earthy", "premium", "grounded"},
 		Palettes: []Palette{
 			{"terracotta", "Terracotta", ""},
 			{"sage", "Sage", "--c-primary:#4d7c0f;--c-primary-fg:#fff;--c-accent:#f0fdf4;--c-accent-fg:#3f6212;--c-heading:#14532d"},
@@ -160,7 +160,7 @@ var siteTemplates = []struct {
 		ID: "salon", Name: "Salon",
 		Description: "Luxe, ornamental design with blush tones for beauty businesses",
 		ExampleSlug: "example-salon", Category: "specific", Industry: "Beauty & Wellness",
-		Tags: []string{"soft", "feminine", "luxe", "rose"},
+		Tags: []string{"soft", "feminine", "luxe", "delicate"},
 		Palettes: []Palette{
 			{"rose", "Rose", ""},
 			{"violet", "Violet", "--c-primary:#7c3aed;--c-primary-fg:#fff;--c-accent:#fdf4ff;--c-accent-fg:#6b21a8"},
@@ -172,7 +172,7 @@ var siteTemplates = []struct {
 		ID: "gym", Name: "Gym",
 		Description: "Aggressive all-caps layout with electric accents for fitness",
 		ExampleSlug: "example-gym", Category: "specific", Industry: "Fitness & Sport",
-		Tags: []string{"energetic", "electric", "dark", "bold"},
+		Tags: []string{"energetic", "fierce", "dark", "bold"},
 		Palettes: []Palette{
 			{"lime", "Lime", ""},
 			{"electric", "Electric", "--c-primary:#00d4ff;--c-primary-fg:#0a0a0a;--c-accent-fg:#00d4ff"},
@@ -184,7 +184,7 @@ var siteTemplates = []struct {
 		ID: "landscaping", Name: "Landscaping",
 		Description: "Organic split layout with forest green and warm cream tones",
 		ExampleSlug: "example-landscaping", Category: "specific", Industry: "Landscaping & Gardens",
-		Tags: []string{"natural", "green", "organic", "earthy"},
+		Tags: []string{"natural", "fresh", "organic", "earthy"},
 		Palettes: []Palette{
 			{"forest", "Forest", ""},
 			{"sage", "Sage", "--c-primary:#84cc16;--c-primary-fg:#1a3a28;--c-accent-fg:#84cc16"},
@@ -196,7 +196,7 @@ var siteTemplates = []struct {
 		ID: "garage", Name: "Garage",
 		Description: "Urgent, phone-first layout with hazard orange for auto trades",
 		ExampleSlug: "example-garage", Category: "specific", Industry: "Automotive",
-		Tags: []string{"dark", "orange", "urgent", "mechanical"},
+		Tags: []string{"dark", "bold", "urgent", "mechanical"},
 		Palettes: []Palette{
 			{"orange", "Orange", ""},
 			{"red", "Red", "--c-primary:#dc2626;--c-primary-fg:#fff;--c-accent-fg:#dc2626"},
@@ -208,7 +208,7 @@ var siteTemplates = []struct {
 		ID: "bnb", Name: "B&B",
 		Description: "Warm, hospitable layout with booking focus for accommodation",
 		ExampleSlug: "example-bnb", Category: "specific", Industry: "Accommodation",
-		Tags: []string{"warm", "hospitable", "teal", "soft"},
+		Tags: []string{"warm", "hospitable", "coastal", "soft"},
 		Palettes: []Palette{
 			{"teal", "Teal", ""},
 			{"sage", "Sage", "--c-primary:#4d7c0f;--c-primary-fg:#fff;--c-accent:#f0fdf4;--c-accent-fg:#3f6212"},
@@ -256,7 +256,7 @@ var siteTemplates = []struct {
 		ID: "retail", Name: "Retail",
 		Description: "Bright terracotta-accented layout for shops and boutiques",
 		ExampleSlug: "example-retail", Category: "specific", Industry: "Retail & Shops",
-		Tags: []string{"bright", "fresh", "terracotta", "welcoming"},
+		Tags: []string{"bright", "fresh", "colourful", "welcoming"},
 		Palettes: []Palette{
 			{"terracotta", "Terracotta", ""},
 			{"sage", "Sage", "--c-primary:#4d7c0f;--c-primary-fg:#fff;--c-accent:#f0fdf4;--c-accent-fg:#3f6212"},
@@ -300,6 +300,22 @@ var siteTemplates = []struct {
 			{"blue", "Blue", "--c-primary:#2563eb;--c-primary-fg:#fff;--c-accent:#dbeafe;--c-accent-fg:#1d4ed8"},
 		},
 	},
+}
+
+// FilterTag is a curated tag shown as a filter pill in the template picker.
+type FilterTag struct {
+	Value string
+	Label string
+}
+
+// TemplateFilterTags is the curated set of filter pills shown in the template picker.
+var TemplateFilterTags = []FilterTag{
+	{"dark", "Dark"},
+	{"warm", "Warm"},
+	{"bold", "Bold"},
+	{"minimal", "Minimal"},
+	{"elegant", "Elegant"},
+	{"clean", "Clean"},
 }
 
 // templateEntry is used to pass template metadata to public-facing pages.
