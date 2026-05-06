@@ -24,6 +24,7 @@ type Handler struct {
 	contactLimiter    *rateLimiter
 	onboardingLimiter *rateLimiter
 	loginLimiter      *rateLimiter
+	slugLimiter       *rateLimiter
 }
 
 func New(store *db.Store, email *email.Client, pay *payment.Client, domain, adminPass, umamiScriptURL string) (*Handler, error) {
@@ -38,6 +39,7 @@ func New(store *db.Store, email *email.Client, pay *payment.Client, domain, admi
 		contactLimiter:    newRateLimiter(1, 10*time.Minute),
 		onboardingLimiter: newRateLimiter(1, 10*time.Minute),
 		loginLimiter:      newRateLimiter(10, 15*time.Minute),
+		slugLimiter:       newRateLimiter(30, time.Minute),
 	}
 	if err := h.loadTemplates(); err != nil {
 		return nil, fmt.Errorf("load templates: %w", err)

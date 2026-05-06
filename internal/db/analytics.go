@@ -8,7 +8,9 @@ import (
 )
 
 func (s *Store) RecordPageView(siteID int, path, referrer, ip, userAgent, country string) error {
-	_, err := s.db.Exec(`
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `
 		INSERT INTO page_views (site_id, path, referrer, ip, user_agent, country)
 		VALUES ($1, $2, $3, $4, $5, $6)`,
 		siteID, path, referrer, ip, userAgent, country)
@@ -20,10 +22,17 @@ func (s *Store) GetSiteStats(siteID int, since time.Time) (*models.SiteStats, er
 		PeriodDays: int(time.Since(since).Hours()/24) + 1,
 	}
 
-	s.db.QueryRow(`SELECT COUNT(*) FROM page_views WHERE site_id=$1 AND viewed_at > $2`, siteID, since).Scan(&stats.TotalViews)
-	s.db.QueryRow(`SELECT COUNT(DISTINCT ip) FROM page_views WHERE site_id=$1 AND viewed_at > $2`, siteID, since).Scan(&stats.UniqueVisitors)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM page_views WHERE site_id=$1 AND viewed_at > $2`, siteID, since).Scan(&stats.TotalViews)
 
-	rows, err := s.db.Query(`
+	ctx2, cancel2 := dbCtx()
+	defer cancel2()
+	s.db.QueryRowContext(ctx2, `SELECT COUNT(DISTINCT ip) FROM page_views WHERE site_id=$1 AND viewed_at > $2`, siteID, since).Scan(&stats.UniqueVisitors)
+
+	ctx3, cancel3 := dbCtx()
+	defer cancel3()
+	rows, err := s.db.QueryContext(ctx3, `
 		SELECT referrer, COUNT(*) AS cnt
 		FROM page_views
 		WHERE site_id=$1 AND viewed_at > $2 AND referrer != ''
@@ -37,7 +46,9 @@ func (s *Store) GetSiteStats(siteID int, since time.Time) (*models.SiteStats, er
 		}
 	}
 
-	rows2, err := s.db.Query(`
+	ctx4, cancel4 := dbCtx()
+	defer cancel4()
+	rows2, err := s.db.QueryContext(ctx4, `
 		SELECT date_trunc('day', viewed_at AT TIME ZONE 'UTC') AS day, COUNT(*) AS cnt
 		FROM page_views
 		WHERE site_id=$1 AND viewed_at > $2
@@ -55,7 +66,9 @@ func (s *Store) GetSiteStats(siteID int, since time.Time) (*models.SiteStats, er
 }
 
 func (s *Store) GetSitesDueForAnalytics() ([]*models.Site, error) {
-	rows, err := s.db.Query(`
+	ctx, cancel := dbCtx()
+	defer cancel()
+	rows, err := s.db.QueryContext(ctx, `
 		SELECT id, slug, business_name, lead_email, analytics_frequency
 		FROM sites
 		WHERE analytics_frequency != 'off'
@@ -81,12 +94,16 @@ func (s *Store) GetSitesDueForAnalytics() ([]*models.Site, error) {
 }
 
 func (s *Store) UpdateAnalyticsFrequency(id int, freq string) error {
-	_, err := s.db.Exec(`UPDATE sites SET analytics_frequency = $1 WHERE id = $2`, freq, id)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET analytics_frequency = $1 WHERE id = $2`, freq, id)
 	return err
 }
 
 func (s *Store) UpdateAnalyticsLastSent(id int) error {
-	_, err := s.db.Exec(`UPDATE sites SET analytics_last_sent = NOW() WHERE id = $1`, id)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET analytics_last_sent = NOW() WHERE id = $1`, id)
 	return err
 }
 
@@ -96,7 +113,6 @@ func (s *Store) GetSitesDueForTrialReminder(reminderType string) ([]*models.Site
 	var query string
 	switch reminderType {
 	case "first":
-		// Send on day 11 (≤3 days left), if first reminder not yet sent
 		query = `SELECT ` + siteColumns + ` FROM sites
 			WHERE trial_ends_at IS NOT NULL
 			  AND payment_status NOT IN ('paid', 'cancelled')
@@ -105,7 +121,6 @@ func (s *Store) GetSitesDueForTrialReminder(reminderType string) ([]*models.Site
 			  AND trial_ends_at > NOW()
 			  AND trial_reminder_sent IS NULL`
 	case "final":
-		// Send on day 13 (≤1 day left), if final reminder not yet sent
 		query = `SELECT ` + siteColumns + ` FROM sites
 			WHERE trial_ends_at IS NOT NULL
 			  AND payment_status NOT IN ('paid', 'cancelled')
@@ -116,7 +131,9 @@ func (s *Store) GetSitesDueForTrialReminder(reminderType string) ([]*models.Site
 	default:
 		return nil, fmt.Errorf("unknown reminder type: %s", reminderType)
 	}
-	rows, err := s.db.Query(query)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	rows, err := s.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
@@ -143,14 +160,18 @@ func (s *Store) MarkTrialReminderSent(id int, reminderType string) error {
 	default:
 		return fmt.Errorf("unknown reminder type: %s", reminderType)
 	}
-	_, err := s.db.Exec(`UPDATE sites SET `+col+` = NOW() WHERE id = $1`, id)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET `+col+` = NOW() WHERE id = $1`, id)
 	return err
 }
 
 // MarkStripeEventProcessed records a Stripe event ID. Returns true if newly inserted
 // (first delivery), false if the event was already processed (retry/duplicate).
 func (s *Store) MarkStripeEventProcessed(eventID string) (bool, error) {
-	res, err := s.db.Exec(
+	ctx, cancel := dbCtx()
+	defer cancel()
+	res, err := s.db.ExecContext(ctx,
 		`INSERT INTO stripe_events (event_id) VALUES ($1) ON CONFLICT (event_id) DO NOTHING`,
 		eventID,
 	)

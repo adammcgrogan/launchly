@@ -46,7 +46,9 @@ func scanSite(s scanner) (*models.Site, error) {
 }
 
 func (s *Store) CreateSite(site *models.Site) error {
-	return s.db.QueryRow(`
+	ctx, cancel := dbCtx()
+	defer cancel()
+	return s.db.QueryRowContext(ctx, `
 		INSERT INTO sites (slug, business_name, template, tagline, about, services,
 		                   certifications, location, cta_text, testimonials, logo_url, gallery,
 		                   phone, email, address, hours,
@@ -66,27 +68,39 @@ func (s *Store) CreateSite(site *models.Site) error {
 }
 
 func (s *Store) GetSiteByID(id int) (*models.Site, error) {
-	return scanSite(s.db.QueryRow(`SELECT `+siteColumns+` FROM sites WHERE id = $1`, id))
+	ctx, cancel := dbCtx()
+	defer cancel()
+	return scanSite(s.db.QueryRowContext(ctx, `SELECT `+siteColumns+` FROM sites WHERE id = $1`, id))
 }
 
 func (s *Store) GetSiteBySlug(slug string) (*models.Site, error) {
-	return scanSite(s.db.QueryRow(`SELECT `+siteColumns+` FROM sites WHERE slug = $1`, slug))
+	ctx, cancel := dbCtx()
+	defer cancel()
+	return scanSite(s.db.QueryRowContext(ctx, `SELECT `+siteColumns+` FROM sites WHERE slug = $1`, slug))
 }
 
 func (s *Store) GetSiteByCustomDomain(domain string) (*models.Site, error) {
-	return scanSite(s.db.QueryRow(`SELECT `+siteColumns+` FROM sites WHERE custom_domain = $1`, domain))
+	ctx, cancel := dbCtx()
+	defer cancel()
+	return scanSite(s.db.QueryRowContext(ctx, `SELECT `+siteColumns+` FROM sites WHERE custom_domain = $1`, domain))
 }
 
 func (s *Store) GetSiteByStripeSessionID(sessionID string) (*models.Site, error) {
-	return scanSite(s.db.QueryRow(`SELECT `+siteColumns+` FROM sites WHERE stripe_session_id = $1`, sessionID))
+	ctx, cancel := dbCtx()
+	defer cancel()
+	return scanSite(s.db.QueryRowContext(ctx, `SELECT `+siteColumns+` FROM sites WHERE stripe_session_id = $1`, sessionID))
 }
 
 func (s *Store) GetSiteByStripeSubscriptionID(subID string) (*models.Site, error) {
-	return scanSite(s.db.QueryRow(`SELECT `+siteColumns+` FROM sites WHERE stripe_subscription_id = $1`, subID))
+	ctx, cancel := dbCtx()
+	defer cancel()
+	return scanSite(s.db.QueryRowContext(ctx, `SELECT `+siteColumns+` FROM sites WHERE stripe_subscription_id = $1`, subID))
 }
 
 func (s *Store) ListSites() ([]*models.Site, error) {
-	rows, err := s.db.Query(`SELECT ` + siteColumns + ` FROM sites ORDER BY created_at DESC`)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	rows, err := s.db.QueryContext(ctx, `SELECT `+siteColumns+` FROM sites ORDER BY created_at DESC`)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +124,9 @@ type LiveSiteEntry struct {
 }
 
 func (s *Store) ListLiveSites() ([]LiveSiteEntry, error) {
-	rows, err := s.db.Query(`
+	ctx, cancel := dbCtx()
+	defer cancel()
+	rows, err := s.db.QueryContext(ctx, `
 		SELECT slug, COALESCE(custom_domain, ''), published_at
 		FROM sites WHERE status = 'live' ORDER BY published_at DESC`)
 	if err != nil {
@@ -129,7 +145,9 @@ func (s *Store) ListLiveSites() ([]LiveSiteEntry, error) {
 }
 
 func (s *Store) UpdateSite(site *models.Site) error {
-	_, err := s.db.Exec(`
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `
 		UPDATE sites SET business_name=$1, tagline=$2, about=$3, services=$4,
 		certifications=$5, location=$6, cta_text=$7, testimonials=$8, logo_url=$9, gallery=$10,
 		phone=$11, email=$12, address=$13, hours=$14,
@@ -148,46 +166,62 @@ func (s *Store) UpdateSite(site *models.Site) error {
 }
 
 func (s *Store) UpdateSiteTemplate(id int, template string) error {
-	_, err := s.db.Exec(`UPDATE sites SET template=$1 WHERE id=$2`, template, id)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET template=$1 WHERE id=$2`, template, id)
 	return err
 }
 
 func (s *Store) UpdateSiteAppearance(id int, palette, headingFont string) error {
-	_, err := s.db.Exec(`UPDATE sites SET palette=$1, heading_font=$2 WHERE id=$3`, palette, headingFont, id)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET palette=$1, heading_font=$2 WHERE id=$3`, palette, headingFont, id)
 	return err
 }
 
 func (s *Store) UpdateSiteNotes(id int, notes string) error {
-	_, err := s.db.Exec(`UPDATE sites SET notes = $1 WHERE id = $2`, notes, id)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET notes = $1 WHERE id = $2`, notes, id)
 	return err
 }
 
 func (s *Store) PublishSite(id int) error {
+	ctx, cancel := dbCtx()
+	defer cancel()
 	now := time.Now().UTC()
-	_, err := s.db.Exec(`UPDATE sites SET status='live', published_at=$1 WHERE id=$2`, now, id)
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET status='live', published_at=$1 WHERE id=$2`, now, id)
 	return err
 }
 
 func (s *Store) UnpublishSite(id int) error {
-	_, err := s.db.Exec(`UPDATE sites SET status='draft', published_at=NULL WHERE id=$1`, id)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET status='draft', published_at=NULL WHERE id=$1`, id)
 	return err
 }
 
 func (s *Store) DeleteSite(id int) error {
-	_, err := s.db.Exec(`DELETE FROM sites WHERE id=$1`, id)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `DELETE FROM sites WHERE id=$1`, id)
 	return err
 }
 
 func (s *Store) SetSitePending(id int, plan, sessionID string) error {
-	_, err := s.db.Exec(`UPDATE sites SET payment_status='pending', plan=$1, stripe_session_id=$2 WHERE id=$3`, plan, sessionID, id)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET payment_status='pending', plan=$1, stripe_session_id=$2 WHERE id=$3`, plan, sessionID, id)
 	return err
 }
 
 // SetSitePaid marks a site as paid. Returns (true, nil) if this was the first time
 // (i.e. the row was updated), (false, nil) if already paid (idempotent retry).
 func (s *Store) SetSitePaid(sessionID, subscriptionID string) (bool, error) {
+	ctx, cancel := dbCtx()
+	defer cancel()
 	now := time.Now().UTC()
-	res, err := s.db.Exec(`UPDATE sites SET payment_status='paid', paid_at=$1, stripe_subscription_id=$2 WHERE stripe_session_id=$3 AND payment_status != 'paid'`, now, subscriptionID, sessionID)
+	res, err := s.db.ExecContext(ctx, `UPDATE sites SET payment_status='paid', paid_at=$1, stripe_subscription_id=$2 WHERE stripe_session_id=$3 AND payment_status != 'paid'`, now, subscriptionID, sessionID)
 	if err != nil {
 		return false, err
 	}
@@ -196,15 +230,19 @@ func (s *Store) SetSitePaid(sessionID, subscriptionID string) (bool, error) {
 }
 
 func (s *Store) SetSiteCancelled(subscriptionID string) error {
-	_, err := s.db.Exec(`UPDATE sites SET payment_status='cancelled' WHERE stripe_subscription_id=$1`, subscriptionID)
+	ctx, cancel := dbCtx()
+	defer cancel()
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET payment_status='cancelled' WHERE stripe_subscription_id=$1`, subscriptionID)
 	return err
 }
 
 func (s *Store) SetCustomDomain(id int, domain string) error {
+	ctx, cancel := dbCtx()
+	defer cancel()
 	var val *string
 	if domain != "" {
 		val = &domain
 	}
-	_, err := s.db.Exec(`UPDATE sites SET custom_domain = $1 WHERE id = $2`, val, id)
+	_, err := s.db.ExecContext(ctx, `UPDATE sites SET custom_domain = $1 WHERE id = $2`, val, id)
 	return err
 }

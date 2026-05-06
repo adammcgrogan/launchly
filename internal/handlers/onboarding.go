@@ -25,6 +25,12 @@ func toSlug(s string) string {
 
 // CheckSlug returns JSON indicating whether a slug derived from the given name is available.
 func (h *Handler) CheckSlug(w http.ResponseWriter, r *http.Request) {
+	if !h.slugLimiter.allow(clientIP(r)) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusTooManyRequests)
+		json.NewEncoder(w).Encode(map[string]any{"available": false, "slug": ""})
+		return
+	}
 	name := strings.TrimSpace(r.URL.Query().Get("name"))
 	slug := toSlug(name)
 	if slug == "" {

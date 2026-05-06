@@ -1,12 +1,20 @@
 package db
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"time"
 
 	_ "github.com/lib/pq"
 )
+
+const queryTimeout = 5 * time.Second
+
+// dbCtx returns a context with the standard 5-second query timeout.
+func dbCtx() (context.Context, context.CancelFunc) {
+	return context.WithTimeout(context.Background(), queryTimeout)
+}
 
 type Store struct {
 	db *sql.DB

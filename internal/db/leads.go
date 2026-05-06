@@ -3,7 +3,9 @@ package db
 import "github.com/adammcgrogan/launchly/internal/models"
 
 func (s *Store) CreateLead(lead *models.Lead) error {
-	return s.db.QueryRow(`
+	ctx, cancel := dbCtx()
+	defer cancel()
+	return s.db.QueryRowContext(ctx, `
 		INSERT INTO leads (site_id, name, email, phone, message)
 		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id, created_at`,
@@ -12,7 +14,9 @@ func (s *Store) CreateLead(lead *models.Lead) error {
 }
 
 func (s *Store) ListLeadsBySite(siteID int) ([]*models.Lead, error) {
-	rows, err := s.db.Query(`
+	ctx, cancel := dbCtx()
+	defer cancel()
+	rows, err := s.db.QueryContext(ctx, `
 		SELECT id, site_id, name, email, phone, message, created_at
 		FROM leads WHERE site_id = $1 ORDER BY created_at DESC`, siteID)
 	if err != nil {
@@ -31,7 +35,9 @@ func (s *Store) ListLeadsBySite(siteID int) ([]*models.Lead, error) {
 }
 
 func (s *Store) ListAllLeads() ([]*models.Lead, error) {
-	rows, err := s.db.Query(`
+	ctx, cancel := dbCtx()
+	defer cancel()
+	rows, err := s.db.QueryContext(ctx, `
 		SELECT id, site_id, name, email, phone, message, created_at
 		FROM leads ORDER BY created_at DESC`)
 	if err != nil {
